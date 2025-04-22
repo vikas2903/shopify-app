@@ -1,0 +1,115 @@
+<div class="product-block">
+  <style>
+    .plp-offer-wrap p {
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+.plp-offer-wrap {
+    border: 2px dashed;
+
+    padding: 10px;
+
+    text-align: center;
+}
+    .plp-offer-wrap p:last-child {
+      margin-bottom: 0;
+    }
+
+    .copy-code {
+      cursor: pointer;
+      color: #fff;
+      font-weight: bold;
+      background: #64112f;
+      display: inline-block;
+      padding: 6px 17px;
+      border-radius: 30px;
+      font-size: 14px;
+      letter-spacing: 3px;
+    }
+
+    .copy-code.add {
+      background: #000;
+    }
+        .plp-offer-wrap p {
+        font-size: 18px;
+        letter-spacing: 0;
+        line-height: normal;
+        margin: 0 0 10px;
+        text-align: left;
+    }
+
+    @media(min-width: 768px) {
+      .plp-offer-wrap p {
+        font-size: 18px;
+        letter-spacing: 0;
+      }
+
+      .plp-offer-wrap p:first-child br {
+        display: none;
+      }
+    }
+  </style>
+
+  <div class="plp-offer-wrap" style="border-color: {{ block.settings.text_color }}; color: {{ block.settings.text_color }}; background: {{ block.settings.text_color1 }};">
+    <p>{{ block.settings.text_1 }} <br> – Use code:
+      <span class="copy-code" data-code="{{ block.settings.text_code }}">{{ block.settings.text_code }}</span>
+    </p>
+    <p>{{ block.settings.text_2 }}</p>
+  </div>
+
+  <script>
+    function copy() {
+      const code = document.querySelector('.copy-code').getAttribute('data-code');
+      navigator.clipboard.writeText(code).then(function () {
+        document.querySelector('.copy-code').classList.add('add');
+        console.log(`Code "${code}" copied`);
+      }, function (err) {
+        console.error('Failed to copy text: ', err);
+      });
+    }
+
+    // Attach event listener
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('.copy-code').addEventListener('click', copy);
+    });
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Offers Content",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text_1",
+      "label": "Offer Primary Text",
+      "default": "Get EXTRA 5% OFF on your first purchase"
+    },
+    {
+      "type": "text",
+      "id": "text_code",
+      "label": "Offer Code",
+      "default": "FIRST"
+    },
+    {
+      "type": "text",
+      "id": "text_2",
+      "label": "Offer Subheading",
+      "default": "Get an additional 5% OFF on prepaid orders"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#540000"
+    },
+    {
+      "type": "color",
+      "id": "text_color1",
+      "label": "Background Color",
+      "default": "#fff3e6"
+    }
+  ]
+}
+{% endschema %}

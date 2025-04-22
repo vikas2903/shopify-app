@@ -1,0 +1,14 @@
+name = "Offers Text"
+type = "theme"
+
+[[extension.blocks]]
+name = "Offers Content"
+target = "section"
+handle = "offers-text"
+settings = "blocks/star_rating.liquid"
+
+[[extension.blocks]]
+name = "WhatsApp"
+target = "section"
+handle = "whatsapp"
+settings = "blocks/whatsapp-widget.liquid"
