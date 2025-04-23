@@ -1,0 +1,129 @@
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f9;
+  margin: 0;
+  padding: 0;
+}
+.offer-container {
+    max-width: 100%;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.slick-slider img {
+  width: 100%;
+  height: auto;
+  border-radius: 0px;
+}
+
+.slider-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+.offer-icon {
+    border: 0;
+    outline: none;
+    background: transparent;
+    font-size: 2rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 11;
+    cursor: pointer;
+}
+
+.prev-arrow.offer-icon {
+    left: 20px;
+}
+
+.next-arrow.offer-icon {
+    right: 20px;
+}
+.slick-dots {
+  bottom: 15px;
+}
+.slick-dots li button:before {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+.slick-dots li.slick-active button:before {
+  color: #333;
+}
+.slick-dots li button:focus {
+  outline: none;
+}
+.slick-dots li button:hover:before {
+  color: #555;
+}
+</style>
+
+<div class="offer-container">
+  <div class="slick-slider">
+    {% if block.settings.offer-image_1 != blank %}
+      <div><img src="{{ block.settings.offer-image_1 | image_url: width: 1000 }}" alt="Slide 1"></div>
+    {% endif %}
+
+    {% if block.settings.offer-image_2 != blank %}
+      <div><img src="{{ block.settings.offer-image_2 | image_url: width: 1000 }}" alt="Slide 2"></div>
+    {% endif %}
+
+    {% if block.settings.offer-image_3 != blank %}
+      <div><img src="{{ block.settings.offer-image_3 | image_url: width: 1000 }}" alt="Slide 3"></div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  if (window.jQuery) {
+    jQuery('.slick-slider').slick({
+      dots: false,
+      infinite: true,
+      prevArrow: '<button class="slide-arrow prev-arrow offer-icon">❮</button>',
+      nextArrow: '<button class="slide-arrow next-arrow offer-icon">❯</button>',
+      slidesToShow: 1,
+      slidesToScroll: 1
+    });
+  } else {
+    console.error("jQuery not loaded.");
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Offer Images",
+  "target": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "offer-image_1",
+      "label": "Offer Image 01",
+      "info": "Image 01"
+    },
+    {
+      "type": "image_picker",
+      "id": "offer-image_2",
+      "label": "Offer Image 02",
+      "info": "Image 02"
+    },
+    {
+      "type": "image_picker",
+      "id": "offer-image_3",
+      "label": "Offer Image 03",
+      "info": "Image 03"
+    }
+  ]
+}
+{% endschema %}
