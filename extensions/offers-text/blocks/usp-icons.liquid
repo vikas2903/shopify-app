@@ -1,69 +1,203 @@
+
+<style>
+
+.usp-container {
+    max-width: 100%;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: {{block.settings.bg}};
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+        .usp-wrapper {
+            width: 100%; /* Ensure the wrapper has a defined width */
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1%;
+            overflow-x: scroll;
+            white-space: nowrap;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .usp-wrapper::-webkit-scrollbar {
+            background-color: transparent;
+        }
+
+        .usp-wrapper::-webkit-scrollbar-thumb {
+            background-color: #000;
+            height: 1px;
+        }
+
+  .usp-items {
+    flex: 0 0 24%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+span.content {
+    color: {{block.settings.text-color}};
+    font-size: 1.4rem;
+    font-family: inherit;
+    text-transform: inherit;
+}
+        .usp-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+      .usp-items .img {
+     width: 60px;
+    }
+    
+    @media(max-width < 767px){
+        .usp-items .img {
+            width: 40px;
+        }
+        .usp-items {
+    flex: 0 0 22%;
+    gap: 5px;
+}
+        .usp-wrapper {
+            gap: 6%;
+        }
+    }
+</style>
+
+
+  <div class="usp-container">
+        <div class="usp-wrapper">
+        {% if block.settings.usp_icon_1_image  != blank %}
+            <div class="usp-items">
+                <div class="img"><img src="{{block.settings.usp_icon_1_image | image_url }}" alt="{{block.settings.usp_icon_1_title}}"></div>
+                <span class="content">{{block.settings.usp_icon_1_title}}</span>
+            </div>
+        {% endif %}
+
+         {% if block.settings.usp_icon_2_image  != blank %}
+            <div class="usp-items">
+        <div class="img"><img src="{{block.settings.usp_icon_2_image | image_url }}" alt="{{block.settings.usp_icon_2_title}}"></div>
+                <span class="content">{{block.settings.usp_icon_2_title}}</span>
+            </div>
+        {% endif %}
+
+         {% if block.settings.usp_icon_3_image  != blank %}
+            <div class="usp-items">
+           <div class="img"><img src="{{block.settings.usp_icon_3_image | image_url }}" alt="{{block.settings.usp_icon_3_title}}"></div>
+                <span class="content">{{block.settings.usp_icon_3_title}}</span>
+            </div>
+        {% endif %}
+
+         {% if block.settings.usp_icon_4_image  != blank %}
+            <div class="usp-items">
+               <div class="img"><img src="{{block.settings.usp_icon_4_image | image_url }}" alt="{{block.settings.usp_icon_4_title}}"></div>
+                <span class="content">{{block.settings.usp_icon_4_title}}</span>
+            </div>
+        {% endif %}
+
+        {% if block.settings.usp_icon_5_image  != blank %}
+            <div class="usp-items">
+               <div class="img"><img src="{{block.settings.usp_icon_5_image | image_url }}" alt="{{block.settings.usp_icon_5_title}}"></div>
+                <span class="content">{{block.settings.usp_icon_5_title}}</span>
+            </div>
+            {% endif %}
+
+            {% if block.settings.usp_icon_6_image  != blank %}
+            <div class="usp-items">
+               <div class="img"><img src="{{block.settings.usp_icon_6_image | image_url }}" alt="{{block.settings.usp_icon_6_title}}"></div>
+                <span class="content">{{block.settings.usp_icon_6_title}}</span>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+
+
+
 {% schema %}
 {
-    "name":" Usp Icons",
-    "target":"section",
-    "settings":[
-     {
-        "type": "image_picker",
-        "id": "usp_img_01",
-        "label": "Usp Image 01"
-    },
-    {
-      "type":"text",
-      "id":"usp-heading_01",
-      "label":"Usp heading 01"
-    },
-    {
-        "type": "image_picker",
-        "id": "usp_img_02",
-        "label": "Usp Image 02"
-    },
-       {
-      "type":"text",
-      "id":"usp-heading_02",
-      "label":"Usp heading 02"
-    },
-     {
-        "type": "image_picker",
-        "id": "usp_img_03",
-        "label": "Usp Image 03"
-    },
-       {
-      "type":"text",
-      "id":"usp-heading_03",
-      "label":"Usp heading 03"
-    },
-     {
-        "type": "image_picker",
-        "id": "usp_img_04",
-        "label": "Usp Image 04"
-    }, 
-    {
-      "type":"text",
-      "id":"usp-heading_04",
-      "label":"Usp heading 04"
-    },
-     {
-        "type": "image_picker",
-        "id": "usp_img_05",
-        "label": "Usp Image 05"
-    },
-    {
-      "type":"text",
-      "id":"usp-heading_05",
-      "label":"Usp heading 05"
-    },
-     {
-        "type": "image_picker",
-        "id": "usp_img_06",
-        "label": "Usp Image 06"
-    },
-    {
-      "type":"text",
-      "id":"usp-heading_06",
-      "label":"Usp heading 06"
-    },
-    
+    "name": "Usp Icons",
+     "target": "section",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "usp_icon_1_image",
+            "label": "USP Icon 1 Image"
+        },
+        {
+            "type": "text",
+            "id": "usp_icon_1_title",
+            "label": "USP Icon 1 Title"
+        },
+        {
+            "type": "image_picker",
+            "id": "usp_icon_2_image",
+            "label": "USP Icon 2 Image"
+        },
+        {
+            "type":"text",
+            "id":"usp_icon_2_title",
+            "label": "USP Icon 2 Title"
+        },
+        {
+            "type": "image_picker",
+            "id": "usp_icon_3_image",
+            "label": "USP Icon 3 Image"
+        },
+        {
+            "type": "text",
+            "id": "usp_icon_3_title",
+            "label": "USP Icon 3 Title"
+        },
+         {
+            "type": "image_picker",
+            "id": "usp_icon_4_image",
+            "label": "USP Icon 4 Image"
+        },
+        {
+            "type": "text",
+            "id": "usp_icon_4_title",
+            "label": "USP Icon 4 Title"
+        },
+           {
+            "type": "image_picker",
+            "id": "usp_icon_5_image",
+            "label": "USP Icon 5 Image"
+        },
+        {
+            "type": "text",
+            "id": "usp_icon_5_title",
+            "label": "USP Icon 5 Title"
+        },
+           {
+            "type": "image_picker",
+            "id": "usp_icon_6_image",
+            "label": "USP Icon 6 Image"
+        },
+        {
+            "type": "text",
+            "id": "usp_icon_6_title",
+            "label": "USP Icon 6 Title"
+        },
+        {
+            "type":"color",
+            "id":"text-color",
+            "label":"Content Color",
+            "default":"#000000"
+        },
+        {
+            "type": "color",
+            "id": "bg",
+            "label": "Body text",
+            "default": "#ffffff"
+            }
     ]
 }
 {% endschema %}
