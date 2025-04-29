@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://pay-argument-prepared-tba.trycloudflare.com"
+application_url = "https://exhibit-margaret-naked-pros.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products,write_customers,read_products"
 
 [auth]
 redirect_urls = [
-  "https://pay-argument-prepared-tba.trycloudflare.com/auth/callback",
-  "https://pay-argument-prepared-tba.trycloudflare.com/auth/shopify/callback",
-  "https://pay-argument-prepared-tba.trycloudflare.com/api/auth/callback"
+  "https://exhibit-margaret-naked-pros.trycloudflare.com/auth/callback",
+  "https://exhibit-margaret-naked-pros.trycloudflare.com/auth/shopify/callback",
+  "https://exhibit-margaret-naked-pros.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
