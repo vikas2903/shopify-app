@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://exhibit-margaret-naked-pros.trycloudflare.com"
+application_url = "https://attendance-garage-fault-clause.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products,write_customers,read_products"
 
 [auth]
 redirect_urls = [
-  "https://exhibit-margaret-naked-pros.trycloudflare.com/auth/callback",
-  "https://exhibit-margaret-naked-pros.trycloudflare.com/auth/shopify/callback",
-  "https://exhibit-margaret-naked-pros.trycloudflare.com/api/auth/callback"
+  "https://attendance-garage-fault-clause.trycloudflare.com/auth/callback",
+  "https://attendance-garage-fault-clause.trycloudflare.com/auth/shopify/callback",
+  "https://attendance-garage-fault-clause.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

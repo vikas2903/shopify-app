@@ -3,7 +3,6 @@ import {Page,Layout,Grid,Card,Text, Bleed } from '@shopify/polaris';
 import React from 'react';
 import { TitleBar } from "@shopify/app-bridge-react";
 import GridItem from '../components/Griditem';
-import  Popup  from '../components/Popup.jsx';
 
 function appwidgets() {
   return (
@@ -26,9 +25,11 @@ function appwidgets() {
           <GridItem img="https://d1xgiem9kow01r.cloudfront.net/6rg79d5ewtpp9xc4503qlqn0bv9h" title="Offer Carosel" />  
           <GridItem img="https://d1xgiem9kow01r.cloudfront.net/pnw2qfjpwmj8582n1cgz1tvhbxqc" title="Whatsapp Button" />
           <GridItem img="https://d1xgiem9kow01r.cloudfront.net/low61hnll2f0h5dc2pf0845l4847"title="Product Page Usp"  />  
+
+          <GridItem  img="https://d1xgiem9kow01r.cloudfront.net/xagtjorkzwew06igloi46uox9p5n" title="Offers Content" />
         </div>
 
-        <Popup />
+      
       </Layout>
     </Page>
     </>
