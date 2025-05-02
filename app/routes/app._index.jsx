@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
+import Homee from "../components/Home";
 import {
   Page,
   Layout,
@@ -14,6 +15,7 @@ import {
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
+import Home from "../components/Home";
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
@@ -105,8 +107,10 @@ export default function Index() {
   const generateProduct = () => fetcher.submit({}, { method: "POST" });
 
   return (
-    <Page>
-      <TitleBar title="Remix app template">
+    <Page fullWidth >
+
+    <Home />
+      {/* <TitleBar title="Remix app template">
         <button variant="primary" onClick={generateProduct}>
           Generate a product
         </button>
@@ -322,7 +326,9 @@ export default function Index() {
             </BlockStack>
           </Layout.Section>
         </Layout>
-      </BlockStack>
+      </BlockStack> */}
+      
+      
     </Page>
   );
 }

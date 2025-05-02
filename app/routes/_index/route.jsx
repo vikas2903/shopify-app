@@ -18,6 +18,7 @@ export default function App() {
 
   return (
     <div className={styles.index}>
+      vikas
       <div className={styles.content}>
         <h1 className={styles.heading}>A short heading about [your app]</h1>
         <p className={styles.text}>
@@ -50,6 +51,6 @@ export default function App() {
           </li>
         </ul>
       </div>
-    </div>
-  );
+    </div> 
+  ); 
 }
