@@ -1312,6 +1312,13 @@ button.btn.btn-success {
     background: #062d89;
   }
   
+  #viewLess{display: none;}
+  .copy {
+    padding: 4px 8px;
+    border: 4px dotted #eee;
+    margin-top: .8rem;
+    font-size: .9rem;
+}
 
 @media (max-width: 768px) {
     .form-container {

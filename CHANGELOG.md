@@ -70,3 +70,62 @@ Allow `SHOP_REDACT` webhook to process without admin context
 ## v2024.07.16
 
 Started tracking changes and releases using calver
+
+
+  <script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const wishlistContainer = document.getElementById("wishlist-products");
+
+
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+    if (wishlist.length === 0) {
+      wishlistContainer.innerHTML = "<p>No products in your wishlist.</p>";
+  
+    }
+
+    wishlistContainer.innerHTML = "";
+
+    for (let productId of wishlist) {
+      try {
+        const response = await fetch(`/products/${productId}.js`);
+        if (!response.ok) throw new Error("Product not found");
+        const product = await response.json();
+
+        const productHtml = `
+          <div class="wishlist-product" style="margin-bottom: 20px;">
+            <h3>${product.title}</h3>
+            <img src="${product.images[0]}" width="150" alt="${product.title}" />
+            <p>Price: ₹${(product.price / 100).toFixed(2)}</p>
+            <a href="${product.url}" target="_blank">View Product</a>
+          </div>
+        `;
+
+        wishlistContainer.insertAdjacentHTML("beforeend", productHtml);
+      } catch (error) {
+        console.error(`Failed to fetch product with ID ${productId}:`, error.message);
+      }
+    }
+  });
+
+  
+//       async function getProductDetails(productId) {
+//     try {
+//         const res = await fetch(`/products/${productId}.js`);
+        
+//         // Check if the response is ok (status in the range 200-299)
+//         if (!res.ok) {
+//             throw new Error(`Error fetching product: ${res.status} ${res.statusText}`);
+//         }
+//         const product = await res.json();
+//         console.log(product); // Log the product details
+//         return product; // Return the product details for further use
+//     } catch (error) {
+//         console.error('Failed to fetch product details:', error);
+//     }
+// }
+// // Example usage
+// const productId = 7960040374306; // Replace with your actual product ID
+// getProductDetails(productId);
+
+</script>

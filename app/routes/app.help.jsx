@@ -1,5 +1,6 @@
 import React from 'react';
-
+import Faq from '../components/Faq';
+import { TitleBar } from "@shopify/app-bridge-react";
  
   const Help = () => {
 
@@ -7,6 +8,7 @@ import React from 'react';
         <>
    
         <div className="form-container">
+        <TitleBar title="Query Form & Faq's" /> 
             <div className="card-pattern"></div>
             <div className="form-title">
                 <h3><i className="fas fa-headset"></i> Support Ticket Form</h3>
@@ -55,6 +57,8 @@ import React from 'react';
                 <button type="submit" className="btn btn-success">Submit Ticket <i className="fas fa-ticket-alt ms-1"></i></button>
             </form>
         </div>
+
+        <Faq />
 
         </>
     )

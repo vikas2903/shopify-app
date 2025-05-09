@@ -108,6 +108,7 @@ export default function Index() {
 
   return (
     <Page fullWidth >
+       <TitleBar title="Dashboard" /> 
 
     <Home />
       {/* <TitleBar title="Remix app template">

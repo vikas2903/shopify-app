@@ -40,3 +40,70 @@ export function ErrorBoundary() {
 export const headers = (headersArgs) => {
   return boundary.headers(headersArgs);
 };
+
+
+// require('dotenv').config();
+// const { ApolloServer, gql } = require('apollo-server');
+// const axios = require('axios');
+
+// // GraphQL Schema
+// const typeDefs = gql`
+//   type DiscountCode {
+//     id: ID
+//     title: String
+//     startsAt: String
+//     endsAt: String
+//     usageLimit: Int
+//   }
+
+//   type Query {
+//     discountCodes: [DiscountCode]
+//   }
+// `;
+
+// // GraphQL Resolvers
+// const resolvers = {
+//   Query: {
+//     discountCodes: async () => {
+//       try {
+//         const response = await axios.post(
+//           `${process.env.SHOPIFY_STORE}/admin/api/2024-01/graphql.json`,
+//           {
+//             query: `
+//               {
+//                 discountCodes(first: 10) {
+//                   edges {
+//                     node {
+//                       id
+//                       title
+//                       startsAt
+//                       endsAt
+//                       usageLimit
+//                     }
+//                   }
+//                 }
+//               }
+//             `,
+//           },
+//           {
+//             headers: {
+//               'X-Shopify-Access-Token': process.env.SHOPIFY_ACCESS_TOKEN,
+//               'Content-Type': 'application/json',
+//             },
+//           }
+//         );
+
+//         return response.data.data.discountCodes.edges.map((edge) => edge.node);
+//       } catch (error) {
+//         console.error('Error fetching discount codes:', error.message);
+//         return [];
+//       }
+//     },
+//   },
+// };
+
+// // Start Server
+// const server = new ApolloServer({ typeDefs, resolvers });
+// server.listen().then(({ url }) => {
+//   console.log(`🚀 Server ready at ${url}`);
+// });

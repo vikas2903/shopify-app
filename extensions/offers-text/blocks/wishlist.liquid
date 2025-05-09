@@ -1,47 +1,424 @@
-<script>
-console.log("App Working....");
-console.log("Wishlist App [0]");
-document.addEventListener('DOMContentLoaded',function(){
+<style>
+    #wishlist-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(24%, 1fr)); grid-template-rows: auto; gap: 10px; } 
+    .Item img { width: 100%; height: auto; display: block; }
 
-    let wishlist_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="30px" id="Semi-Solid__x2F__x2F__Black" viewBox="0 0 788.994 643.434"><path d="m729.401 55.76c-33.742-33.741-77.523-53.486-123.281-55.596-41.868-1.93-85.6 13.265-126.447 43.947-28.446 21.367-53.387 46.693-72.128 73.244-3.019 4.283-7.756 6.75-12.997 6.767-5.277 0-9.993-2.42-13.039-6.683l-.062-.087c-18.74-26.548-43.681-51.874-72.126-73.24-40.849-30.684-84.578-45.879-126.448-43.948-45.757 2.11-89.54 21.855-123.281 55.596-32.958 32.959-53.616 76.22-58.167 121.813-16.408 164.374 112.03 295.902 222.665 377.296 25.782 18.968 53.158 36.42 81.323 51.849 23.965 13.388 43.662 23.142 63.865 31.628 8.042 3.378 16.516 5.088 25.202 5.088.307 0 .615-.002.923-.006 8.386-.117 16.593-1.838 24.393-5.116 20.178-8.479 39.85-18.223 63.74-31.57 28.209-15.453 55.585-32.906 81.367-51.873 110.635-81.393 239.073-212.921 222.665-377.296-4.551-45.593-25.208-88.854-58.167-121.813zm-409.435 491.705c-1.091 1.991-3.146 3.119-5.268 3.119-.975 0-1.962-.238-2.877-.739-21.186-11.606-41.747-24.713-61.11-38.959-44.899-33.031-81.57-67.987-108.995-103.896-2.011-2.634-1.507-6.399 1.127-8.41 2.632-2.011 6.398-1.507 8.41 1.126 26.733 35.003 62.588 69.157 106.569 101.514 18.936 13.931 39.044 26.75 59.765 38.101 2.905 1.592 3.97 5.238 2.379 8.144z"/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>'
-     document.querySelectorAll('.wishlist-engine').forEach(button => {
-     button.innerHTML = wishlist_icon;
-     button.style.cssText = `
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        z-index: 99;
-     `;
-        button.addEventListener('click', function(){
-            let product_id = button.getAttribute('data-product_id');
-            let variant_id = button.getAttribute('data-variant_id');
-            let backendData = {
-                productId: product_id,
-                variantId:variant_id
+    
+.wishlist-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.wishlist-inner {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(24%, 1fr));
+        grid-template-rows: auto;
+        gap: 1%;
+      }
+.wishlist-item {
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+    border-radius: 4px;
+  
+}
+
+.wi-l h5 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.wish-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem .5rem;
+    gap: 1rem;
+}
+.wish-price {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .4rem;
+    padding-top: .5rem;
+}
+.wish-compare {
+    color: #000;
+    text-decoration: line-through;
+    opacity: .5;
+}
+.wi-l {
+    border-right: 1px solid #eee;
+}
+.wish-img img {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+a.wish-view {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.wish-img{position: relative;}
+a.wish-view {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 9;
+}
+.wish-img:before {
+    position: absolute;
+    content: "";
+    background: #fff3c0;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    clip-path: circle(16.9% at 100% 0);
+    z-index: 1;
+}
+.wish-img img {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    aspect-ratio: 2 / 2.5;
+    object-fit: cover;
+}
+.wi-l {
+    flex: 0 0 82%;
+}
+.wi-r {
+    flex: 0 0 10%;
+}
+</style>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+        const backendUrl =
+          "https://shopify-wishlist-app-mu3m.onrender.com/api/wishlist/getwishlist";
+
+        const storeData2 = document.getElementById(
+          "ds-wishlist-store-credentials"
+        );
+        const customerEmailget = storeData2.getAttribute("customer-email");
+        const customerIdget = storeData2.getAttribute("customer-id");
+
+        async function getWishlistProducts(customerId, email) {
+          try {
+            const response = await fetch(backendUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ customerId, email }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              console.log("Wishlist data:", data);
+
+              for (const wishlist of data.wishlist) {
+                for (const item of wishlist.productHandle) {
+                  try {
+                    const res = await fetch(`/products/${item}.js`);
+
+                    if (!res.ok) throw new Error("Product Not Found");
+
+                    const productData = await res.json();
+                    console.log("Product details:", productData);
+
+                    // You can now render productData to the DOM here
+
+                    let wishlistProduct = `
+
+               <div class="wishlist-item">
+                    <div class="wish-img">
+                        <img
+                            src="${productData.featured_image}&width=350&height=350"
+                            alt="${productData.title}">
+                        <a href="/products/${
+                          productData.handle
+                        }" class="wish-view">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                id="Layer_2" height="20px" viewBox="0 0 512 512"
+                                width="20px" data-name="Layer 2"><lineargradient
+                                    id="linear-gradient"
+                                    gradientUnits="userSpaceOnUse" x1="43.93" 
+                                    x2="468.07" y1="43.93" y2="468.07"><stop
+                                        offset="0" stop-color="#ffe415" /><stop
+                                        offset="1"
+                                        stop-color="#ff5200" /></lineargradient><g
+                                    id="Icon"><g id="I"><rect
+                                            fill="url(#linear-gradient)"
+                                            height="512" rx="150"
+                                            width="512" /><path
+                                            d="m200.29 380.41v-35.03l25.81-5.47v-167.65l-25.81-5.47v-35.21h111.43v35.21l-25.81 5.47v167.65l25.81 5.47v35.03z"
+                                            fill="#fff" /></g></g></svg>
+                        </a>
+                    </div>
+                    <div class="wish-info">
+                        <div class="wi-l">
+                            <h5>${productData.title}</h5>
+                            <div class="wish-price">
+                                <div class="wish-compare">
+                                  ${
+                                    productData.compare_at_price
+                                      ? `$${(
+                                          productData.compare_at_price / 100
+                                        ).toFixed(2)}`
+                                      : ""
+                                  }
+                                </div>
+                                <div class="wish-sell-price">$ ${(
+                                  productData.price / 100
+                                ).toFixed(2)}</div>
+                            </div>
+                        </div>
+                        <div class="wi-r">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                fill="none" height="40px" viewBox="0 0 24 24"
+                                width="40px"><lineargradient
+                                    id="paint0_linear_8354_26461"
+                                    gradientUnits="userSpaceOnUse" x1="12"
+                                    x2="12" y1=".064" y2="23.991"><stop
+                                        offset="0" stop-color="#fffcd9" /><stop
+                                        offset=".7781"
+                                        stop-color="#ffeba8" /><stop offset="1"
+                                        stop-color="#ffe699" /></lineargradient><lineargradient
+                                    id="paint1_linear_8354_26461"
+                                    gradientUnits="userSpaceOnUse" x1="12"
+                                    x2="12" y1="5" y2="19"><stop offset="0"
+                                        stop-color="#fd6700" /><stop offset="1"
+                                        stop-color="#ffce00" /></lineargradient><rect
+                                    fill="url(#paint0_linear_8354_26461)"
+                                    height="24" rx="2" width="24" /><path
+                                    clip-rule="evenodd"
+                                    d="m12 5c.5523 0 1 .44772 1 1v5h5c.5523 0 1 .4477 1 1s-.4477 1-1 1h-5v5c0 .5523-.4477 1-1 1s-1-.4477-1-1v-5h-5c-.55228 0-1-.4477-1-1s.44772-1 1-1h5v-5c0-.55228.4477-1 1-1z"
+                                    fill="url(#paint1_linear_8354_26461)"
+                                    fill-rule="evenodd" /></svg>
+                        </div>
+                    </div>
+                </div>
+              
+              
+              `;
+
+                    let wishlistContainer =
+                      document.querySelector("#wishlist-inner");
+                    wishlistContainer.innerHTML += wishlistProduct;
+                  } catch (error) {
+                    console.log("Error:", error.message);
+                  }
+                }
+              }
+            } else {
+              console.error("Failed to fetch wishlist:", data.message || data);
             }
-            // console.log(`Product id:${product_id} and Variant id: ${product_id}`);
-            let wishlist_api_url = 'http://localhost:3001/api/wishlist';
-            fetch(wishlist_api_url, {
-                method: 'POST',
-                headers: {'Content-Type' : 'application/json'},
-                body:JSON.stringify(backendData),
-            })
-            .then((response) =>{
-                return response.json();
-            })
-            .then((data) =>{
-                alert("Added to Wishlist")
-                console.log("Server Response", data)
-            })
-            .catch((error) =>{
-                console.log("Error Sending data to backend", error);
-            })
-        })
+          } catch (err) {
+            console.error("Request error:", err);
+          }
+        }
+
+        getWishlistProducts(customerIdget, customerEmailget);
+      });
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    let storeData1 = document.getElementById("ds-wishlist-store-credentials");
+    let customerName = storeData1.getAttribute("customer-name");
+
+    let newDiv = document.createElement("div");
+    newDiv.innerHTML = `
+        
+           <div class="toast ">
+            <div class="toast-content">
+                <i class="fas fa-solid fa-check check">✓</i>
+
+                <div class="message">
+                    <span class="text text-1">Success</span>
+                    <span class="text text-2"> Hey ${customerName} your Product Added to Wishlist</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-xmark close">🗙</i>
+
+            <div class="progress "></div>
+        </div>
+            
+        `;
+    document.body.appendChild(newDiv);
+
+    let tostifyStyle = document.createElement("style");
+    tostifyStyle.textContent = `
+        .toast { position: fixed; z-index:9999; top: 40px; right: 0px; border-radius: 12px; background: #fff; padding: 20px 35px 20px 25px; box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.1); overflow: hidden; transform: translateX(calc(100% + 30px)); transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35); } .toast.active { transform: translateX(0%); } .toast .toast-content { display: flex; align-items: center; } .toast-content .check { display: flex; align-items: center; justify-content: center; height: 35px; min-width: 35px; background-color: #2770ff; color: #fff; font-size: 20px; border-radius: 50%; } .toast-content .message { display: flex; flex-direction: column; margin: 0 20px; } .message .text { font-size: 16px; font-weight: 400; color: #666666; } .message .text.text-1 { font-weight: 600; color: #333; } .toast .close { position: absolute; top: 10px; right: 15px; padding: 5px; cursor: pointer; opacity: 0.7; } .toast .close:hover { opacity: 1; } .toast .progress { position: absolute; bottom: 0; left: 0; height: 3px; width: 100%; } .toast .progress:before { content: ""; position: absolute; bottom: 0; right: 0; height: 100%; width: 100%; background-color: #2770ff; } .progress.active:before { animation: progress 5s linear forwards; } @keyframes progress { 100% { right: 100%; } } .toast.active~button { pointer-events: none; }
+        `;
+    document.head.appendChild(tostifyStyle);
+
+    let tostifyscript = document.createElement("script");
+    tostifyscript.textContent = `   
+        
+        toast = document.querySelector(".toast");
+
+        (closeIcon = document.querySelector(".close")),
+            (progress = document.querySelector(".progress"));
+
+        let timer1, timer2;
+
+        function tostTrigger() {
+            toast.classList.add("active");
+            progress.classList.add("active"); 
+
+            timer1 = setTimeout(() => {
+                toast.classList.remove("active");
+            }, 5000);
+
+            timer2 = setTimeout(() => {
+                progress.classList.remove("active");
+            }, 5300);
+        }
+
+        closeIcon.addEventListener("click", () => {
+            toast.classList.remove("active");
+
+            setTimeout(() => {
+                progress.classList.remove("active");
+            }, 300);
+
+            clearTimeout(timer1);
+            clearTimeout(timer2);
+        });
+      
+        
+        `;
+
+    document.body.appendChild(tostifyscript);
+  });
+
+console.log("wp [01]");
+ 
+document.addEventListener("DOMContentLoaded", function () {
+    let storeData = document.getElementById("ds-wishlist-store-credentials");
+
+    let storeDomain = storeData.getAttribute("shop-domain");
+    let customerId = storeData.getAttribute("customer-id");       
+    let customerEmail = storeData.getAttribute("customer-email");  
+
+    const frontendWishlistItems = document.querySelectorAll(".wishlist-engine");
+
+    if (frontendWishlistItems) {
+        frontendWishlistItems.forEach((wishlist) => {
+           
+          wishlist.addEventListener("click", async function () {
+                    let productHandle = wishlist.getAttribute("data-product-handle");
+
+                    if (!customerId || !customerEmail) {
+                        alert("Please log in to use the wishlist.");
+                        
+                    }
+
+                    try {
+                        const response = await fetch("https://shopify-wishlist-app-mu3m.onrender.com/api/wishlist/get", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                storeDomain,
+                                customerId,
+                                email: customerEmail,
+                                productHandle: [productHandle],
+                            }),
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                             tostTrigger();
+                            console.log("Wishlist updated:", data);
+                        } else {
+                            alert(data.message || "Something went wrong.");
+                        }
+                    } catch (error) {
+                        console.error("Error adding to wishlist:", error.message);
+                    }
+                });
+            
+        });
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    let wishlist_icon = '<svg class="wishlist-svg" xmlns="http://www.w3.org/2000/svg" width="30px" id="Semi-Solid__x2F__x2F__Black" viewBox="0 0 788.994 643.434"><path d="m729.401 55.76c-33.742-33.741-77.523-53.486-123.281-55.596-41.868-1.93-85.6 13.265-126.447 43.947-28.446 21.367-53.387 46.693-72.128 73.244-3.019 4.283-7.756 6.75-12.997 6.767-5.277 0-9.993-2.42-13.039-6.683l-.062-.087c-18.74-26.548-43.681-51.874-72.126-73.24-40.849-30.684-84.578-45.879-126.448-43.948-45.757 2.11-89.54 21.855-123.281 55.596-32.958 32.959-53.616 76.22-58.167 121.813-16.408 164.374 112.03 295.902 222.665 377.296 25.782 18.968 53.158 36.42 81.323 51.849 23.965 13.388 43.662 23.142 63.865 31.628 8.042 3.378 16.516 5.088 25.202 5.088.307 0 .615-.002.923-.006 8.386-.117 16.593-1.838 24.393-5.116 20.178-8.479 39.85-18.223 63.74-31.57 28.209-15.453 55.585-32.906 81.367-51.873 110.635-81.393 239.073-212.921 222.665-377.296-4.551-45.593-25.208-88.854-58.167-121.813zm-409.435 491.705c-1.091 1.991-3.146 3.119-5.268 3.119-.975 0-1.962-.238-2.877-.739-21.186-11.606-41.747-24.713-61.11-38.959-44.899-33.031-81.57-67.987-108.995-103.896-2.011-2.634-1.507-6.399 1.127-8.41 2.632-2.011 6.398-1.507 8.41 1.126 26.733 35.003 62.588 69.157 106.569 101.514 18.936 13.931 39.044 26.75 59.765 38.101 2.905 1.592 3.97 5.238 2.379 8.144z"/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>';
+
+    document.querySelectorAll('.wishlist-engine').forEach(button => {
+        button.innerHTML = wishlist_icon;
+        button.style.cssText = `
+              position: absolute;
+              top: 8px;
+              right: 8px;
+              z-index: 99;
+              cursor: pointer;
+                  fill: #e50000c2;
+           `;
+
+
+        function addToWishlist(productId) {
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+            if (!wishlist.includes(productId)) {
+                wishlist.push(productId);
+                localStorage.setItem("wishlist", JSON.stringify(wishlist));
+            }
+        }
+
+        button.addEventListener('click', function () {
+            let product_handle = button.getAttribute('data-product-handle');
+            addToWishlist(product_handle);
+   
+        });
 
     })
 })
 
-console.log("Wishlist App [1]");M
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const wishlistContainer = document.getElementById("wishlist-products");
+    wishlistContainer.innerHTML = " ";
+
+    const wishlistHandle = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+    if (wishlistHandle.length === 0) {
+        wishlistContainer.innerHTML = "<p>No products in your wishlist.</p>";
+
+    }
+
+    for (let handle of wishlistHandle) {
+        try {
+            const response = await fetch(`/products/${handle}.js`);
+            if (!response.ok) throw new Error("Product Not Found");
+
+            const product = await response.json();
+            console.log(product)
+            const productHtml = `
+            <div class="Item" product-handle="${product.handle}">
+              <a href="${product.url}" class="Item__link"> 
+                <div class="ImageContainer">
+                  <img src="${product.featured_image}&width=350&height=350" alt="${product.title}" class="Image">
+                </div>
+                <div class="Item__title">${product.title}</div>
+                <div class="Item__price">₹${(product.price / 100).toFixed(2)}</div>
+              </a>
+            </div>
+          `;
+
+            wishlistContainer.innerHTML += productHtml;
+
+        } catch (error) {
+            console.error(`Failed to load product: ${handle}`, error);
+        }
+    }
+});
+
+
 </script>
 
 {% schema %}
@@ -57,4 +434,4 @@ console.log("Wishlist App [1]");M
         }
     ]
 }
-{% endschema %}
+{% endschema %}`

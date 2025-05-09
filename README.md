@@ -369,3 +369,49 @@ This template uses [Remix](https://remix.run). The following Shopify tools are a
 - [App extensions](https://shopify.dev/docs/apps/app-extensions/list)
 - [Shopify Functions](https://shopify.dev/docs/api/functions)
 - [Getting started with internationalizing your app](https://shopify.dev/docs/apps/best-practices/internationalization/getting-started)
+
+
+// Example: On product card click or wishlist button
+function addToWishlist(productId) {
+  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  if (!wishlist.includes(productId)) {
+    wishlist.push(productId);
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }
+}
+
+// Usage
+addToWishlist(123456789); // Replace with actual Shopify product ID
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+    if (wishlist.length === 0) {
+      document.getElementById("wishlist-products").innerHTML = "<p>No products in your wishlist.</p>";
+      return;
+    }
+
+    document.getElementById("wishlist-products").innerHTML = "";
+
+    for (let productId of wishlist) {
+      try {
+        const res = await fetch(`/products/${productId}.js`);
+        const product = await res.json();
+
+        const productHtml = `
+          <div class="wishlist-product" style="margin-bottom: 20px;">
+            <h3>${product.title}</h3>
+            <img src="${product.images[0]}" width="150" />
+            <p>Price: ₹${(product.price / 100).toFixed(2)}</p>
+            <a href="${product.url}">View Product</a>
+          </div>
+        `;
+
+        document.getElementById("wishlist-products").innerHTML += productHtml;
+      } catch (err) {
+        console.error("Failed to fetch product:", err);
+      }
+    }
+  });
+</script>

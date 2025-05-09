@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://day-leave-glossary-wm.trycloudflare.com"
+application_url = "https://presidential-packard-maker-slim.trycloudflare.com"
 embedded = true
 
 [build]
@@ -23,13 +23,13 @@ api_version = "2025-04"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,write_customers,read_products"
+scopes = "write_products,write_customers,read_products,read_orders,read_discounts"
 
 [auth]
 redirect_urls = [
-  "https://day-leave-glossary-wm.trycloudflare.com/auth/callback",
-  "https://day-leave-glossary-wm.trycloudflare.com/auth/shopify/callback",
-  "https://day-leave-glossary-wm.trycloudflare.com/api/auth/callback"
+  "https://presidential-packard-maker-slim.trycloudflare.com/auth/callback",
+  "https://presidential-packard-maker-slim.trycloudflare.com/auth/shopify/callback",
+  "https://presidential-packard-maker-slim.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
