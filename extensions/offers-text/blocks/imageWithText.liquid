@@ -1,0 +1,143 @@
+
+<style>
+   {{ block.settings.font | font_face }} 
+
+  :root {
+    --font-family: {{ block.settings.font.family }}, sans-serif;
+    --font-style: {{ block.settings.font.style }};
+    --font-weight: {{ block.settings.font.weight }};
+    --fontSizeheading: {{block.settings.font-size}}rem;
+    --fontSizeContent: {{block.settings.font-size1}}rem;
+    --btnbackground: {{block.settings.btn-color}};
+     
+  }
+  
+   #block-{{ block.id }} .imageWithText-right {font-family:var(--font-family) !important; font-style:var(--font-style) !important; font-weight:var(--font-weight)!important;}
+  .custom-page-layout { width: 100%; max-width: 100%; } 
+  .imageWithText-container { max-width: 1170px; margin: auto; } 
+  .imageWithText-wrapper {0 3px 20px #0000001a;box-shadow: 0 3px 20px #0000001a;background: #fff;border-radius: 20px;margin: 0;display: flex;align-items: center;justify-content: center;gap: 4rem;} 
+  .imageWithText-left ,  imageWithText-right { flex:  0 0 50%; } 
+  .image-position-left .imageWithText-image img { display: block; width: 100%; height: 100%; border-top-left-radius: 20px; border-bottom-left-radius: 20px; }
+  .image-position-left .imageWithText-right { padding-right: 3rem; }
+  #block-{{ block.id }} .imageWithText-right h4 { font-size: var(--fontSizeheading); text-transform: uppercase; margin: 0; line-height: 1; padding-bottom: 1.4rem; font-family:var(--font-family) !important; font-style:var(--font-style) !important; font-weight:var(--font-weight)!important; }
+  #block-{{ block.id }} .imageWithText-right p { margin: 0; font-size: var(--fontSizeContent); padding-bottom: 1.6rem; font-family:var(--font-family) !important; font-style:var(--font-style) !important; font-weight:var(--font-weight)!important;} 
+  #block-{{ block.id }} .imageWithText-right a { display: inline-block; padding: 6px 12px; text-decoration: none; color: #fff; background: var(--btnbackground); border-radius: 6px; font-size: 1.5rem;  font-family:var(--font-family) !important; font-style:var(--font-style) !important; font-weight:var(--font-weight)!important;}
+  .custom-page-layout{margin: 20px auto;}
+  .image-position-right .imageWithText-wrapper { flex-direction: row-reverse;}
+  .imageWithText-right { padding-left: 3rem; }
+  .image-position-right .imageWithText-image img { display: block; width: 100%; height: 100%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
+
+    @media(max-width:767px){
+        .imageWithText-wrapper{flex-direction: column;}
+        .image-position-right .imageWithText-wrapper {flex-direction: column;}
+        .imageWithText-wrapper{gap: 2rem;  padding-bottom: 2rem;}
+        .imageWithText-right { padding: 0 2rem; } 
+        .image-position-left .imageWithText-image img { border-top-left-radius: 20px; border-bottom-left-radius: 0; border-top-right-radius: 20px; }
+        .image-position-left .imageWithText-right { padding-right: 3rem; padding: 0 2rem; }
+        .image-position-left .imageWithText-wrapper { padding-bottom: 2rem; gap: 2rem; }
+        .image-position-right .imageWithText-wrapper { flex-direction: column; gap: 2rem; padding-bottom: 2rem; }
+        .image-position-right .imageWithText-image img { border-top-right-radius: 20px; border-bottom-right-radius: 0; border-top-left-radius: 20px; }
+    }
+</style>
+
+
+<div class="custom-page-layout {{ block.settings.image_position }}" id=block-{{ block.id }}>
+  <div class="imageWithText-container">
+    <div class="imageWithText-wrapper">
+      <div class="imageWithText-left">
+        <div class="imageWithText-image"><img src="{{ block.settings.image | img_url:"720x" }}" alt="{{ block.settings.image.alt }}" width="" height="" ></div>
+      </div>
+      <div class="imageWithText-right">
+        <h4>{{ block.settings.heading }}</h4>
+        <p>{{ block.settings.content }}</p>
+        <a href="{{ block.settings.url }}" class="custom-button">{{ block.settings.btn }}</a>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+{% schema %}
+  {
+    "name": "ImageWithText",
+    "target":"section",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id":"font",
+        "label":"Font Family",
+        "default":"helvetica_n4"
+        
+      },
+      {
+        "type": "select",
+        "id": "image_position",
+        "label": "Image Position",
+        "options": [
+          {
+            "value": "image-position-left",
+            "label": "Image Postion Left"
+          },
+          {
+            "value": "image-position-right",
+            "label": "Image Position Right"
+          }
+        ],
+        "default": "image-position-left"
+      },
+      {
+      "type":"range",
+      "id":"font-size",
+      "label":"Heading Font Size ",
+      "min":1,
+      "max":10,
+      "step":0.1,
+      "default":2.6
+    },
+      {
+      "type":"range",
+      "id":"font-size1",
+      "label":"Content Font Size ",
+      "min":1,
+      "max":10,
+      "step":0.1,
+
+      "default":1.6
+    },
+      {
+        "type":"image_picker",
+        "id":"image",
+        "label": "Image"
+      },
+      {
+        "type":"liquid",
+        "id":"heading",
+        "label":"Content",
+        "default":"HD Video Conferencing"
+      },
+      {
+        "type":"liquid",
+        "id":"content",
+        "label":"Content"
+      },
+      {
+        "type":"url",
+        "id":"url",
+        "label":"Url"
+      },
+      {
+        "type":"text",
+        "label":"Button Label",
+        "id":"btn",
+        "default":"Learn More"
+      },
+      {
+        "type": "color",
+        "id": "btn-color",
+        "label": "Background Color",
+        "default": "#000000"
+    },
+      
+    ]
+  }
+{% endschema %}

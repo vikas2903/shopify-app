@@ -1,0 +1,263 @@
+<style>
+
+  {{ block.settings.heading_font | font_face }} 
+
+  :root {
+    --font-family: {{ block.settings.heading_font.family }}, sans-serif;
+    --font-style: {{ block.settings.heading_font.style }};
+    --font-weight: {{ block.settings.heading_font.weight }};
+    --background-color: {{block.settings.Background-color}};
+    --text-color:{{block.settings.text-color}};
+    --secondry-bg:{{block.settings.polygon}};
+    --section-margin:{{block.settings.section-margin}}px;
+  }
+    .coupon-container-main-div-9 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 0px;
+        font-family:var(--font-family);
+        font-style:var(--font-style);
+        font-weight:var(--font-weight);
+        position: relative;
+        margin-bottom:var(--section-margin); 
+        margin-top:var(--section-margin);
+    }
+
+    .coupon-container-div-9 {
+        width: 400px;
+        height: 100px;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: absolute;
+        border-radius: 10px;
+    }
+
+    .coupon-container-div-9::before,
+    .coupon-container-div-9::after {
+        content: "";
+        position: absolute;
+        bottom: 3px;
+        width: 60%;
+        height: 30px;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: -1;
+        filter: blur(3px);
+    }
+
+    .coupon-container-div-9::before {
+        left: 0;
+        transform-origin: right;
+        transform: skewY(-4deg);
+    }
+
+    .coupon-container-div-9::after {
+        right: 0;
+        transform-origin: left;
+        transform: skewY(4deg);
+    }
+
+    .main-content-9 {
+        font-size: 21px;
+        margin-bottom: 7px;
+        font-weight: 700;
+    }
+
+    .content-div-9 {
+        line-height: normal;
+        padding-left: 6%;
+    }
+
+    .usecode-9 {
+        font-size: 13px;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .usecode-9 div {
+        border: 1px dotted white;
+        padding: 2px 4px;
+    }
+
+    .my-coupon-code-9 {
+        font-weight: bold;
+    }
+
+    .copy-btn-9 {
+        background-color: var(--secondry-bg);
+        border-radius: 3px;
+        padding: 2px 4px; 
+    }
+
+    .copy-btn-9:hover {
+        cursor: pointer;
+        background-color: white;
+        color: black;
+    }
+
+    .polygon-9 {
+        clip-path: polygon(100% 0, 100% 76%, 50% 100%, 0 76%, 0 0);
+        background-color: var(--secondry-bg);
+        width: 120px;
+        height: 122px;
+        position: relative;
+        top: 10px;
+        right: 20px;
+        display: block !important;
+    }
+
+    .polygon-9 div {
+        position: absolute;
+        bottom: 45px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: normal;
+        text-align: center;
+        width: 100%;
+    }
+
+    .polygon-9 span {
+        font-size: 15px;
+    }
+
+    .polygon-9 b {
+        font-size: 20px;
+    }
+
+    @media(max-width:767px){
+        .coupon-container-div-9{width:95%;}
+        .polygon-9{right: 8px;}
+        .usecode-9{flex-direction: column; gap: 1rem;}
+    }
+</style> 
+
+
+<div class="coupon-container-main-div-9">
+    <div class="coupon-container-div-9">
+        <div class="content-div-9">
+            <div class="main-content-9">{{ block.settings.deal_title }}</div>
+            <div class="usecode-9">
+                <div>Use Code: <span class="my-coupon-code-9">{{ block.settings.coupon_code }}</span></div>
+                <span class="copy-btn-9">Copy Code</span>
+            </div>
+        </div>
+        <div class="polygon-9">
+            <div>
+                <span>{{ block.settings.discount_text_top }}</span>
+                <span><b>{{ block.settings.discount_amount }}</b></span>
+                <span>{{ block.settings.discount_text_bottom }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.copy-btn-9').forEach(button => {
+        button.addEventListener('click', function () {
+            const couponCode = this.previousElementSibling.querySelector('.my-coupon-code-9').innerText;
+            const tempInput = document.createElement('input');
+            tempInput.value = couponCode;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            this.innerText = 'Code Copied';
+            setTimeout(() => {
+                this.innerText = 'Copy Code';
+            }, 2000);
+        });
+    });
+</script>
+
+{% schema %}
+{
+  "name": "Offer",
+  "target":"section",
+  "settings": [
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "font Family",
+      "default": "helvetica_n4"
+    },
+    {
+      "type":"range",
+      "id":"font-size",
+      "label":"Font Size",
+      "min":16,
+      "max":28,
+      "step":1,
+      "unit":"px",
+      "default":16
+    },
+    {
+    "type": "range",
+    "id": "section-margin",
+    "min": 20,
+    "max": 100,
+    "step": 5,
+    "unit": "px",
+    "label": "Section Margin",
+    "default": 40
+    },
+    {
+      "type": "color",
+      "id": "Background-color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+       {
+      "type": "color",
+      "id": "polygon",
+      "label": "Background Color of Polygon Shape",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "text-color",
+      "label": "Text  Color",
+      "default": "#fff"
+    },
+    {
+      "type": "text",
+      "id": "deal_title",
+      "label": "Main Title",
+      "default": "Deal of the Day"
+    },
+    {
+      "type": "text",
+      "id": "coupon_code",
+      "label": "Coupon Code",
+      "default": "FLAT300"
+    },
+    {
+      "type": "text",
+      "id": "discount_text_top",
+      "label": "Top Text (Polygon)",
+      "default": "ADDITIONAL"
+    },
+    {
+      "type": "text",
+      "id": "discount_amount",
+      "label": "Discount Amount",
+      "default": "₹300 Off"
+    },
+    {
+      "type": "text",
+      "id": "discount_text_bottom",
+      "label": "Bottom Text (Polygon)",
+      "default": "on all orders"
+    }
+  ]
+}
+{% endschema %}

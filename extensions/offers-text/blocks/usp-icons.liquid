@@ -1,5 +1,8 @@
 
 <style>
+:root{
+    --usp-width:{{block.settings.usp-width}}px;
+}
 
 .usp-container {
     max-width: 100%;
@@ -52,8 +55,8 @@ span.content {
         }
 
       .usp-items .img {
-     width: 60px;
-    }
+       width: var(--usp-width);
+       }
     .usp-wrapper::-webkit-scrollbar {
     display: none;
 }
@@ -129,6 +132,17 @@ span.content {
     "name": "Usp Icons",
      "target": "section",
     "settings": [
+
+        {
+        "type":"range",
+        "id":"usp-width",
+        "label":"Font Size",
+        "min":40,
+        "max":120,
+        "step":10,
+        "unit":"px",
+        "default":60
+        },
         {
             "type": "image_picker",
             "id": "usp_icon_1_image",
