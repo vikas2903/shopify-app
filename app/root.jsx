@@ -36,15 +36,17 @@ export default function App() {
       <body>
 
         <div className="dashboard">
-          <ExploreContextProvider>
+         
           <Sidebar />
           <div className="main-contentt">
-            <Header />
-            <Outlet />
+             <ExploreContextProvider>
+                  <Header />
+                  <Outlet />
+              </ExploreContextProvider>
             <ScrollRestoration />
             <Scripts />
           </div>
-        </ExploreContextProvider>
+    
         </div>
 
 
