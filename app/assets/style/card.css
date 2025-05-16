@@ -1,0 +1,114 @@
+:root{
+    --text-color:#fff;
+}
+
+.explore-card-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(24%, 1fr));
+  gap: 1rem;
+  grid-template-rows: auto;
+}
+
+.explore-card .img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  position: relative;
+}
+
+.explore-card .img img {
+  display: block;
+  width: 100%;
+  height: min-content;
+  border-radius: 6px;
+}
+
+.explore-card a {
+  color: #fff;
+}
+
+.img-title {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 .3rem;
+  align-items: center;
+}
+
+.imgt-l {
+  font-size: 1.1rem;
+  font-family: "Rubik";
+}
+
+.svg-wrapper span {
+  background: #eee;
+  margin: 0 5px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-wrapper span svg {
+  fill: #464242;
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.img-title {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    align-items: center;
+    position: absolute;
+    bottom: 23%;
+    left: 0;
+    right: 0;
+    transition: all .4s ease;
+    opacity: 0;
+}
+
+.explore-card:hover .img-title{
+    transition: all .4s ease;
+    opacity: 1;
+}
+
+.explore-card .img-bottom img {
+    width: 100% !important;
+    max-width: 20px;
+    border-radius: 100% !important;
+}
+
+.img-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem .3rem;
+}
+
+.imgb-l {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.imgb-l span {
+    font-size: 1rem;
+    font-family: 'Rubik';
+    color: #000;
+}
+
+span.views {
+    font-size: .7rem;
+    vertical-align: middle;
+}
+
+.svg-wrapper-imgb-r {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .1rem;
+}

@@ -1,0 +1,81 @@
+.popip-container {
+    position: fixed;
+    top: 10%;
+    padding: 64px 120px;
+    transition: padding 0.25s linear;
+    transition-delay: 0.15s;
+    background: #fff;
+    overflow-y: scroll;
+    height: -webkit-fill-available;
+    overflow-x: hidden;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    left: 0;
+    right: 0;
+    
+}
+
+.pop-header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #000;
+}
+
+.pop-title {
+    font-size: 1.4rem;
+    font-family: "Rubik";
+    letter-spacing: 0.5px;
+}
+
+.popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.popup-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.youtube-video {
+    padding-top: 2rem;
+}
+
+.pop-content {
+    color: #000;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.pop-content {
+    color: #000;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.pop-content p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.youtube-video iframe {
+    border-radius: 6px;
+}
+
+.pop-content ul {
+    padding-top: 1rem;
+}
+
+.pop-content ul li {
+    list-style: disc;
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+.pop-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+}
