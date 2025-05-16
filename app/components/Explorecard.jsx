@@ -3,15 +3,20 @@ import { Link } from "react-router-dom";
 import { ExploreContext } from "../context/Explorecontext.jsx";
 import { useContext } from "react";
 import Popup from '../components/Popup.jsx';
+
 function Explorecard() {
   const {exploreData, setShowPopup, setSelectedId, selectedId} = useContext(ExploreContext);
 
+  if (!exploreData || !Array.isArray(exploreData)) {
+    return <div>No data available</div>;
+  }
 
   function popupvisible(id) {
-    setSelectedId(id);
-    setShowPopup(true);
+    if (id) {
+      setSelectedId(id);
+      setShowPopup(true);
+    }
   }
-  console.log("selectedid", selectedId);
 
   const loveSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" role="img" class="icon ">
     <path d="M10.7408 2C13.0889 2 14.6667 4.235 14.6667 6.32C14.6667 10.5425 8.11856 14 8.00004 14C7.88152 14 1.33337 10.5425 1.33337 6.32C1.33337 4.235 2.91115 2 5.2593 2C6.60745 2 7.48893 2.6825 8.00004 3.2825C8.51115 2.6825 9.39263 2 10.7408 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -26,47 +31,44 @@ function Explorecard() {
 
   return (
     <>
-      {exploreData.map(function (item, key) {
-        return (
-          <div
-            className="explore-card"
-            exploreId={item.id}
-            key={item.id}
-            onClick={() => popupvisible(item.id)}
-          >
-            <Link to="#">
-              <div className="img">
-                <img src={item.image} alt="" />
+      {exploreData.map((item) => (
+        <div
+          className="explore-card"
+          key={item.id}
+          onClick={() => popupvisible(item.id)}
+        >
+          <Link to="#">
+            <div className="img">
+              <img src={item.image} alt={item.title} />
 
-                <div className="img-title">
-                  <div className="imgt-l">{item.title}</div>
-                  <div className="imgt-r">
-                    <div className="svg-wrapper">
-                      <span dangerouslySetInnerHTML={{ __html: loveSvg }} />
-                      <span dangerouslySetInnerHTML={{ __html: ptanahi }} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="img-bottom">
-                  <div className="imgb-l">
-                    <img
-                      src="https://cdn.dribbble.com/users/1832625/avatars/small/d0a819596a87076630326f81799e85c0.jpg?1586442553"
-                      alt=""
-                    />
-                    <span>{item.title}</span>
-                  </div>
-                  <div className="imgb-r">
-                    <div className="svg-wrapper-imgb-r"></div>
+              <div className="img-title">
+                <div className="imgt-l">{item.title}</div>
+                <div className="imgt-r">
+                  <div className="svg-wrapper">
+                    <span dangerouslySetInnerHTML={{ __html: loveSvg }} />
+                    <span dangerouslySetInnerHTML={{ __html: ptanahi }} />
                   </div>
                 </div>
               </div>
-            </Link>
-          </div>
-        );
-      })}
-      < Popup />
-    </> 
+
+              <div className="img-bottom">
+                <div className="imgb-l">
+                  <img
+                    src="https://cdn.dribbble.com/users/1832625/avatars/small/d0a819596a87076630326f81799e85c0.jpg?1586442553"
+                    alt="Avatar"
+                  />
+                  <span>{item.title}</span>
+                </div>
+                <div className="imgb-r">
+                  <div className="svg-wrapper-imgb-r"></div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+      ))}
+      <Popup />
+    </>
   );
 }
 

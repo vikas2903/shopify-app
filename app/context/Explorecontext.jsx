@@ -1,10 +1,16 @@
 import { createContext, useState } from "react"; 
 import exploreData from '../data/data.json';
 
-export const ExploreContext = createContext(null);
+// Create context with default values to avoid null context
+export const ExploreContext = createContext({
+  showPopup: false,
+  setShowPopup: () => {},
+  exploreData: [],
+  selectedId: '001',
+  setSelectedId: () => {}
+});
 
 export const ExploreContextProvider = ({ children }) => {
-  
   const [showPopup, setShowPopup] = useState(false);
   const [selectedId, setSelectedId] = useState('001');
 
