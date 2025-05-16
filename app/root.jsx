@@ -9,7 +9,7 @@ import {
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import Analytics from "./routes/app.analytics";
-import {ExploreContextProvider} from './context/Explorecontext.jsx'
+
  
 
 
@@ -39,10 +39,10 @@ export default function App() {
          
           <Sidebar />
           <div className="main-contentt">
-             <ExploreContextProvider>
+          
                   <Header />
                   <Outlet />
-              </ExploreContextProvider>
+  
             <ScrollRestoration />
             <Scripts />
           </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import Faq from '../components/Faq';
-import { TitleBar } from "@shopify/app-bridge-react";
  
   const Help = () => {
 
