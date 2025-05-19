@@ -10,8 +10,8 @@
     overflow-x: hidden;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    left: 0;
-    right: 0;
+    left: 170px;
+    right: 20px;
     
 }
 
@@ -24,7 +24,6 @@
 
 .pop-title {
     font-size: 1.4rem;
-    font-family: "Rubik";
     letter-spacing: 0.5px;
 }
 
@@ -32,8 +31,9 @@
     position: absolute;
     top: 15px;
     right: 15px;
+    cursor: pointer;
 }
-
+button{cursor: pointer;}
 .popup-header {
     padding-bottom: 1rem;
     border-bottom: 1px solid #eee;

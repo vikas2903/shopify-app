@@ -24,7 +24,7 @@ export default function App() {
         <NavMenu>
           <Link to="/app/explore">Explore Section</Link>
           <Link to="/app" rel="home"> Home</Link>
-          <Link to="/app/analytics">Analytics</Link>
+          {/* <Link to="/app/analytics">Analytics</Link> */}
           <Link to="/app/help"> Help</Link> 
           {/* <Link to="/app/additional">Additional page</Link> */}
           <Link to="/app/installation">Installation</Link>

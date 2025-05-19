@@ -37,11 +37,12 @@
 
 .imgt-l {
   font-size: 1.1rem;
-  font-family: "Rubik";
+  color: #fff;
+
 }
 
 .svg-wrapper span {
-  background: #eee;
+  background: #fff;
   margin: 0 5px;
   width: 40px;
   height: 40px;
@@ -52,7 +53,7 @@
 }
 
 .svg-wrapper span svg {
-  fill: #464242;
+  fill: #ffffff;
   width: 20px;
   height: 20px;
   display: block;
@@ -97,7 +98,7 @@
 
 .imgb-l span {
     font-size: 1rem;
-    font-family: 'Rubik';
+    text-transform: uppercase;
     color: #000;
 }
 

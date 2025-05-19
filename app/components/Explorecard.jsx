@@ -59,7 +59,7 @@ function Explorecard() {
             <div className="img-bottom">
               <div className="imgb-l">
                 <img
-                  src="https://cdn.dribbble.com/users/1832625/avatars/small/d0a819596a87076630326f81799e85c0.jpg?1586442553"
+                  src="https://cdn.shopify.com/s/files/applications/7e14cea35d331d8a859a3d97b6b76175_200x200.png"
                   alt="Avatar"
                 />
                 <span>{item.title}</span>

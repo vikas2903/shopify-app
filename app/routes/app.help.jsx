@@ -7,7 +7,7 @@ import Faq from '../components/Faq';
         <>
    
         <div className="form-container">
-        <TitleBar title="Query Form & Faq's" /> 
+     
             <div className="card-pattern"></div>
             <div className="form-title">
                 <h3><i className="fas fa-headset"></i> Support Ticket Form</h3>
