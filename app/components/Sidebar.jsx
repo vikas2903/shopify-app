@@ -17,12 +17,6 @@ function Sidebar() {
               <span> <Link to="/app">Dashboard</Link> </span>
             </li>
             <li>
-           
-              <i className="fas fa-chart-line"></i>
-              <span> <Link to="/app/analytics"> Analytics  </Link></span>
-        
-            </li>
-            <li>
               <i className="fas fa-section"></i>
               <span> <Link to="/app/explore"> Explore</Link> </span> 
             </li>

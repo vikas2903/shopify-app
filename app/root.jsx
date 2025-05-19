@@ -7,7 +7,7 @@ import {
 } from "@remix-run/react";
 
 import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import Analytics from "./routes/app.analytics";
 
  
@@ -40,7 +40,7 @@ export default function App() {
           <Sidebar />
           <div className="main-contentt">
           
-                  <Header />
+                  {/* <Header /> */}
                   <Outlet />
   
             <ScrollRestoration />

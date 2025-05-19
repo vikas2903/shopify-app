@@ -8,8 +8,6 @@ const Help = () => {
     message: '',
   });
 
-  const [file, setFile] = useState(null);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -18,44 +16,25 @@ const Help = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const convertFileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
-  const sendEmail = async (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
-
-    let base64File = null;
-    if (file) {
-      base64File = await convertFileToBase64(file);
-    }
 
     const emailParams = {
       email: formData.email,
       name: formData.name,
       message: formData.message,
       time: new Date().toLocaleString(),
-      attachment: base64File, // Required by EmailJS for sending files
     };
 
     const PUBLIC_KEY = 'XMsEZ-hlGcph6hZ_b';
     const SERVICE_ID = 'service_l6nwykh';
     const TEMPLATE_ID = 'template_shkdbn5';
 
-    emailjs.send(SERVICE_ID, TEMPLATE_ID, emailParams, PUBLIC_KEY)
+    emailjs
+      .send(SERVICE_ID, TEMPLATE_ID, emailParams, PUBLIC_KEY)
       .then(() => {
         alert('Ticket submitted successfully!');
         setFormData({ email: '', name: '', message: '' });
-        setFile(null);
       })
       .catch((error) => {
         console.error(error);
@@ -103,23 +82,11 @@ const Help = () => {
             id="issueDetails"
             name="message"
             rows="6"
+            placeholder="Please describe your issue in detail. If needed, share video or screenshot links (Google Drive, Loom, etc.)"
             value={formData.message}
             onChange={handleChange}
             required
           ></textarea>
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="formFile" className="form-label">Attachments</label>
-          <input
-            className="form-control"
-            type="file"
-            id="formFile"
-            onChange={handleFileChange}
-          />
-          <div className="form-text mt-2">
-            Upload screenshots, logs, or other helpful files (max 5MB each).
-          </div>
         </div>
 
         <button type="submit" className="btn btn-success">

@@ -15,11 +15,11 @@ function Homee() {
                                 <i className="fas fa-users"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Total Users</h3>
-                                <div className="stat-number">2,453</div>
+                                <h3>Total Blocks</h3>
+                                <div className="stat-number">10</div>
                                 <div className="stat-trend positive">
                                     <i className="fas fa-arrow-up"></i>
-                                    <span>12.7%</span>
+                                    <span>+ Recent View Section</span>
                                 </div>
                             </div>
                         </div>
@@ -29,11 +29,11 @@ function Homee() {
                                 <i className="fas fa-dollar-sign"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Revenue</h3>
-                                <div className="stat-number">$13,893</div>
+                                <h3>App</h3>
+                                <div className="stat-number">01</div>
                                 <div className="stat-trend positive">
                                     <i className="fas fa-arrow-up"></i>
-                                    <span>8.2%</span>
+                                    <span>+ Wishlist App</span>
                                 </div>
                             </div>
                         </div>
@@ -43,11 +43,11 @@ function Homee() {
                                 <i className="fas fa-shopping-cart"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Orders</h3>
-                                <div className="stat-number">1,257</div>
+                                <h3>Installed Section</h3>
+                                <div className="stat-number">10</div>
                                 <div className="stat-trend negative">
                                     <i className="fas fa-arrow-down"></i>
-                                    <span>3.1%</span>
+                                    <span>+2</span> 
                                 </div>
                             </div>
                         </div>
@@ -56,10 +56,10 @@ function Homee() {
                     <div className="recent-activity">
                         <div className="section-header">
                             <h2>Recent Activity</h2>
-                            <button className="view-all">View All</button>
+                            {/* <button className="view-all">View All</button> */}
                         </div>
 
-                        <div className="activity-card">
+                        {/* <div className="activity-card">
                             <div className="activity-icon green">
                                 <i className="fas fa-check"></i>
                             </div>
@@ -92,21 +92,25 @@ function Homee() {
                                     requirements</p>
                                 <div className="activity-time">Yesterday</div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
-                <footer>
+                {/* <footer>
                     <div className="copyright">© 2025 Pulse Dashboard</div>
                     <div className="footer-links">
                         <a href="#">Privacy Policy</a>
                         <a href="#">Terms of Service</a>
                         <a href="#">Contact Us</a>
                     </div>
-                </footer>
+                </footer> */}
             </div>
     </>
   )
 }
 
 export default Homee
+
+
+
+
