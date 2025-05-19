@@ -2,17 +2,12 @@ import React from 'react';
 import '../assets/style/popup.css';
 import {ExploreContext} from '../context/Explorecontext.jsx';
 import {useContext} from 'react';
-import { Redirect } from '@shopify/app-bridge/actions';
-import { useAppBridge } from '@shopify/app-bridge-react';
+
 
 
 function Popup() {
 
-    const appp = useAppBridge();
-    const handleRedirect = () => {
-        const redirect = Redirect.create(appp);
-        redirect.dispatch(Redirect.Action.APP, '/customize');
-      };
+    
     const {showPopup, setShowPopup, exploreData, selectedId} = useContext(ExploreContext);
 
     if (!showPopup || !exploreData || !selectedId) {
@@ -56,7 +51,7 @@ function Popup() {
                                 type="button" 
                                 className="action-button"
                                 aria-label="Add to collection"
-                                onClick={handleRedirect}
+                               
                             >
                                 <span dangerouslySetInnerHTML={{__html: plus}} />
                             </button>

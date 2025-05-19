@@ -1325,3 +1325,6 @@ button.btn.btn-success {
         padding: 25px;
     }
 }
+button{
+    cursor: pointer;
+}
