@@ -47,7 +47,7 @@ function Homee() {
                                 <div className="stat-number">10</div>
                                 <div className="stat-trend negative">
                                     <i className="fas fa-arrow-down"></i>
-                                    <span>+2</span> 
+                                    <span>-2</span> 
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@ function Homee() {
 
                     <div className="recent-activity">
                         <div className="section-header">
-                            <h2>Recent Activity</h2>
+                            {/* <h2>Recent Activity</h2> */}
                             {/* <button className="view-all">View All</button> */}
                         </div>
 

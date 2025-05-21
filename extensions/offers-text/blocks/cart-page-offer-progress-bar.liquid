@@ -1,0 +1,332 @@
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+<style>
+    :root{
+        --drawerColor:#64112f
+    }
+    .progress-wrapper {
+      margin-bottom: 2rem;
+  }
+    .progress-container-bg-color {
+        background-image: linear-gradient(-65deg, #fff, #fff);
+        height: 80px;
+        padding: 3px 0;
+    }
+    .progress-container-wrap {
+        margin-top: 10px;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+    .progress-container-wrap .progress-container {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin-bottom: 30px;
+        max-width: 100%;
+        width: auto;
+        margin: 0 50px 0 40px;
+    }
+    .progress-container-wrap .progress-container::before {
+        content: "";
+        background: #DCDCDC;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        height: 3px;
+        width: 100%;
+        z-index: 0;
+    }
+    .progress-container-wrap .progress {
+        background: var(--drawerColor);
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        height: 3px;
+        width: 0%;
+        /* z-index: -1; */
+        transition: 0.4s ease;
+    }
+    .progress_offer_wrap {
+        background-image: linear-gradient(-65deg, var(--drawerColor), var(--drawerColor));
+        text-align: center;
+        font-size: 13px;
+        letter-spacing: normal;
+    }
+    .progress_offer_wrap p {
+        margin-top: 5px !important;
+          letter-spacing: normal;
+        margin: 0;
+    color:#fff;
+        padding: 2px 2px 4px 2px;
+    }
+
+    .progress_offer_wrap p {
+        margin-top: 10px;
+        letter-spacing: normal;
+        /* font-family: 'poppins-Medium' !important; */
+    }
+    .circle.alu {
+        border: none;
+        background: none;
+        width: 0;
+        height: 0;
+        margin: 0;
+        padding: 0;
+        position: static;
+    }
+    .progress-container-wrap .circle {
+        background: #fff;
+        color: #999;
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #64112f !important;
+        transition: .4s ease;
+        position: relative;
+    }
+
+    .progress-container-wrap .circle.active {
+        border-color: var(--drawerColor);
+        background:  var(--drawerColor);
+        color: #fff;
+        /* box-shadow: 0px 0px 12px #FF40B1; */
+    }
+    .progress-container-wrap .circle {
+        background: #fff;
+        color: #999;
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #ff40b1;
+        transition: .4s ease;
+        position: relative;
+    }
+    .progress-container-wrap .circle img {
+        border-radius: 50%;
+          filter: saturate(0.5) saturate(0.5) grayscale(0);
+    }
+    .progress-container-wrap .circle span {
+        margin-top: 95px;
+        width: 117px !important;
+        position: absolute;
+        line-height: 1;
+    }
+    .progress-container-wrap p {
+        color: #000;
+        font-size: 9px;
+          padding: 0 4px !important;
+    }
+    .progress-container-wrap .circle.active::after {
+        content: '';
+        background-image: url('https://cdn.shopify.com/s/files/1/0361/8553/8692/files/active-right-sign.png?v=1732347738');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        top: -39%;
+        left: 10px;
+        height: 20px;
+        width: 20px;
+        z-index: 0;
+        display: block;
+    }
+
+    div#progress {
+        display: block;
+    }
+    .progress-container{height:100% !important; overflow: unset !important; background:transparent !important;}
+    .progress-note p {
+        padding: 8px 14px;
+        text-align: center;
+        margin: 0;
+        font-size: 14px;
+        font-family: 'GOTHAM-2';
+        color: #64112f;
+        letter-spacing: 0;
+    }
+    /* ==================== End: Progress Bar =============== */
+</style>
+
+<div class="progress-wrapper">
+  <div class="progress-note"><p>Free Gift Available at Checkout</p></div>
+  <div class="progress_offer_wrap">
+    <p>Spend ₹1299 or more – Get a Reusable Face Sponge (Free)</p>
+  </div>
+  <div class="progress-container-bg-color">
+    <div class="progress-container-wrap">
+      <div class="progress-container">
+        <div
+          class="progress"
+          id="progress"
+          style="width: 33%;"
+        ></div>
+        <div class="circle active">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527"
+            style="width: 26px; height: auto;"
+            loading="lazy" width="" height=""
+          >
+          <span><p>{{ block.settings.cp-text1}}</p></span>
+        </div>
+        <div class="circle ">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527"
+            style="width: 26px; height: auto;"
+            loading="lazy" width="" height=""
+          >
+          <span><p>{{ block.settings.cp-text2 }}</p></span>
+        </div>
+        <div class="circle ">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527"
+            style="box-shadow: 0px 0px 12px #FF40B1; width: 26px; height: auto;"
+            loading="lazy" width="" height=""
+          >
+          <span><p>{{ block.settings.cp-text3}}</p></span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  
+  let price_range_1 = parseFloat("{{ block.settings.cp-price-1 }}");
+  let price_range_2 = parseFloat("{{ block.settings.cp-price-2 }}");
+  let price_range_3 = parseFloat("{{ block.settings.cp-price-3 }}");
+
+  let price_text_1 = "{{ block.settings.cp-text1 }}";
+  let price_text_2 = "{{ block.settings.cp-text2 }}";
+  let price_text_3 = "{{ block.settings.cp-text3 }}";
+
+  // console.log(price_range_1);
+  // console.log(price_range_2 );
+  // console.log(price_range_3);
+  // console.log(price_text_1 );
+  // console.log(price_text_2);
+  // console.log(price_text_3 );
+  
+function getCartData() {
+    fetch('/cart.js')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        let cartTotalPrice = data.total_price / 100;
+        updateProgressBar(cartTotalPrice);
+        console.log("Cart Price", cartTotalPrice)
+      })
+      .catch(error => {
+        console.error("Error fetching cart data:", error);
+      });
+  }
+function updateProgressBar(cartTotal) {
+    $('.progress-note').hide();
+    $('.progress-container-bg-color , .progress_offer_wrap').hide();
+    if(cartTotal > 1299){
+      $('.progress-container-bg-color , .progress_offer_wrap').show();
+      $('.progress-note').show();
+    }
+
+
+    let progressWidth = '0%';
+    var offerText = '';
+
+    $('.circle').removeClass('active');
+
+    if (cartTotal >= 1299 && cartTotal < 1598) {
+      progressWidth = '25%';
+      offerText = price_text_1;
+      $('.circle:nth-child(2)').addClass('active');
+    } else if (cartTotal >= 1599 && cartTotal < 2198) {
+      progressWidth = '50%';
+      offerText = price_text_2;
+      $('.circle:nth-child(2), .circle:nth-child(3)').addClass('active');
+    } else if (cartTotal >= 2199) {
+      progressWidth = '100%';
+      offerText = price_text_3;
+      $('.circle:not(:nth-child(1))').addClass('active');
+    }
+
+    $('#progress').css({ width: progressWidth });
+    $('.progress_offer_wrap p').text(offerText);
+  
+
+ 
+  }
+
+$(document).ready(function () {
+  getCartData();
+  setInterval(getCartData, 1000);
+  
+  let progressElement = document.querySelector('.progress-wrapper');
+  let drawerHeader = document.querySelector('.drawer__header');
+  if (drawerHeader && progressElement) {
+    drawerHeader.insertAdjacentElement("afterend", progressElement);
+}
+
+});
+
+</script>
+
+{% schema %}
+{
+  "name": "Cart Progress bar",
+  "target":"body",
+  "settings": [
+    {
+      "type":"text",
+      "id": "cart-heading",
+      "label":"Progressbar Heading",
+      "info":"Free Gift Available at Checkout",
+    },
+    {
+      "type":"text",
+      "id": "cp-text1",
+      "label":"Price Range Text-1",
+      "info":"e.g: Spend ₹1000 – Get a 10% discount on an order",
+    },
+    {
+      "type":"text",
+      "id": "cp-text2",
+      "label":"Price Range Text-2",
+      "info":"e.g: Spend ₹1000 – Get a 15% discount on an order",
+    },
+    {
+      "type":"text",
+      "id": "cp-text3",
+      "label":"Price Range Text-3",
+      "info":"e.g: Spend ₹1000 – Get a 20% discount on an order",
+    },
+    {
+      "type":"text",
+      "id":"cp-price-1",
+      "label":"Price Range Amount -1",
+      "info": "e.g: $1000"
+    },
+      {
+      "type":"text",
+      "id":"cp-price-2",
+      "label":"Price Range Amount -2",
+      "info": "e.g: $2000"
+    },
+    {
+      "type":"text",
+      "id":"cp-price-3",
+      "label":"Price Range Amount -3",
+      "info": "e.g: $3000"
+    }
+  ]
+}
+{% endschema %}
