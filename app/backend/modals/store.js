@@ -14,6 +14,16 @@ const storeSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  }
+});
+
+// Add middleware to update the updatedAt field before saving
+storeSchema.pre('save', function(next) {
+  this.updatedAt = new Date();
+  next();
 });
 
 export default mongoose.model("Store", storeSchema);

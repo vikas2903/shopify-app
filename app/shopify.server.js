@@ -13,7 +13,7 @@ import mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-
+ 
 // Load environment variables
 dotenv.config();
 
@@ -24,10 +24,10 @@ app.use(cors());
 const connectDB = async () => {
   try {
     if (!process.env.MONGO_URI) {
-      throw new Error('MONGO_URIis not defined in environment variables');
+      throw new Error('MONGO_URI is not defined in environment variables');
     }
     
-    await mongoose.connect(process.env.MONGO_URI); 
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Connected Successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);
@@ -141,9 +141,10 @@ export const sessionStorage = shopify.sessionStorage;
 
 // Start Express server if not in test environment
 if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 9000;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log("sahi chal raha h sab")
   });
 }
 
