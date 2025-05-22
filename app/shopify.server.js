@@ -141,7 +141,7 @@ export const sessionStorage = shopify.sessionStorage;
 
 // Start Express server if not in test environment
 if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 6000;
+  const PORT = 5000;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log("sahi chal raha h sab")
