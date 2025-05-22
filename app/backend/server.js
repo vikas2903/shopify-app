@@ -8,7 +8,6 @@ import Store from "./modals/store.js";
 const PORT = process.env.PORT || 3000;
 dotenv.config();
 connectDatabase();
-const router = express.Router();
 
 
 const app = express();

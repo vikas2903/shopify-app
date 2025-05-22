@@ -22,6 +22,8 @@ const connectDatabase = async () => {
       console.error('MongoDB connection error:', err);
     });
 
+    
+
     mongoose.connection.on('disconnected', () => {
       console.log('MongoDB disconnected. Attempting to reconnect...');
     });
