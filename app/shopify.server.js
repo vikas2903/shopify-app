@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const  daConnect =  mongoose.connect('mongodb+srv://vikasprasad2903:fkkbpuJg7iHm7dB4@cluster0.nq7t1.mongodb.net/',{
+ mongoose.connect('mongodb+srv://vikasprasad2903:fkkbpuJg7iHm7dB4@cluster0.nq7t1.mongodb.net/',{
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -27,6 +27,9 @@ console.log("MongoDB Connected Successfully");
 
 app.get("/auth/callback", async (req, res) => {
   const { shop, code } = req.query;
+
+  console.log("shop", shop);
+  console.log("code", code);
 
   if (!shop || !code) {
     return res.status(400).json({ success: false, message: "Missing shop or code" });
@@ -42,7 +45,10 @@ app.get("/auth/callback", async (req, res) => {
     };
 
     const tokenResponse = await axios.post(tokenUrl, payload);
+    console.log(tokenResponse);
+    
     const accessToken = tokenResponse.data.access_token;
+    console.log(accessToken);
 
     // Step 2: Save a new store entry (no update)
     const store = new Store({
@@ -71,7 +77,7 @@ mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);
 });
 
-daConnect();
+
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
