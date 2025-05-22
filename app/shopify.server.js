@@ -12,7 +12,10 @@ import Store from './backend/modals/store.js'
 import mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
+// Load environment variables
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -20,9 +23,11 @@ app.use(cors());
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || '', {
-      // Remove deprecated options
-    });
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MONGODB_URI is not defined in environment variables');
+    }
+    
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log("MongoDB Connected Successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);
@@ -39,7 +44,14 @@ app.get("/auth/callback", async (req, res) => {
     return res.status(400).json({ success: false, message: "Missing shop or code" });
   }
 
+  console.log("Shop:", shop);
+  console.log("Code:", code);
+
   try {
+    if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
+      throw new Error('Shopify credentials are not properly configured');
+    }
+
     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
     const payload = {
       client_id: process.env.SHOPIFY_CLIENT_ID,
@@ -50,19 +62,39 @@ app.get("/auth/callback", async (req, res) => {
     const tokenResponse = await axios.post(tokenUrl, payload);
     const accessToken = tokenResponse.data.access_token;
 
-    const store = new Store({
-      shop,
-      accessToken,
-      updatedAt: new Date(),
-    });
+    console.log("Access Token received successfully");
+
+    // Check if store already exists
+    let store = await Store.findOne({ shop });
+    
+    if (store) {
+      // Update existing store
+      store.accessToken = accessToken;
+      store.updatedAt = new Date();
+      console.log(`Updating existing store: ${shop}`);
+    } else {
+      // Create new store
+      store = new Store({
+        shop,
+        accessToken,
+        updatedAt: new Date(),
+      });
+      console.log(`Creating new store: ${shop}`);
+    }
 
     await store.save();
+    console.log(`Store ${shop} saved successfully`);
+
+    if (!process.env.SHOPIFY_APP_NAME) {
+      throw new Error('SHOPIFY_APP_NAME is not defined in environment variables');
+    }
 
     const redirectURL = `https://admin.shopify.com/store/${shop.replace(
       ".myshopify.com",
       ""
     )}/apps/${process.env.SHOPIFY_APP_NAME}`;
 
+    console.log("Redirecting to:", redirectURL);
     return res.redirect(redirectURL);
 
   } catch (error) {
