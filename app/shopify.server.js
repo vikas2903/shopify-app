@@ -25,18 +25,60 @@ app.use(cors());
 
 console.log("MongoDB Connected Successfully");
 
+// app.get("/auth/callback", async (req, res) => {
+//   const { shop, code } = req.query;
+
+//   console.log("shop", shop);
+//   console.log("code", code);
+
+//   if (!shop || !code) {
+//     return res.status(400).json({ success: false, message: "Missing shop or code" });
+//   }
+
+//   try {
+//     // Step 1: Exchange code for access token
+//     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
+//     const payload = {
+//       client_id: '7e14cea35d331d8a859a3d97b6b76175',
+//       client_secret: 'e4ffba4176a93186f92eeccdff913d56',
+//       code,
+//     };
+
+//     const tokenResponse = await axios.post(tokenUrl, payload);
+//     console.log(tokenResponse);
+
+//     const accessToken = tokenResponse.data.access_token;
+//     console.log(accessToken);
+
+//     // Step 2: Save a new store entry (no update)
+//     const store = new Store({
+//       shop,
+//       accessToken,
+//       updatedAt: new Date(),
+//     });
+
+//     await store.save(); // Save to MongoDB
+
+//     // Step 3: Return success response
+//     return res.status(200).json({
+//       success: true,
+//       message: "Token saved successfully",
+//       store,
+//     });
+//   } catch (error) {
+//     console.error("Callback Error:", error.response?.data || error.message);
+//     return res.status(500).json({ success: false, message: "Failed to save token" });
+//   }
+// });
+
 app.get("/auth/callback", async (req, res) => {
   const { shop, code } = req.query;
-
-  console.log("shop", shop);
-  console.log("code", code);
 
   if (!shop || !code) {
     return res.status(400).json({ success: false, message: "Missing shop or code" });
   }
 
   try {
-    // Step 1: Exchange code for access token
     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
     const payload = {
       client_id: '7e14cea35d331d8a859a3d97b6b76175',
@@ -45,32 +87,29 @@ app.get("/auth/callback", async (req, res) => {
     };
 
     const tokenResponse = await axios.post(tokenUrl, payload);
-    console.log(tokenResponse);
-    
     const accessToken = tokenResponse.data.access_token;
-    console.log(accessToken);
 
-    // Step 2: Save a new store entry (no update)
     const store = new Store({
       shop,
       accessToken,
       updatedAt: new Date(),
     });
 
-    await store.save(); // Save to MongoDB
+    await store.save();
 
-    // Step 3: Return success response
-    return res.status(200).json({
-      success: true,
-      message: "Token saved successfully",
-      store,
-    });
+    // ✅ Redirect to your embedded app inside Shopify Admin
+    const redirectURL = `https://admin.shopify.com/store/${shop.replace(
+      ".myshopify.com",
+      ""
+    )}/apps/${process.env.SHOPIFY_APP_HANDLE}`;
+
+    return res.redirect(redirectURL); // This sends the merchant to your app in Shopify admin
+
   } catch (error) {
     console.error("Callback Error:", error.response?.data || error.message);
     return res.status(500).json({ success: false, message: "Failed to save token" });
   }
 });
-
 
 
 mongoose.connection.on('error', (err) => {
