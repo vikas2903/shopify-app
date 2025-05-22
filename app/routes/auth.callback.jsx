@@ -1,5 +1,4 @@
 import { redirect } from "@remix-run/node";
-import { authenticate } from "../shopify.server";
 import axios from "axios";
 import Store from "../backend/modals/store.js";
 
@@ -31,24 +30,22 @@ export const loader = async ({ request }) => {
     }
 
     // Save store data
-    await Store.findOneAndUpdate(
-      { shop },
-      {
-        shop,
-        accessToken,
-        updatedAt: new Date(),
-        status: "active",
-      },
-      { upsert: true, new: true }
+    await Store.create({
+      shop,
+      accessToken,
+      updatedAt: new Date(),
+      status: "active",
+    });
+
+    // Redirect to the app dashboard inside Shopify admin
+    return redirect(
+      `https://admin.shopify.com/store/${shop.replace(
+        ".myshopify.com",
+        ""
+      )}/apps/${process.env.SHOPIFY_APP_HANDLE}`
     );
-
-    // Create Shopify session
-    await authenticate.admin(request);
-
-    // Redirect to the app
-    return redirect(`/app?shop=${shop}&host=${host}`);
   } catch (error) {
     console.error("Auth callback error:", error.message);
     throw new Response("Authentication failed", { status: 500 });
   }
-}; 
+};
