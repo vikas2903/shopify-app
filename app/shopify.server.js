@@ -6,7 +6,7 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
-
+import axios from 'axios';
 import Store from './backend/modals/store.js'
 
 import mongoose from "mongoose";
@@ -18,58 +18,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
- mongoose.connect('mongodb+srv://vikasprasad2903:fkkbpuJg7iHm7dB4@cluster0.nq7t1.mongodb.net/',{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || '', {
+      // Remove deprecated options
+    });
+    console.log("MongoDB Connected Successfully");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1); // Exit if cannot connect to database
+  }
+};
 
-console.log("MongoDB Connected Successfully");
-
-// app.get("/auth/callback", async (req, res) => {
-//   const { shop, code } = req.query;
-
-//   console.log("shop", shop);
-//   console.log("code", code);
-
-//   if (!shop || !code) {
-//     return res.status(400).json({ success: false, message: "Missing shop or code" });
-//   }
-
-//   try {
-//     // Step 1: Exchange code for access token
-//     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
-//     const payload = {
-//       client_id: '7e14cea35d331d8a859a3d97b6b76175',
-//       client_secret: 'e4ffba4176a93186f92eeccdff913d56',
-//       code,
-//     };
-
-//     const tokenResponse = await axios.post(tokenUrl, payload);
-//     console.log(tokenResponse);
-
-//     const accessToken = tokenResponse.data.access_token;
-//     console.log(accessToken);
-
-//     // Step 2: Save a new store entry (no update)
-//     const store = new Store({
-//       shop,
-//       accessToken,
-//       updatedAt: new Date(),
-//     });
-
-//     await store.save(); // Save to MongoDB
-
-//     // Step 3: Return success response
-//     return res.status(200).json({
-//       success: true,
-//       message: "Token saved successfully",
-//       store,
-//     });
-//   } catch (error) {
-//     console.error("Callback Error:", error.response?.data || error.message);
-//     return res.status(500).json({ success: false, message: "Failed to save token" });
-//   }
-// });
+connectDB();
 
 app.get("/auth/callback", async (req, res) => {
   const { shop, code } = req.query;
@@ -81,8 +42,8 @@ app.get("/auth/callback", async (req, res) => {
   try {
     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
     const payload = {
-      client_id: '7e14cea35d331d8a859a3d97b6b76175',
-      client_secret: 'e4ffba4176a93186f92eeccdff913d56',
+      client_id: process.env.SHOPIFY_CLIENT_ID,
+      client_secret: process.env.SHOPIFY_CLIENT_SECRET,
       code,
     };
 
@@ -97,32 +58,33 @@ app.get("/auth/callback", async (req, res) => {
 
     await store.save();
 
-    // ✅ Redirect to your embedded app inside Shopify Admin
     const redirectURL = `https://admin.shopify.com/store/${shop.replace(
       ".myshopify.com",
       ""
-    )}/apps/${process.env.SHOPIFY_APP_HANDLE}`;
+    )}/apps/${process.env.SHOPIFY_APP_NAME}`;
 
-    return res.redirect(redirectURL); // This sends the merchant to your app in Shopify admin
+    return res.redirect(redirectURL);
 
   } catch (error) {
     console.error("Callback Error:", error.response?.data || error.message);
-    return res.status(500).json({ success: false, message: "Failed to save token" });
+    return res.status(500).json({ 
+      success: false, 
+      message: "Failed to process authentication",
+      error: error.message 
+    });
   }
 });
-
 
 mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);
 });
 
-
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
-  apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
+  apiSecretKey: process.env.SHOPIFY_API_SECRET,
   apiVersion: ApiVersion.January25,
-  scopes: process.env.SCOPES?.split(","),
-  appUrl: process.env.SHOPIFY_APP_URL || "",
+  scopes: process.env.SCOPES?.split(",") || [],
+  appUrl: process.env.SHOPIFY_APP_URL,
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
@@ -144,6 +106,14 @@ export const unauthenticated = shopify.unauthenticated;
 export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
+
+// Start Express server if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
 
 
 

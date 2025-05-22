@@ -45,7 +45,7 @@ export const loader = async ({ request }) => {
     // Create Shopify session
     await authenticate.admin(request);
 
-    // Redirect to app
+    // Redirect to the app
     return redirect(`/app?shop=${shop}&host=${host}`);
   } catch (error) {
     console.error("Auth callback error:", error.message);
