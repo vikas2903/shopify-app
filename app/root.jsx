@@ -54,7 +54,7 @@ export default function App() {
 
         <div className="dashboard">
          
-          <Sidebar />
+          {/* <Sidebar /> */}
           <div className="main-contentt">
           
                   {/* <Header /> */}
