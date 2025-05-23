@@ -28,6 +28,7 @@ export default function App() {
           <Link to="/app/help"> Help</Link> 
           {/* <Link to="/app/additional">Additional page</Link> */}
           <Link to="/app/installation">Installation</Link>
+          <Link to="/app/orders">Orders</Link>
         </NavMenu>
         <Outlet />
       </ExploreContextProvider>

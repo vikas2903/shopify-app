@@ -64,7 +64,7 @@ Local development is powered by [the Shopify CLI](https://shopify.dev/docs/apps/
 
 ### Authenticating and querying data
 
-To authenticate and query data you can use the `shopify` const that is exported from `/app/shopify.server.js`:
+To authenticate and query data you can use the `shopify` const that is exported from `/app/shopify.`:
 
 ```js
 export async function loader({ request }) {

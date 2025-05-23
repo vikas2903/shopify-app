@@ -1,0 +1,150 @@
+
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %} .sticky-atc-{{ ai_gen_id }} { position: fixed; bottom: 0; left: 0; width: 100%; background-color: {{ block.settings.button_background }}; padding: 15px 20px; z-index: 100; box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); transform: translateY(100%); transition: transform 0.3s ease-in-out; opacity: 0; visibility: hidden; } .sticky-atc-{{ ai_gen_id }}.visible { transform: translateY(0); opacity: 1; visibility: visible; } .sticky-atc-button-{{ ai_gen_id }} { width: 100%; padding: 14px 28px; background-color: {{ block.settings.button_color }}; color: {{ block.settings.button_text_color }}; border: none; border-radius: {{ block.settings.button_radius }}px; font-weight: 500; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; } .sticky-atc-button-{{ ai_gen_id }}:hover { background-color: {{ block.settings.button_hover_color }}; } .variant-popup-{{ ai_gen_id }} { position: fixed; bottom: 0; left: 0; width: 100%; background-color: {{ block.settings.popup_background }}; border-top-left-radius: 16px; border-top-right-radius: 16px; padding: 24px; z-index: 101; box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15); transform: translateY(100%); transition: transform 0.3s ease-in-out; max-height: 80vh; overflow-y: auto; } .variant-popup-{{ ai_gen_id }}.active { transform: translateY(0); } .variant-popup-header-{{ ai_gen_id }} { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; } .variant-popup-title-{{ ai_gen_id }} { font-size: 18px; font-weight: 600; color: {{ block.settings.text_color }}; margin: 0; } .variant-popup-close-{{ ai_gen_id }} { background: none; border: none; cursor: pointer; padding: 5px; color: {{ block.settings.text_color }}; } .variant-popup-content-{{ ai_gen_id }} { display: flex; flex-direction: column; gap: 20px; } .variant-option-{{ ai_gen_id }} { margin-bottom: 16px; } .variant-option-label-{{ ai_gen_id }} { font-size: 14px; font-weight: 500; margin-bottom: 8px; color: {{ block.settings.text_color }}; display: block; } .variant-option-values-{{ ai_gen_id }} { display: flex; flex-wrap: wrap; gap: 8px; } .variant-value-{{ ai_gen_id }} { padding: 10px 16px; border-radius: {{ block.settings.variant_radius }}px; border: 1px solid {{ block.settings.variant_border }}; background-color: {{ block.settings.variant_background }}; color: {{ block.settings.text_color }}; cursor: pointer; font-size: 14px; transition: all 0.2s ease; } .variant-value-{{ ai_gen_id }}.selected { background-color: {{ block.settings.variant_selected_background }}; color: {{ block.settings.variant_selected_text }}; border-color: {{ block.settings.variant_selected_background }}; } .variant-value-{{ ai_gen_id }}:hover:not(.selected) { border-color: {{ block.settings.variant_hover_border }}; background-color: {{ block.settings.variant_hover_background }}; } .popup-add-to-cart-{{ ai_gen_id }} { width: 100%; padding: 14px 28px; background-color: {{ block.settings.button_color }}; color: {{ block.settings.button_text_color }}; border: none; border-radius: {{ block.settings.button_radius }}px; font-weight: 500; font-size: 16px; cursor: pointer; margin-top: 20px; } .popup-add-to-cart-{{ ai_gen_id }}:hover { background-color: {{ block.settings.button_hover_color }}; } .popup-add-to-cart-{{ ai_gen_id }}:disabled { background-color: #cccccc; cursor: not-allowed; } .overlay-{{ ai_gen_id }} { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; } .overlay-{{ ai_gen_id }}.active { opacity: 1; visibility: visible; } .product-info-{{ ai_gen_id }} { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; } .product-image-{{ ai_gen_id }} { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; } .product-image-{{ ai_gen_id }} img { width: 100%; height: 100%; object-fit: cover; } .product-image-placeholder-{{ ai_gen_id }} { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: #f4f4f4; border-radius: 8px; } .product-image-placeholder-{{ ai_gen_id }} svg { width: 30px; height: 30px; color: #888; } .product-details-{{ ai_gen_id }} { flex: 1; } .product-title-{{ ai_gen_id }} { font-size: 16px; font-weight: 500; margin: 0 0 4px; color: {{ block.settings.text_color }}; } .product-price-{{ ai_gen_id }} { font-size: 14px; color: {{ block.settings.text_color }}; } .notification-{{ ai_gen_id }} { position: fixed; top: 20px; right: 20px; background-color: {{ block.settings.notification_background }}; color: {{ block.settings.notification_text }}; padding: 16px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 1000; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: transform 0.3s ease; max-width: 320px; } .notification-{{ ai_gen_id }}.active { transform: translateX(0); } .notification-icon-{{ ai_gen_id }} { flex-shrink: 0; width: 24px; height: 24px; color: {{ block.settings.notification_icon_color }}; } .notification-content-{{ ai_gen_id }} { flex: 1; } .notification-title-{{ ai_gen_id }} { font-weight: 600; margin: 0 0 4px; font-size: 16px; } .notification-message-{{ ai_gen_id }} { margin: 0; font-size: 14px; } @media screen and (min-width: 768px) { .sticky-atc-{{ ai_gen_id }} { padding: 20px; } .variant-popup-{{ ai_gen_id }} { max-width: 500px; left: 50%; transform: translateX(-50%) translateY(100%); border-radius: 16px; bottom: 20px; } .variant-popup-{{ ai_gen_id }}.active { transform: translateX(-50%) translateY(0); } } {% endstyle %}
+<sticky-add-to-cart-{{ ai_gen_id }} {{ block.shopify_attributes }}> <div class="sticky-atc-{{ ai_gen_id }}"> <button type="button" class="sticky-atc-button-{{ ai_gen_id }}"> <span>{{ product.selected_or_first_available_variant.price | money }}</span> <span>Add to cart</span> </button> </div> <div class="overlay-{{ ai_gen_id }}"></div> <div class="variant-popup-{{ ai_gen_id }}"> <div class="variant-popup-header-{{ ai_gen_id }}"> <h3 class="variant-popup-title-{{ ai_gen_id }}">{{ block.settings.popup_title }}</h3> <button type="button" class="variant-popup-close-{{ ai_gen_id }}"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </svg> </button> </div> <div class="product-info-{{ ai_gen_id }}"> <div class="product-image-{{ ai_gen_id }}"> {% if product.featured_image %} <img src="{{ product.featured_image | image_url: width: 120 }}" alt="{{ product.featured_image.alt | escape }}"> {% else %} <div class="product-image-placeholder-{{ ai_gen_id }}"> {{ 'product-apparel-1' | placeholder_svg_tag }} </div> {% endif %} </div> <div class="product-details-{{ ai_gen_id }}"> <h4 class="product-title-{{ ai_gen_id }}">{{ product.title }}</h4> <div class="product-price-{{ ai_gen_id }}"> <span class="price-item">{{ product.selected_or_first_available_variant.price | money }}</span> </div> </div> </div> <div class="variant-popup-content-{{ ai_gen_id }}"> {% for option in product.options_with_values %} <div class="variant-option-{{ ai_gen_id }}" data-option-index="{{ forloop.index0 }}"> <label class="variant-option-label-{{ ai_gen_id }}">{{ option.name }}</label> <div class="variant-option-values-{{ ai_gen_id }}"> {% for value in option.values %} <button type="button" class="variant-value-{{ ai_gen_id }} {% if option.selected_value == value %}selected{% endif %}" data-option-value="{{ value | escape }}" > {{ value }} </button> {% endfor %} </div> </div> {% endfor %} </div> <button type="button" class="popup-add-to-cart-{{ ai_gen_id }}"> {{ block.settings.add_to_cart_text }} </button> </div> <div class="notification-{{ ai_gen_id }}"> <div class="notification-icon-{{ ai_gen_id }}"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M20 6L9 17l-5-5"></path> </svg> </div> <div class="notification-content-{{ ai_gen_id }}"> <h4 class="notification-title-{{ ai_gen_id }}">Added to cart</h4> <p class="notification-message-{{ ai_gen_id }}">Your item has been added to the cart</p> </div> </div> </sticky-add-to-cart-{{ ai_gen_id }}>
+<script> (function() { class StickyAddToCart extends HTMLElement { constructor() { super(); this.stickyBar = this.querySelector('.sticky-atc-{{ ai_gen_id }}'); this.openButton = this.querySelector('.sticky-atc-button-{{ ai_gen_id }}'); this.popup = this.querySelector('.variant-popup-{{ ai_gen_id }}'); this.closeButton = this.querySelector('.variant-popup-close-{{ ai_gen_id }}'); this.addToCartButton = this.querySelector('.popup-add-to-cart-{{ ai_gen_id }}'); this.overlay = this.querySelector('.overlay-{{ ai_gen_id }}'); this.variantOptions = this.querySelectorAll('.variant-option-{{ ai_gen_id }}'); this.variantButtons = this.querySelectorAll('.variant-value-{{ ai_gen_id }}'); this.notification = this.querySelector('.notification-{{ ai_gen_id }}'); this.productForm = document.querySelector('form[action*="/cart/add"]'); this.mainAddToCartButton = this.productForm ? this.productForm.querySelector('button[type="submit"], input[type="submit"]') : null; this.productId = this.productForm ? this.productForm.querySelector('input[name="id"]').value : null; this.selectedOptions = {}; this.productVariants = JSON.parse(document.querySelector('#ProductJson-{{ product.id }}') ? document.querySelector('#ProductJson-{{ product.id }}').textContent : '{}').variants || []; this.initializeOptions(); this.setupEventListeners(); this.setupScrollListener(); } connectedCallback() { // Component is now in the DOM } initializeOptions() { // Initialize selected options based on current variant this.variantOptions.forEach(option => { const optionIndex = parseInt(option.dataset.optionIndex); const selectedButton = option.querySelector('.variant-value-{{ ai_gen_id }}.selected'); if (selectedButton) { this.selectedOptions[`option${optionIndex + 1}`] = selectedButton.dataset.optionValue; } }); } setupEventListeners() { this.openButton.addEventListener('click', () => this.openPopup()); this.closeButton.addEventListener('click', () => this.closePopup()); this.overlay.addEventListener('click', () => this.closePopup()); this.variantButtons.forEach(button => { button.addEventListener('click', (event) => this.handleVariantSelection(event)); }); this.addToCartButton.addEventListener('click', () => this.addToCart()); // If there's a main add to cart button, intercept its click to show notification if (this.mainAddToCartButton) { const originalForm = this.productForm; this.productForm.addEventListener('submit', (e) => { if (!e.defaultPrevented) { e.preventDefault(); // Get the form data const formData = new FormData(originalForm); fetch('/cart/add.js', { method: 'POST', body: formData }) .then(response => response.json()) .then(data => { this.showNotification(); // Open cart drawer if it exists if (typeof window.openCartDrawer === 'function') { setTimeout(() => { window.openCartDrawer(); }, 1500); } }) .catch(error => { console.error('Error:', error); }); } }); } } setupScrollListener() { // Get the main add to cart button position const checkButtonVisibility = () => { if (!this.mainAddToCartButton) return; const buttonRect = this.mainAddToCartButton.getBoundingClientRect(); const isVisible = ( buttonRect.top >= 0 && buttonRect.left >= 0 && buttonRect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && buttonRect.right <= (window.innerWidth || document.documentElement.clientWidth) ); if (isVisible) { this.stickyBar.classList.remove('visible'); } else { this.stickyBar.classList.add('visible'); } }; // Check visibility on scroll and resize window.addEventListener('scroll', checkButtonVisibility); window.addEventListener('resize', checkButtonVisibility); // Initial check setTimeout(checkButtonVisibility, 500); } openPopup() { this.popup.classList.add('active'); this.overlay.classList.add('active'); document.body.style.overflow = 'hidden'; } closePopup() { this.popup.classList.remove('active'); this.overlay.classList.remove('active'); document.body.style.overflow = ''; } handleVariantSelection(event) { const button = event.currentTarget; const optionValue = button.dataset.optionValue; const optionContainer = button.closest('.variant-option-{{ ai_gen_id }}'); const optionIndex = parseInt(optionContainer.dataset.optionIndex); // Update selected button UI optionContainer.querySelectorAll('.variant-value-{{ ai_gen_id }}').forEach(btn => { btn.classList.remove('selected'); }); button.classList.add('selected'); // Update selected options this.selectedOptions[`option${optionIndex + 1}`] = optionValue; // Find matching variant this.updateSelectedVariant(); } updateSelectedVariant() { // Find the variant that matches all selected options const matchingVariant = this.productVariants.find(variant => { return Object.keys(this.selectedOptions).every(option => { return variant[option] === this.selectedOptions[option]; }); }); if (matchingVariant) { this.productId = matchingVariant.id; // Update price if needed const priceElement = this.querySelector('.product-price-{{ ai_gen_id }} .price-item'); if (priceElement) { // Format price (simple approach) const formattedPrice = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(matchingVariant.price / 100); priceElement.textContent = formattedPrice; } // Enable add to cart button this.addToCartButton.disabled = !matchingVariant.available; this.addToCartButton.textContent = matchingVariant.available ? '{{ block.settings.add_to_cart_text }}' : '{{ block.settings.sold_out_text }}'; } } addToCart() { if (!this.productId) return; const formData = { 'items': [{ 'id': this.productId, 'quantity': 1 }] }; fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) }) .then(response => response.json()) .then(data => { this.closePopup(); this.showNotification(); // Open cart drawer if it exists setTimeout(() => { if (typeof window.openCartDrawer === 'function') { window.openCartDrawer(); } else { // Fallback - refresh cart and open drawer via event fetch('/cart.js') .then(res => res.json()) .then(cart => { // Try different methods to open cart drawer if (window.Shopify && window.Shopify.theme) { if (window.Shopify.theme.jsDrawer) { window.Shopify.theme.jsDrawer.open('cart'); } } // Dispatch custom event that theme might listen for document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true })); // Last resort - redirect to cart page if ({{ block.settings.redirect_to_cart | json }}) { window.location.href = '/cart'; } }); } }, 1500); }) .catch(error => { console.error('Error:', error); }); } showNotification() { this.notification.classList.add('active'); // Hide notification after delay setTimeout(() => { this.notification.classList.remove('active'); }, 3000); } } customElements.define('sticky-add-to-cart-{{ ai_gen_id }}', StickyAddToCart); })(); </script>
+
+{% schema %}
+{
+  "name": "Sticky Add to Cart",
+  "target": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button bar background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Variant Popup"
+    },
+    {
+      "type": "text",
+      "id": "popup_title",
+      "label": "Popup title",
+      "default": "Select options"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add to cart text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_text",
+      "label": "Sold out text",
+      "default": "Sold Out"
+    },
+    {
+      "type": "color",
+      "id": "popup_background",
+      "label": "Popup background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Variant Selectors"
+    },
+    {
+      "type": "color",
+      "id": "variant_background",
+      "label": "Variant background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "variant_border",
+      "label": "Variant border",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "variant_hover_background",
+      "label": "Variant hover background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "variant_hover_border",
+      "label": "Variant hover border",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "variant_selected_background",
+      "label": "Selected variant background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "variant_selected_text",
+      "label": "Selected variant text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "variant_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Variant button radius",
+      "default": 6
+    },
+    {
+      "type": "color",
+      "id": "notification_background",
+      "label": "Notification background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "notification_text",
+      "label": "Notification text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "notification_icon_color",
+      "label": "Notification icon color",
+      "default": "#4CAF50"
+    }
+  ]
+}
+{% endschema %}
