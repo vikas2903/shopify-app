@@ -10,7 +10,7 @@ function order() {
         <Layout fullWidth>
           <section className="section">
             <div className="container">
-              
+              orders
             </div>
           </section>
         </Layout>
