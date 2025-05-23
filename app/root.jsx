@@ -9,7 +9,7 @@ import {
 import Sidebar from "./components/Sidebar";
 // import Header from "./components/Header";
 import Analytics from "./routes/app.analytics";
-
+import {Root} from './zoha.jsx'
  
 
 
@@ -48,7 +48,7 @@ export default function App() {
           </div>
     
         </div>
-
+<Root />
 
       </body>
     </html>
