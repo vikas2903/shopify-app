@@ -23,9 +23,5 @@ export default function Root() {
     document.body.appendChild(script);
   }, []);
 
-  return (
-    <>
-      {/* Your App Content */}
-    </>
-  );
+  return null;
 }

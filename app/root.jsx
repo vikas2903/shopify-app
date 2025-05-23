@@ -15,7 +15,24 @@ import {Root} from './zoha.jsx'
 
 
 export default function App() {
+ useEffect(() => {
+    // Inject Zoho SalesIQ Script
+    const script1 = document.createElement("script");
+    script1.innerHTML = `
+      window.$zoho = window.$zoho || {};
+      $zoho.salesiq = $zoho.salesiq || {
+        ready: function () {
+          console.log("Zoho SalesIQ Ready");
+        }
+      };
+    `;
+    document.body.appendChild(script1);
 
+    const script2 = document.createElement("script");
+    script2.src = "https://salesiq.zohopublic.in/widget?wc=siq2084c27fe220c816892dec0d99a9092a03d9399a0a187b9968460a97f4233ff0";
+    script2.defer = true;
+    document.body.appendChild(script2);
+  }, []);
 
   return (
     <html HL="VIKAS">
@@ -48,8 +65,10 @@ export default function App() {
           </div>
     
         </div>
-<Root />
 
+        
+<Root />
+    
       </body>
     </html>
   );
