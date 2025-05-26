@@ -14,7 +14,7 @@ import mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-
+import dashboardroute from "./backend/route/dashboardRoutes.js";
  
 // Load environment variables
 dotenv.config();
@@ -22,7 +22,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use("/api", dashboardroute);
 const connectDB = async () => {
   try {
     if (!process.env.MONGO_URI) {
@@ -39,6 +39,7 @@ const connectDB = async () => {
 
 connectDB();
 
+console.log("###################### Vikas Prasad ######################");
 
 
 app.get("/auth/callback", async (req, res) => {
