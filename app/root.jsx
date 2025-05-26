@@ -9,8 +9,8 @@ import {
 import Sidebar from "./components/Sidebar";
 // import Header from "./components/Header";
 import Analytics from "./routes/app.analytics";
-import {Root} from './zoha.jsx'
- 
+import Root from './zoha.jsx'
+ import { useEffect } from "react";
 
 
 
@@ -66,7 +66,7 @@ export default function App() {
     
         </div>
 
-        
+
 <Root />
     
       </body>
