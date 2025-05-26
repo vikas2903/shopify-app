@@ -9,6 +9,7 @@ import {
 import Sidebar from "./components/Sidebar";
 // import Header from "./components/Header";
 import Analytics from "./routes/app.analytics";
+<<<<<<< HEAD
 import Root from "./zoha.jsx";
 import { useEffect } from "react";
 
@@ -40,6 +41,33 @@ export default function App() {
      };
    }, []);
  
+=======
+// import {Root} from './zoha.jsx'
+ 
+
+
+
+export default function App() {
+//  useEffect(() => {
+//     // Inject Zoho SalesIQ Script
+//     const script1 = document.createElement("script");
+//     script1.innerHTML = `
+//       window.$zoho = window.$zoho || {};
+//       $zoho.salesiq = $zoho.salesiq || {
+//         ready: function () {
+//           console.log("Zoho SalesIQ Ready");
+//         }
+//       };
+//     `;
+//     document.body.appendChild(script1);
+
+//     const script2 = document.createElement("script");
+//     script2.src = "https://salesiq.zohopublic.in/widget?wc=siq2084c27fe220c816892dec0d99a9092a03d9399a0a187b9968460a97f4233ff0";
+//     script2.defer = true;
+//     document.body.appendChild(script2);
+//   }, []);
+
+>>>>>>> d280ec7dd8040936af57b92001c5b53b196639b0
   return (
     <html HL="VIKAS">
       <head>
@@ -60,7 +88,12 @@ export default function App() {
       </head>
       <body>
         <div className="dashboard">
+<<<<<<< HEAD
           <Sidebar />
+=======
+         
+          {/* <Sidebar /> */}
+>>>>>>> d280ec7dd8040936af57b92001c5b53b196639b0
           <div className="main-contentt">
             {/* <Header /> */}
             <Outlet />
@@ -69,6 +102,13 @@ export default function App() {
             <Scripts />
           </div>
         </div>
+<<<<<<< HEAD
+=======
+
+        
+{/* <Root /> */}
+    
+>>>>>>> d280ec7dd8040936af57b92001c5b53b196639b0
       </body>
     </html>
   );
