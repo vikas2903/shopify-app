@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 :root {
     --primary-color: #4f46e5;
     --secondary-color: #5D5FEF;
     --dark-color: #111827;
     --light-color: #F9FAFB;
     --success-color: #10B981;
-    --primary-font: "Urbanist", sans-serif;
+    --primary-font: "Jost", sans-serif;
     --accent-color: #7C3AED;
 }
 * {
@@ -502,7 +503,7 @@ h1::after {
 
 .stats-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -1387,4 +1388,7 @@ button{
 }
 .install-body ol{
     padding-left: 1rem;
+}
+.stat-card:nth-child(4)::before {
+    background: linear-gradient(45deg, #e62274, #e62274);
 }

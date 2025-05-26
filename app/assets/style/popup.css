@@ -10,11 +10,11 @@
     overflow-x: hidden;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    left: 170px;
+    left: 20px;
     right: 20px;
     
 }
-
+.explore-card{cursor: pointer;}
 
 .pop-header-wrapper {
     display: flex;

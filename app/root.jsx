@@ -35,7 +35,7 @@ export default function App() {
     document.body.appendChild(zohoScript);
 
     return () => {
-      // Cleanup if needed
+      
       document.body.removeChild(configScript);
       document.body.removeChild(zohoScript);
     };
@@ -60,11 +60,10 @@ export default function App() {
       </head>
       <body>
         <div className="dashboard">
-          <Sidebar />
+          {/* <Sidebar /> */}
           <div className="main-contentt">
             {/* <Header /> */}
             <Outlet />
-
             <ScrollRestoration />
             <Scripts />
           </div>

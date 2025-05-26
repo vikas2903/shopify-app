@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDatabase from "./database/connect.js";
 import Store from "./modals/store.js";
+import dashboardroute from "../backend/route.js/dashboardRoutes.js";
 
 
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.use(cors({
   credentials: true
 }));
 
+ app.use("/api", dashboardroute);
 // Middleware to validate Shopify requests
 const validateShopifyRequest = (req, res, next) => {
   const shop = req.body.shop;

@@ -47,6 +47,7 @@
     "graphql": "^16.11.0",
     "isbot": "^5.1.0",
     "mongoose": "^8.15.0",
+    "node-fetch": "^3.3.2",
     "prisma": "^6.2.1",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.3.0",

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Homee() {
+function Home() {
   return (
     <>
              <div className="main-content">
@@ -15,7 +15,7 @@ function Homee() {
                                 <i className="fas fa-users"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Total Blocks</h3>
+                                <h3>Total Orders</h3>
                                 <div className="stat-number">10</div>
                                 <div className="stat-trend positive">
                                     <i className="fas fa-arrow-up"></i>
@@ -29,7 +29,7 @@ function Homee() {
                                 <i className="fas fa-dollar-sign"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>App</h3>
+                                <h3>Total Products</h3>
                                 <div className="stat-number">01</div>
                                 <div className="stat-trend positive">
                                     <i className="fas fa-arrow-up"></i>
@@ -37,13 +37,12 @@ function Homee() {
                                 </div>
                             </div>
                         </div>
-
-                        <div className="stat-card">
+                         <div className="stat-card">
                             <div className="stat-icon orders">
                                 <i className="fas fa-shopping-cart"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Installed Section</h3>
+                                <h3>Total Customers</h3>
                                 <div className="stat-number">10</div>
                                 <div className="stat-trend negative">
                                     <i className="fas fa-arrow-down"></i>
@@ -51,6 +50,20 @@ function Homee() {
                                 </div>
                             </div>
                         </div>
+                        <div className="stat-card">
+                            <div className="stat-icon orders">
+                                <i className="fas fa-shopping-cart"></i>
+                            </div>
+                            <div className="stat-details">
+                                <h3>Conversion Rate</h3> 
+                                <div className="stat-number">10</div>
+                                <div className="stat-trend negative">
+                                    <i className="fas fa-arrow-down"></i>
+                                    <span>-2</span> 
+                                </div>
+                            </div>
+                        </div>
+                       
                     </div>
 
                     <div className="recent-activity">
@@ -109,7 +122,7 @@ function Homee() {
   )
 }
 
-export default Homee
+export default Home
 
 
 
