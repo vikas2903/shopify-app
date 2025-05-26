@@ -2,8 +2,8 @@ import Store from "../modals/store";
 
 import fetch from 'node-fetch';
 
-const SHOP = 'aaryajewel';
-const ACCESS_TOKEN = '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';
+const SHOP = process.env.SHOPIFY_SHOP_NAME;
+const ACCESS_TOKEN = process.env.TEMP_ACCESS_TOKEN;
 
 const shopifyFetch = async (query) => {
   const response = await fetch(`https://${SHOP}.myshopify.com/admin/api/2024-01/graphql.json`, {

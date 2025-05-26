@@ -14,6 +14,8 @@ import mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+
+import {getdashboardroute} from './backend/route/dashboardRoutes.js'
  
 // Load environment variables
 dotenv.config();
@@ -21,7 +23,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use("/api", getdashboardroute)
 const connectDB = async () => {
   try {
     if (!process.env.MONGO_URI) {
