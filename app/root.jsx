@@ -10,11 +10,36 @@ import Sidebar from "./components/Sidebar";
 // import Header from "./components/Header";
 import Analytics from "./routes/app.analytics";
 import Root from "./zoha.jsx";
-
+import { useEffect } from "react";
 
 export default function App() {
 
+  useEffect(() => {
+    // Zoho config script
+    const configScript = document.createElement("script");
+    configScript.type = "text/javascript";
+    configScript.innerHTML = `
+      window.$zoho = window.$zoho || {};
+      $zoho.salesiq = $zoho.salesiq || {
+        ready: function () {
+          console.log("Zoho SalesIQ loaded");
+        }
+      };
+    `;
+    document.body.appendChild(configScript);
 
+    // Zoho widget loader script
+    const zohoScript = document.createElement("script");
+    zohoScript.src = "https://salesiq.zohopublic.in/widget?wc=siq2084c27fe220c816892dec0d99a9092a03d9399a0a187b9968460a97f4233ff0";
+    zohoScript.defer = true;
+    document.body.appendChild(zohoScript);
+
+    return () => {
+      // Cleanup if needed
+      document.body.removeChild(configScript);
+      document.body.removeChild(zohoScript);
+    };
+  }, []);
   return (
     <html HL="VIKAS">
       <head>
