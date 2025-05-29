@@ -23,9 +23,8 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-// app.use("/api", dashboardroute);
-import  { getDashboardData }  from "./backend/controller/dashboardController.js"
-app.use("/api/analytics", getDashboardData)
+
+
 const connectDB = async () => {
   try {
     if (!process.env.MONGO_URI) {
