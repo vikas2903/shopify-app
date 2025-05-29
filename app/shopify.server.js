@@ -15,6 +15,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import dashboardroute from "./backend/route/dashboardRoutes.js";
+import  { getDashboardData }  from "./backend/controller/dashboardController.js"
  
 // Load environment variables
 dotenv.config();
@@ -22,7 +23,9 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use("/api", dashboardroute);
+// app.use("/api", dashboardroute);
+import  { getDashboardData }  from "./backend/controller/dashboardController.js"
+app.use("/api/analytics", getDashboardData)
 const connectDB = async () => {
   try {
     if (!process.env.MONGO_URI) {
@@ -36,7 +39,7 @@ const connectDB = async () => {
     process.exit(1); // Exit if cannot connect to database
   }
 };
-
+console.log(getDashboardData); 
 connectDB();
 
 console.log("###################### Vikas Prasad ######################");
@@ -110,6 +113,10 @@ app.get("/auth/callback", async (req, res) => {
       error: error.message 
     });
   }
+});
+
+app.get("/issue", (req, res) => {
+  res.send("working");
 });
 
 mongoose.connection.on('error', (err) => {
