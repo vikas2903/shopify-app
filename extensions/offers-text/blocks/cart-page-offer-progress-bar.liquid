@@ -1,4 +1,5 @@
-<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 <style>
     :root{
         --drawerColor:#64112f
@@ -197,9 +198,7 @@
   </div>
 </div>
 
-
 <script>
-  
   let price_range_1 = parseFloat("{{ block.settings.cp-price-1 }}");
   let price_range_2 = parseFloat("{{ block.settings.cp-price-2 }}");
   let price_range_3 = parseFloat("{{ block.settings.cp-price-3 }}");
@@ -208,14 +207,7 @@
   let price_text_2 = "{{ block.settings.cp-text2 }}";
   let price_text_3 = "{{ block.settings.cp-text3 }}";
 
-  // console.log(price_range_1);
-  // console.log(price_range_2 );
-  // console.log(price_range_3);
-  // console.log(price_text_1 );
-  // console.log(price_text_2);
-  // console.log(price_text_3 );
-  
-function getCartData() {
+  function getCartData() {
     fetch('/cart.js')
       .then(response => {
         if (!response.ok) {
@@ -226,24 +218,23 @@ function getCartData() {
       .then(data => {
         let cartTotalPrice = data.total_price / 100;
         updateProgressBar(cartTotalPrice);
-        
-      
       })
       .catch(error => {
         console.error("Error fetching cart data:", error);
       });
   }
-function updateProgressBar(cartTotal) {
+
+  function updateProgressBar(cartTotal) {
     $('.progress-note').hide();
     $('.progress-container-bg-color , .progress_offer_wrap').hide();
-    if(cartTotal > 1299){
+
+    if (cartTotal > 1299) {
       $('.progress-container-bg-color , .progress_offer_wrap').show();
       $('.progress-note').show();
     }
 
-
     let progressWidth = '0%';
-    var offerText = '';
+    let offerText = '';
 
     $('.circle').removeClass('active');
 
@@ -263,30 +254,27 @@ function updateProgressBar(cartTotal) {
 
     $('#progress').css({ width: progressWidth });
     $('.progress_offer_wrap p').text(offerText);
-      let progressElement = document.querySelector('.progress-wrapper');
-  let drawerHeader = document.querySelector('.drawer__header');
-  if (drawerHeader && progressElement) {
-    drawerHeader.insertAdjacentElement("afterend", progressElement);
-} 
-  
- 
- 
+
+    let progressElement = document.querySelector('.progress-wrapper');
+    let drawerHeader = document.querySelector('.drawer__header');
+
+    // ✅ Prevent duplicate or disappearing progress bar
+    if (drawerHeader && progressElement && !drawerHeader.nextElementSibling?.classList.contains('progress-wrapper')) {
+      drawerHeader.insertAdjacentElement("afterend", progressElement);
+    }
   }
 
-$(document).ready(function () {
-  getCartData();
-  setInterval(getCartData, 1000);
-  
-
-
-});
- 
+  $(document).ready(function () {
+    getCartData();
+    setInterval(getCartData, 3000); 
+  });
 </script>
+
 
 {% schema %}
 {
   "name": "Cart Progress bar",
-  "target":"body",
+  "target":"section",
   "settings": [
     {
       "type":"text",
