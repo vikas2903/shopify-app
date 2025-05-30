@@ -14,7 +14,13 @@
     right: 20px;
     
 }
-.explore-card{cursor: pointer;}
+.explore-card {
+    cursor: pointer;
+    padding: 0 0 .7rem 0;
+    background: #fff;
+    border-radius: 8px;
+    border: none;
+}
 
 .pop-header-wrapper {
     display: flex;

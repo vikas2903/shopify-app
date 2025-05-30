@@ -337,6 +337,7 @@ nav ul li.active i {
     display: flex;
     flex-direction: column;
     animation: fadeIn 0.8s ease-in-out;
+    background: #eeeeeec5;
 }
 
 @keyframes fadeIn {
