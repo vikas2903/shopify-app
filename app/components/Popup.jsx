@@ -61,7 +61,9 @@ function Popup() {
                 <div className="popupbody">
                     <div className="youtube-video">
                         {item.youtube ? (
-                            <div dangerouslySetInnerHTML={{__html: item.youtube}} />
+                            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                              <div dangerouslySetInnerHTML={{__html: item.youtube}} />
+                            </div>
                         ) : (
                             <img src={item.image} alt={item.title} width="100%" height="100%" />
                         )}

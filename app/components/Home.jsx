@@ -1,25 +1,72 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import ChartsGraph from './ChartsGraph.jsx'; // Assuming you have a Chart component for displaying charts
 
 function Home() {
-  return (
-    <>
-             <div className="main-content">
-    
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-                <div className="content">
-                    <h1>Dashboard</h1>
+    useEffect(() => {
+        const fetchDashboard = async () => {
+            let tries = 0;
 
+            while (tries < 3) {
+                try {
+                    const res = await fetch('https://shopify-wishlist-app-mu3m.onrender.com/api/dashboard',
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        }
+                    );
+                    const result = await res.json();
+
+                    if (result.success) {
+                        setData(result);
+                        setError("");
+                        break;
+                    } else {
+                        setError("Failed to load dashboard data.");
+                        break;
+                    }
+                } catch (err) {
+                    console.error(`Fetch attempt ${tries + 1} failed:`, err);
+                    tries++;
+                    if (tries < 3) {
+                        await new Promise(res => setTimeout(res, 2000)); // Wait 2s before retry
+                    } else {
+                        setError("Error fetching data after multiple attempts.");
+                    }
+                }
+            }
+
+            setLoading(false);
+        };
+
+        fetchDashboard();
+    }, []);
+
+    return (
+        <div className="main-content">
+            <div className="content">
+                <h1>Dashboard</h1>
+
+                {loading && <p>Loading or waking up server...</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+
+                {data && (
                     <div className="stats-container">
                         <div className="stat-card">
                             <div className="stat-icon users">
                                 <i className="fas fa-users"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Total Orders</h3>
-                                <div className="stat-number">10</div>
+                                <h3>Today Orders</h3>
+                                <div className="stat-number">{data.orderTodayCount}</div>
                                 <div className="stat-trend positive">
-                                    <i className="fas fa-arrow-up"></i>
-                                    <span>+ Recent View Section</span>
+                                    {/* <i className="fas fa-arrow-up"></i>
+                  <span>+ Recent View Section</span> */}
                                 </div>
                             </div>
                         </div>
@@ -30,100 +77,49 @@ function Home() {
                             </div>
                             <div className="stat-details">
                                 <h3>Total Products</h3>
-                                <div className="stat-number">01</div>
+                                <div className="stat-number">{data.productCount}</div>
                                 <div className="stat-trend positive">
-                                    <i className="fas fa-arrow-up"></i>
-                                    <span>+ Wishlist App</span>
+                                    {/* <i className="fas fa-arrow-up"></i>
+                  <span>+ Wishlist App</span> */}
                                 </div>
                             </div>
                         </div>
-                         <div className="stat-card">
-                            <div className="stat-icon orders">
-                                <i className="fas fa-shopping-cart"></i>
-                            </div>
-                            <div className="stat-details">
-                                <h3>Total Customers</h3>
-                                <div className="stat-number">10</div>
-                                <div className="stat-trend negative">
-                                    <i className="fas fa-arrow-down"></i>
-                                    <span>-2</span> 
-                                </div>
-                            </div>
-                        </div>
+
                         <div className="stat-card">
                             <div className="stat-icon orders">
                                 <i className="fas fa-shopping-cart"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Conversion Rate</h3> 
-                                <div className="stat-number">10</div>
+                                <h3>Total Customers</h3>
+                                <div className="stat-number">{data.customerCount}</div>
                                 <div className="stat-trend negative">
-                                    <i className="fas fa-arrow-down"></i>
-                                    <span>-2</span> 
+                                    {/* <i className="fas fa-arrow-down"></i>
+                  <span>-2</span> */}
                                 </div>
                             </div>
                         </div>
-                       
-                    </div>
 
-                    <div className="recent-activity">
-                        <div className="section-header">
-                            {/* <h2>Recent Activity</h2> */}
-                            {/* <button className="view-all">View All</button> */}
-                        </div>
-
-                        {/* <div className="activity-card">
-                            <div className="activity-icon green">
-                                <i className="fas fa-check"></i>
+                        <div className="stat-card">
+                            <div className="stat-icon orders">
+                                <i className="fas fa-percentage"></i>
                             </div>
-                            <div className="activity-details">
-                                <h4>Project Alpha completed</h4>
-                                <p>Team finished the project ahead of
-                                    schedule</p>
-                                <div className="activity-time">2 hours ago</div>
+                            <div className="stat-details">
+                                <h3>Conversion Rate</h3>
+                                <div className="stat-number">{data.conversionRate}</div>
+                                <div className="stat-trend positive">
+                                    {/* <i className="fas fa-arrow-up"></i>
+                  <span>Improved</span> */}
+                                </div>
                             </div>
                         </div>
-
-                        <div className="activity-card">
-                            <div className="activity-icon blue">
-                                <i className="fas fa-user-plus"></i>
-                            </div>
-                            <div className="activity-details">
-                                <h4>New team member</h4>
-                                <p>Emily Jones joined the design team</p>
-                                <div className="activity-time">5 hours ago</div>
-                            </div>
-                        </div>
-
-                        <div className="activity-card">
-                            <div className="activity-icon orange">
-                                <i className="fas fa-comments"></i>
-                            </div>
-                            <div className="activity-details">
-                                <h4>Client meeting</h4>
-                                <p>Discussion about the new project
-                                    requirements</p>
-                                <div className="activity-time">Yesterday</div>
-                            </div>
-                        </div> */}
                     </div>
-                </div>
+                )}
 
-                {/* <footer>
-                    <div className="copyright">© 2025 Pulse Dashboard</div>
-                    <div className="footer-links">
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                        <a href="#">Contact Us</a>
-                    </div>
-                </footer> */}
+                < ChartsGraph />
+
             </div>
-    </>
-  )
+        </div>
+    );
 }
 
-export default Home
-
-
-
-
+export default Home;
