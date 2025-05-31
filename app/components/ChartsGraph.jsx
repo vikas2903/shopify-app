@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
 
+// Register Chart.js components
 ChartJS.register(
   LineElement,
   BarElement,
@@ -26,35 +27,38 @@ ChartJS.register(
 const ChartsGraph = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [range, setRange] = useState('7d'); // Default to last 7 days
+
+  const fetchDashboard = async () => {
+    setLoading(true);
+    try {
+      const endpoint = `https://shopify-wishlist-app-mu3m.onrender.com/api/dashboard?range=${range}`;
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        setData(result);
+      } else {
+        console.error('API responded with success: false');
+        setData(null);
+      }
+    } catch (err) {
+      console.error('Fetch failed:', err);
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const res = await fetch('https://shopify-wishlist-app-mu3m.onrender.com/api/dashboard', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            shop: 'your-shop-name.myshopify.com',
-            token: 'your-shopify-access-token',
-          }),
-        });
-        const result = await res.json();
-        if (result.success) {
-          setData(result);
-        } else {
-          setError('Failed to load dashboard data.');
-        }
-      } catch (err) {
-        console.error('Fetch error:', err);
-        setError('Error fetching data.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDashboard();
-  }, []);
+  }, [range]);
 
   const chartOptions = {
     responsive: true,
@@ -67,92 +71,170 @@ const ChartsGraph = () => {
     },
   };
 
-  if (loading) return <p>Loading charts...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
-  if (!data) return null;
+  if (loading) return <p>Loading dashboard...</p>;
+  if (!data) return <p style={{ color: 'red' }}>Failed to load data.</p>;
 
-  const conversionRate = parseFloat(data.conversionRate) || 0;
+  const {
+    productCount,
+    customerCount,
+    conversionRate,
+    orderTrends,
+    orderTodayCount,
+    totalOrderCount,
+  } = data;
+
+  const parsedConversionRate = parseFloat(conversionRate.replace('%', '')) || 0;
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2 style={{ textAlign: 'center' }}>Dashboard Analytics</h2>
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '30px',
-        justifyContent: 'center',
-      }}>
-        {/* Orders Today - Line Chart */}
-        <div style={{ width: '45%', minWidth: '300px' }}>
-          <h4>Orders Today</h4>
-          <Line
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Dashboard Analytics</h2>
+
+      {/* Order Filter */}
+      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+        <label htmlFor="range">Order Trend Range:&nbsp;</label>
+        <select
+          id="range"
+          value={range}
+          onChange={(e) => setRange(e.target.value)}
+        >
+          <option value="1d">1 Day</option>
+          <option value="7d">7 Days</option>
+          <option value="1m">1 Month</option>
+          <option value="1y">1 Year</option>
+        </select>
+      </div>
+
+      {/* Chart Grid */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '30px',
+        }}
+      >
+        {/* Order Trends Line Chart */}
+        <div>
+          <h4>Order Trends</h4>
+          {Array.isArray(orderTrends) && orderTrends.length > 0 ? (
+            <Line
+              data={{
+                labels: orderTrends.map((entry) => entry.date),
+                datasets: [
+                  {
+                    label: 'Orders',
+                    data: orderTrends.map((entry) => entry.count),
+                    borderColor: '#4bc0c0',
+                    backgroundColor: 'rgba(75,192,192,0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3,
+                  },
+                ],
+              }}
+              options={chartOptions}
+            />
+          ) : (
+            <p>No order trend data available.</p>
+          )}
+        </div>
+
+        {/* Total Orders Bar Chart */}
+        <div>
+          <h4>Total Orders</h4>
+          <Bar
             data={{
-              labels: ['Today'],
-              datasets: [{
-                label: 'Orders',
-                data: [data.orderTodayCount],
-                borderColor: '#4bc0c0',
-                backgroundColor: 'rgba(75,192,192,0.2)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 5,
-              }],
+              labels: ['Orders'],
+              datasets: [
+                {
+                  label: 'Total Orders',
+                  data: [totalOrderCount],
+                  backgroundColor: '#36a2eb',
+                  borderColor: '#1e88e5',
+                  borderWidth: 1,
+                },
+              ],
             }}
             options={chartOptions}
           />
         </div>
 
-        {/* Products - Bar Chart */}
-        <div style={{ width: '45%', minWidth: '300px' }}>
+        {/* Today’s Orders Bar Chart */}
+        <div>
+          <h4>Today’s Orders</h4>
+          <Bar
+            data={{
+              labels: ['Today'],
+              datasets: [
+                {
+                  label: 'Orders Today',
+                  data: [orderTodayCount],
+                  backgroundColor: '#81c784',
+                  borderColor: '#388e3c',
+                  borderWidth: 1,
+                },
+              ],
+            }}
+            options={chartOptions}
+          />
+        </div>
+
+        {/* Total Products Bar Chart */}
+        <div>
           <h4>Total Products</h4>
           <Bar
             data={{
               labels: ['Products'],
-              datasets: [{
-                label: 'Products',
-                data: [data.productCount],
-                backgroundColor: '#9966ff',
-                borderColor: '#7c4dff',
-                borderWidth: 1,
-              }],
+              datasets: [
+                {
+                  label: 'Products',
+                  data: [productCount],
+                  backgroundColor: '#9966ff',
+                  borderColor: '#7c4dff',
+                  borderWidth: 1,
+                },
+              ],
             }}
             options={chartOptions}
           />
         </div>
 
-        {/* Customers - Line Chart */}
-        <div style={{ width: '45%', minWidth: '300px' }}>
+        {/* Total Customers Line Chart */}
+        <div>
           <h4>Total Customers</h4>
           <Line
             data={{
               labels: ['Customers'],
-              datasets: [{
-                label: 'Customers',
-                data: [data.customerCount],
-                borderColor: '#ff9f40',
-                backgroundColor: 'rgba(255,159,64,0.2)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 5,
-              }],
+              datasets: [
+                {
+                  label: 'Customers',
+                  data: [customerCount],
+                  borderColor: '#ff9f40',
+                  backgroundColor: 'rgba(255,159,64,0.2)',
+                  fill: true,
+                  tension: 0.4,
+                  pointRadius: 5,
+                },
+              ],
             }}
             options={chartOptions}
           />
         </div>
 
-        {/* Conversion Rate - Bar Chart */}
-        <div style={{ width: '45%', minWidth: '300px' }}>
+        {/* Conversion Rate % Bar Chart */}
+        <div>
           <h4>Conversion Rate (%)</h4>
           <Bar
             data={{
-              labels: ['Conversion Rate'],
-              datasets: [{
-                label: 'Conversion Rate',
-                data: [conversionRate],
-                backgroundColor: '#ff6384',
-                borderColor: '#e91e63',
-                borderWidth: 1,
-              }],
+              labels: ['Conversion'],
+              datasets: [
+                {
+                  label: 'Conversion Rate',
+                  data: [parsedConversionRate],
+                  backgroundColor: '#ff6384',
+                  borderColor: '#e91e63',
+                  borderWidth: 1,
+                },
+              ],
             }}
             options={chartOptions}
           />
@@ -163,4 +245,3 @@ const ChartsGraph = () => {
 };
 
 export default ChartsGraph;
-ChartsGraph

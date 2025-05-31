@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://literacy-mil-potter-commissioners.trycloudflare.com"
+application_url = "https://athletics-internship-below-jerusalem.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products,write_customers,read_products,read_orders,read_discount
 
 [auth]
 redirect_urls = [
-  "https://literacy-mil-potter-commissioners.trycloudflare.com/auth/callback",
-  "https://literacy-mil-potter-commissioners.trycloudflare.com/auth/shopify/callback",
-  "https://literacy-mil-potter-commissioners.trycloudflare.com/api/auth/callback"
+  "https://athletics-internship-below-jerusalem.trycloudflare.com/auth/callback",
+  "https://athletics-internship-below-jerusalem.trycloudflare.com/auth/shopify/callback",
+  "https://athletics-internship-below-jerusalem.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

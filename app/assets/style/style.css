@@ -651,6 +651,7 @@ h1::after {
     background: linear-gradient(90deg, #3498db, transparent);
     border-radius: 2px;
 }
+h2::after{visibility: hidden; opacity: 0; transition: all 0.3s ease;}
 
 .view-all {
     background-color: rgba(52, 152, 219, 0.1);

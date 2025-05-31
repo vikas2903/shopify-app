@@ -62,8 +62,8 @@ function Home() {
                                 <i className="fas fa-users"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Today Orders</h3>
-                                <div className="stat-number">{data.orderTodayCount}</div>
+                                <h3>Total Orders</h3>
+                                <div className="stat-number">{data.totalOrderCount}</div>
                                 <div className="stat-trend positive">
                                     {/* <i className="fas fa-arrow-up"></i>
                   <span>+ Recent View Section</span> */}
