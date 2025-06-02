@@ -37,6 +37,7 @@ function Explorecard() {
 </svg>`;
   return (
     <>
+    
       {exploreData.map((item) => (
         <div
           className="explore-card"

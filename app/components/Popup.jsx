@@ -8,7 +8,7 @@ import {useContext} from 'react';
 function Popup() {
 
     
-    const {showPopup, setShowPopup, exploreData, selectedId} = useContext(ExploreContext);
+    const {showPopup, setShowPopup, exploreData, selectedId, blockId, setblockId} = useContext(ExploreContext);
 
     if (!showPopup || !exploreData || !selectedId) {
         return null;
@@ -51,6 +51,32 @@ function Popup() {
                                 type="button" 
                                 className="action-button"
                                 aria-label="Add to collection"
+                                block-id={item.id}
+                                onClick={() => {
+                                    console.log("test...")
+                                    fetch('https://shopify-wishlist-app-mu3m.onrender.com/api/upload-section', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                        shop: 'aaryajewel',  // Ideally dynamic
+                                        blockId: item.id,
+                                        }),
+                                    })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (data.message) {
+                                        alert(data.message);
+                                        console.log("its working item.id", item.id);
+
+                                        // Redirect to the Shopify customize section for the theme
+                                        window.location.href = `https://aaryajewel.myshopify.com/admin/themes/current/editor`;
+                                        } else {
+                                        alert(data.error || 'Something went wrong');
+                                        }
+                                    })
+                                    .catch(console.error);
+                                    }}
+
                                
                             >
                                 <span dangerouslySetInnerHTML={{__html: plus}} />

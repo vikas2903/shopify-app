@@ -6,6 +6,19 @@ function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    const getActiveTheme = async () => {
+  const res = await fetch(`https://${shop}.myshopify.com/admin/api/2024-01/themes.json`, {
+    headers: {
+      'X-Shopify-Access-Token': accessToken,
+      'Content-Type': 'application/json',
+    },
+  });
+  const json = await res.json();
+  const activeTheme = json.themes.find(theme => theme.role === 'main');
+  return activeTheme.id;
+};
+
+
     useEffect(() => {
         const fetchDashboard = async () => {
             let tries = 0;
@@ -62,8 +75,8 @@ function Home() {
                                 <i className="fas fa-users"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Total Orders</h3>
-                                <div className="stat-number">{data.totalOrderCount}</div>
+                                <h3>Today Orders</h3>
+                                <div className="stat-number">{data.orderTodayCount}</div>
                                 <div className="stat-trend positive">
                                     {/* <i className="fas fa-arrow-up"></i>
                   <span>+ Recent View Section</span> */}
@@ -76,8 +89,8 @@ function Home() {
                                 <i className="fas fa-dollar-sign"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Total Products</h3>
-                                <div className="stat-number">{data.productCount}</div>
+                                <h3>Total Orders</h3>
+                                <div className="stat-number">{data.totalOrderCount}</div>
                                 <div className="stat-trend positive">
                                     {/* <i className="fas fa-arrow-up"></i>
                   <span>+ Wishlist App</span> */}
@@ -90,8 +103,8 @@ function Home() {
                                 <i className="fas fa-shopping-cart"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Total Customers</h3>
-                                <div className="stat-number">{data.customerCount}</div>
+                                <h3>Products </h3>
+                                <div className="stat-number">{data.productCount}</div>
                                 <div className="stat-trend negative">
                                     {/* <i className="fas fa-arrow-down"></i>
                   <span>-2</span> */}
@@ -104,8 +117,8 @@ function Home() {
                                 <i className="fas fa-percentage"></i>
                             </div>
                             <div className="stat-details">
-                                <h3>Conversion Rate</h3>
-                                <div className="stat-number">{data.conversionRate}</div>
+                                <h3>customers</h3>
+                                <div className="stat-number">{data.customerCount}</div>
                                 <div className="stat-trend positive">
                                     {/* <i className="fas fa-arrow-up"></i>
                   <span>Improved</span> */}

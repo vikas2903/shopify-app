@@ -6,6 +6,8 @@ const Installation = () => {
   
   return (
     <>
+    <div className="Polaris-Page Polaris-Page--fullWidth">
+    <h1>Guide</h1>
         <div className="install-inner">
             <div className="install-wrapper">
                 <div className="install-item">
@@ -75,6 +77,7 @@ const Installation = () => {
                     </div>
                 </div>
             </div> 
+        </div>
         </div>
     </>
   );

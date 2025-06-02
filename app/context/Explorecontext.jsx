@@ -7,19 +7,25 @@ export const ExploreContext = createContext({
   setShowPopup: () => {},
   exploreData: [],
   selectedId: '001',
-  setSelectedId: () => {}
+  setSelectedId: () => {},
+  blockId: '001',
+  setblockId: () => {}
+  
 });
 
 export const ExploreContextProvider = ({ children }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedId, setSelectedId] = useState('001');
+  const [blockId, setblockId] = useState('001');
 
   const contextValue = {
     showPopup,
     setShowPopup,
     exploreData,
     selectedId,
-    setSelectedId
+    setSelectedId,
+    blockId,
+    setblockId
   };
 
   return (

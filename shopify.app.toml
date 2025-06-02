@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://athletics-internship-below-jerusalem.trycloudflare.com"
+application_url = "https://enters-tue-travelers-ref.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products,write_customers,read_products,read_orders,read_discount
 
 [auth]
 redirect_urls = [
-  "https://athletics-internship-below-jerusalem.trycloudflare.com/auth/callback",
-  "https://athletics-internship-below-jerusalem.trycloudflare.com/auth/shopify/callback",
-  "https://athletics-internship-below-jerusalem.trycloudflare.com/api/auth/callback"
+  "https://enters-tue-travelers-ref.trycloudflare.com/auth/callback",
+  "https://enters-tue-travelers-ref.trycloudflare.com/auth/shopify/callback",
+  "https://enters-tue-travelers-ref.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

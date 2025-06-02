@@ -81,17 +81,18 @@ const ChartsGraph = () => {
     orderTrends,
     orderTodayCount,
     totalOrderCount,
+    revenueTrends,
   } = data;
 
-  const parsedConversionRate = parseFloat(conversionRate.replace('%', '')) || 0;
+  const parsedConversionRate = parseFloat(conversionRate?.replace('%', '')) || 0;
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Dashboard Analytics</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Dashboard Analytics</h2>
 
       {/* Order Filter */}
-      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <label htmlFor="range">Order Trend Range:&nbsp;</label>
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <label htmlFor="range"><strong>Trend Range:</strong>&nbsp;</label>
         <select
           id="range"
           value={range}
@@ -112,7 +113,7 @@ const ChartsGraph = () => {
           gap: '30px',
         }}
       >
-        {/* Order Trends Line Chart */}
+        {/* Order Trends */}
         <div>
           <h4>Order Trends</h4>
           {Array.isArray(orderTrends) && orderTrends.length > 0 ? (
@@ -138,7 +139,33 @@ const ChartsGraph = () => {
           )}
         </div>
 
-        {/* Total Orders Bar Chart */}
+        {/* Revenue Trends */}
+        <div>
+          <h4>Revenue Trends</h4>
+          {Array.isArray(revenueTrends) && revenueTrends.length > 0 ? (
+            <Line
+              data={{
+                labels: revenueTrends.map((entry) => entry.date),
+                datasets: [
+                  {
+                    label: 'Revenue',
+                    data: revenueTrends.map((entry) => entry.amount),
+                    borderColor: '#36a2eb',
+                    backgroundColor: 'rgba(54,162,235,0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3,
+                  },
+                ],
+              }}
+              options={chartOptions}
+            />
+          ) : (
+            <p>No revenue trend data available.</p>
+          )}
+        </div>
+
+        {/* Total Orders */}
         <div>
           <h4>Total Orders</h4>
           <Bar
@@ -158,7 +185,7 @@ const ChartsGraph = () => {
           />
         </div>
 
-        {/* Today’s Orders Bar Chart */}
+        {/* Orders Today */}
         <div>
           <h4>Today’s Orders</h4>
           <Bar
@@ -178,7 +205,7 @@ const ChartsGraph = () => {
           />
         </div>
 
-        {/* Total Products Bar Chart */}
+        {/* Total Products */}
         <div>
           <h4>Total Products</h4>
           <Bar
@@ -198,7 +225,7 @@ const ChartsGraph = () => {
           />
         </div>
 
-        {/* Total Customers Line Chart */}
+        {/* Total Customers */}
         <div>
           <h4>Total Customers</h4>
           <Line
@@ -220,7 +247,7 @@ const ChartsGraph = () => {
           />
         </div>
 
-        {/* Conversion Rate % Bar Chart */}
+        {/* Conversion Rate */}
         <div>
           <h4>Conversion Rate (%)</h4>
           <Bar

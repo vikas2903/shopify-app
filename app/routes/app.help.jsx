@@ -43,7 +43,11 @@ const Help = () => {
   };
 
   return (
+    <> 
+    <div className='Polaris-Page Polaris-Page--fullWidth'>
+      <h1>Help</h1>
     <div className="form-container">
+      
       <div className="form-title">
         <h3><i className="fas fa-headset"></i> Support Ticket Form</h3>
       </div>
@@ -94,6 +98,8 @@ const Help = () => {
         </button>
       </form>
     </div>
+    </div>
+    </>
   );
 };
 
