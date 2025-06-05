@@ -59,7 +59,7 @@ function Explorecard() {
               <div className="imgt-r">
                 <div className="svg-wrapper"> 
                   <span onClick={() => popupvisible(item.id)} dangerouslySetInnerHTML={{ __html: loveSvg }} />
-                  <span dangerouslySetInnerHTML={{ __html: eye }} />
+         
                 </div>
               </div>
             </div>

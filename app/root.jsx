@@ -11,6 +11,7 @@ import Sidebar from "./components/Sidebar";
 import Analytics from "./routes/app.analytics";
 import Root from "./zoha.jsx";
 import { useEffect } from "react";
+import "./assets/style/style.css";
 
 export default function App() {
 
@@ -30,7 +31,7 @@ export default function App() {
 
     // Zoho widget loader script
     const zohoScript = document.createElement("script");
-    zohoScript.src = "https://salesiq.zohopublic.in/widget?wc=siq2084c27fe220c816892dec0d99a9092a03d9399a0a187b9968460a97f4233ff0";
+    zohoScript.src = "https://salesiq.zohopublic.in/widget?wc=siq1b81f21d9c29bf6604592eb7dbc4b3b9569d0f1d8957d977477a7e6f458cb73c";
     zohoScript.defer = true;
     document.body.appendChild(zohoScript);
 
@@ -50,6 +51,7 @@ export default function App() {
           rel="stylesheet"
           href="https://cdn.shopify.com/static/fonts/inter/v4/styles.css"
         />
+        
         <Meta />
         <Links />
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

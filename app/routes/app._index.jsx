@@ -15,7 +15,9 @@ import {
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
-import Home from "../components/Home";
+// import Home from "../components/Home";
+import '../assets/style/style.css'
+import Dashboard from "../components/Dashboard.jsx";
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
@@ -110,7 +112,8 @@ export default function Index() {
     <Page fullWidth >
        <TitleBar title="Dashboard" /> 
 
-    <Home />
+    {/* <Home /> */}
+    < Dashboard />
       {/* <TitleBar title="Remix app template">
         <button variant="primary" onClick={generateProduct}>
           Generate a product

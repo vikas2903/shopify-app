@@ -46,57 +46,78 @@ const Help = () => {
     <> 
     <div className='Polaris-Page Polaris-Page--fullWidth'>
       <h1>Help</h1>
-    <div className="form-container">
+  <div className="support-wrapper">
+    <div className="support-image">
+      <div className="support-image-inner">
+        <img src="https://pagedone.io/asset/uploads/1696488602.png" alt="Support" />
+
+        <div className="support-info">
+          <div className="si">
+            <a href="mailto:support@digisidekick.com"><i className='fas fa-envelope-open'></i> Support@digisidekick.com</a>
+            <a href=""><i className='fas '></i> Address: A-25 Noida Section 16</a>
+          </div>
+        </div>
+      </div> 
+
       
-      <div className="form-title">
-        <h3><i className="fas fa-headset"></i> Support Ticket Form</h3>
+    </div>
+
+
+      <div className="form-container">
+        
+        <div className="form-title">
+          <h3><i className="fas fa-headset"></i> Support Ticket Form</h3>
+        </div>
+
+        <form onSubmit={sendEmail}>
+          <div className="mb-4">
+            <label htmlFor="email3" className="form-label">Email address</label>
+            <input
+              type="email"
+              className="form-control"
+              id="email3"
+              name="email"
+              placeholder='Email address'
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="ticketSubject" className="form-label">Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="ticketSubject"
+              name="name"
+               placeholder='Name'
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="issueDetails" className="form-label">Issue Details</label>
+            <textarea
+              className="form-control"
+              id="issueDetails"
+              name="message"
+              rows="6"
+              placeholder="Please describe your issue in detail. If needed, share video or screenshot links (Google Drive, Loom, etc.)"
+              value={formData.message}
+              onChange={handleChange}
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" className="btn btn-success">
+            Submit Ticket <i className="fas fa-ticket-alt ms-1"></i>
+          </button>
+        </form>
       </div>
 
-      <form onSubmit={sendEmail}>
-        <div className="mb-4">
-          <label htmlFor="email3" className="form-label">Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            id="email3"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="ticketSubject" className="form-label">Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="ticketSubject"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="issueDetails" className="form-label">Issue Details</label>
-          <textarea
-            className="form-control"
-            id="issueDetails"
-            name="message"
-            rows="6"
-            placeholder="Please describe your issue in detail. If needed, share video or screenshot links (Google Drive, Loom, etc.)"
-            value={formData.message}
-            onChange={handleChange}
-            required
-          ></textarea>
-        </div>
-
-        <button type="submit" className="btn btn-success">
-          Submit Ticket <i className="fas fa-ticket-alt ms-1"></i>
-        </button>
-      </form>
     </div>
     </div>
     </>

@@ -6,17 +6,6 @@ function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    const getActiveTheme = async () => {
-  const res = await fetch(`https://${shop}.myshopify.com/admin/api/2024-01/themes.json`, {
-    headers: {
-      'X-Shopify-Access-Token': accessToken,
-      'Content-Type': 'application/json',
-    },
-  });
-  const json = await res.json();
-  const activeTheme = json.themes.find(theme => theme.role === 'main');
-  return activeTheme.id;
-};
 
 
     useEffect(() => {
@@ -27,7 +16,7 @@ function Home() {
                 try {
                     const res = await fetch('https://shopify-wishlist-app-mu3m.onrender.com/api/dashboard',
                         {
-                            method: 'POST',
+                            method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
                             }

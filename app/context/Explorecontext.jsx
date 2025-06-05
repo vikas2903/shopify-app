@@ -1,22 +1,30 @@
 import { createContext, useState } from "react"; 
 import exploreData from '../data/data.json';
 
+
+
+
 // Create context with default values to avoid null context
+
+
 export const ExploreContext = createContext({
   showPopup: false,
   setShowPopup: () => {},
   exploreData: [],
   selectedId: '001',
-  setSelectedId: () => {},
-  blockId: '001',
-  setblockId: () => {}
+  setSelectedId: () => {}
+ 
   
 });
 
 export const ExploreContextProvider = ({ children }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedId, setSelectedId] = useState('001');
-  const [blockId, setblockId] = useState('001');
+
+
+
+ 
+   
 
   const contextValue = {
     showPopup,
@@ -24,8 +32,8 @@ export const ExploreContextProvider = ({ children }) => {
     exploreData,
     selectedId,
     setSelectedId,
-    blockId,
-    setblockId
+  
+  
   };
 
   return (

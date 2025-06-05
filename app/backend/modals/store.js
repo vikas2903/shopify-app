@@ -26,4 +26,4 @@ storeSchema.pre('save', function(next) {
   next();
 });
 
-export default mongoose.model("Store", storeSchema);
+export default mongoose.model("Store", storeSchema); 

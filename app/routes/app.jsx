@@ -7,6 +7,7 @@ import { authenticate } from "../shopify.server";
 import '../assets/style/style.css'
 import {ExploreContextProvider} from '../context/Explorecontext.jsx'
 
+
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
 export const loader = async ({ request }) => {
@@ -18,16 +19,16 @@ export const loader = async ({ request }) => {
 export default function App() {
   const { apiKey } = useLoaderData();
 
+
+
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <ExploreContextProvider>
         <NavMenu>
-          <Link to="/app/explore">Explore Section</Link>
-          <Link to="/app" rel="home"> Home</Link>
-          {/* <Link to="/app/analytics">Analytics</Link> */}
-          <Link to="/app/help"> Help</Link> 
-          {/* <Link to="/app/additional">Additional page</Link> */}
-          <Link to="/app/installation">Installation</Link>
+          <Link to="/app/explore">Blocks</Link>
+          <Link to="/app" rel="home"> Dashboard</Link>
+          <Link to="/app/help"> Support</Link> 
+          <Link to="/app/installation">Wishlist</Link>
  
         </NavMenu>
         <Outlet />
