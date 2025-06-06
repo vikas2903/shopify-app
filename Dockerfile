@@ -1,20 +1,24 @@
 FROM node:18-alpine
 
-# If using native modules, uncomment the line below:
-# RUN apk add --no-cache python3 make g++ openssl
+# Install build dependencies
+RUN apk add --no-cache python3 make g++ openssl
 
 WORKDIR /app
 ENV NODE_ENV=production
 
-COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev && npm cache clean --force
+# Copy package files
+COPY package*.json ./
 
-RUN npm remove @shopify/cli
+# Install dependencies
+RUN npm ci
 
+# Copy the rest of the application
 COPY . .
 
+# Build the application
 RUN npm run build
 
 EXPOSE 3000
 
+# Start the application
 CMD ["npm", "run", "docker-start"]
