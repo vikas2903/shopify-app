@@ -3,76 +3,83 @@
 :root{
     --usp-width:{{block.settings.usp-width}}px;
 }
-
 .usp-container {
-    max-width: 100%;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: {{block.settings.bg}};
-    border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  background: {{block.settings.bg}};
+
 }
-        .usp-wrapper {
-            width: 100%; /* Ensure the wrapper has a defined width */
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 1%;
-            overflow-x: scroll;
-            white-space: nowrap;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
 
-        .usp-wrapper::-webkit-scrollbar {
-            background-color: transparent;
-        }
 
-        .usp-wrapper::-webkit-scrollbar-thumb {
-            background-color: #000;
-            height: 1px;
-        }
+.usp-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+}
+
+.usp-wrapper::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+.usp-wrapper::-webkit-scrollbar-thumb {
+  background-color: #000;
+  height: 1px;
+}
+
+.usp-items {
+  flex: 0 0 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+span.content {
+ font-size:11px;
+  text-align: center;
+  font-family: inherit;
+  text-transform: inherit;
+}
+
+.usp-wrapper img {
+  width: 80%;
+  height: auto;
+  display: block;
+}
+
+
+.usp-items .img {
+  box-shadow: 2px 2px 2px 1px #d9d8d8;
+  border-radius: 50%;
+  width: var(--usp-width);
+  height: var(--usp-width);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+.usp-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+@media(max-width < 767px) {
+  .usp-items .img {
+    width: 40px;
+  }
 
   .usp-items {
-    flex: 0 0 24%;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 10px;
-}
-span.content {
-    color: {{block.settings.text-color}};
-    font-size: 1.4rem;
-    font-family: inherit;
-    text-transform: inherit;
-}
-        .usp-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-      .usp-items .img {
-       width: var(--usp-width);
-       }
-    .usp-wrapper::-webkit-scrollbar {
-    display: none;
-}
-    
-    @media(max-width < 767px){
-        .usp-items .img {
-            width: 40px;
-        }
-        .usp-items {
     flex: 0 0 22%;
     gap: 5px;
+  }
+
+  .usp-wrapper {
+    gap: 6%;
+  }
 }
-        .usp-wrapper {
-            gap: 6%;
-        }
-    }
 </style>
 
 

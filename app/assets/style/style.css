@@ -1480,3 +1480,15 @@ button {
 .si i { 
     margin-right: 4px;
 }
+.youtube-video img {
+    max-width: 400px;
+    margin: auto;
+    border-radius: 8px;
+}
+.youtube-video {
+    padding-top: 2rem;
+    margin: auto;
+    text-align: center;
+}
+
+
