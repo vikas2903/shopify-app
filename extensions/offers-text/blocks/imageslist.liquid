@@ -17,9 +17,12 @@
     padding: 2rem 0;
     display: flex;
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 1rem;
     overflow-x: scroll;
+}
+@media(max-width:767px){
+  .logo-container {    justify-content: flex-start;}
 }
 
  .logo-item {
@@ -71,7 +74,6 @@
 }
   }
 </style>
-<h1>hhdfhsdkfjksfd</h1>
 
 <div class="logo-container">
   {% if block.settings.image1 != blank %}
@@ -154,7 +156,7 @@
 
 {% schema %}
 {
-  "name": "Images List",
+  "name": "Collection List",
   "target": "section",
   "settings": [
     {
