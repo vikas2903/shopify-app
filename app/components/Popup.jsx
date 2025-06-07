@@ -2,9 +2,6 @@ import React, { useContext } from 'react';
 import '../assets/style/popup.css';
 import { ExploreContext } from '../context/Explorecontext.jsx';
 
-
-
-
 function EyeIcon() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="30" viewBox="0 0 312 312" width="30">
