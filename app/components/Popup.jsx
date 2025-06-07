@@ -3,8 +3,7 @@ import '../assets/style/popup.css';
 import { ExploreContext } from '../context/Explorecontext.jsx';
 
 
-import { Redirect } from '@shopify/app-bridge/actions';
-import { useAppBridge } from '@shopify/app-bridge-react';
+
 
 function EyeIcon() {
     return (
@@ -48,17 +47,8 @@ function Popup() {
     
     const { showPopup, setShowPopup, exploreData, selectedId } = useContext(ExploreContext);
 
-     const app = useAppBridge(); // ✅ inside component
 
-      const handleClick = () => {
-    const redirect = Redirect.create(app);
-console.log('Redirecting....');
-    // Use ADMIN_PATH instead of REMOTE — it's safer inside Shopify Admin
-    redirect.dispatch(
-      Redirect.Action.ADMIN_PATH,
-      '/themes/current/editor?context=apps&activateAppId=7e14cea35d331d8a859a3d97b6b76175'
-    );
-  };
+
 
     if (!showPopup || !exploreData || !selectedId) return null;
 
@@ -92,7 +82,7 @@ console.log('Redirecting....');
                                 type="button"
                                 className="action-button"
                                 aria-label="Add to collection 1 "
-                                onClick={handleClick}
+                          
                             >
                                 <PlusIcon />
                             </button>
