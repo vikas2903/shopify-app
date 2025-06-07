@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://israeli-founded-constitution-chan.trycloudflare.com"
+application_url = "https://particle-automotive-drunk-diff.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products,write_customers,read_products,read_orders,read_discount
 
 [auth]
 redirect_urls = [
-  "https://israeli-founded-constitution-chan.trycloudflare.com/auth/callback",
-  "https://israeli-founded-constitution-chan.trycloudflare.com/auth/shopify/callback",
-  "https://israeli-founded-constitution-chan.trycloudflare.com/api/auth/callback"
+  "https://particle-automotive-drunk-diff.trycloudflare.com/auth/callback",
+  "https://particle-automotive-drunk-diff.trycloudflare.com/auth/shopify/callback",
+  "https://particle-automotive-drunk-diff.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

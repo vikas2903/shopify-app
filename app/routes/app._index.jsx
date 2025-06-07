@@ -16,7 +16,7 @@ import {
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
 // import Home from "../components/Home";
-import '../assets/style/style.css'
+import '../assets/style/styles.css'
 import Dashboard from "../components/Dashboard.jsx";
 
 export const loader = async ({ request }) => {

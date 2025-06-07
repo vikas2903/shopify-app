@@ -11,7 +11,7 @@ import Sidebar from "./components/Sidebar";
 import Analytics from "./routes/app.analytics";
 import Root from "./zoha.jsx";
 import { useEffect } from "react";
-import "./assets/style/style.css";
+import "./assets/style/styles.css";
 
 export default function App() {
 
