@@ -14,9 +14,9 @@
     right: 20px;
     
 }
-.explore-card {
+.explore-card { 
     cursor: pointer;
-    padding: 0 0 .7rem 0;
+    padding: 0;
     background: #fff;
     border-radius: 8px;
     border: none;

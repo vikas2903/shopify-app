@@ -1497,3 +1497,11 @@ button {
     width: 100%;
     padding: 1rem 2rem;
 }
+.Polaris-Layout section {
+    width: 100%;
+}
+
+.announcement-item {
+    margin-bottom: 1.4rem;
+}
+

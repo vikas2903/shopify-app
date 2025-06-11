@@ -29,6 +29,8 @@ export default function App() {
           <Link to="/app" rel="home"> Dashboard</Link>
           <Link to="/app/help"> Support</Link> 
           <Link to="/app/installation">Wishlist</Link>
+          <Link to="/app/about">About</Link>
+
  
         </NavMenu>
         <Outlet />

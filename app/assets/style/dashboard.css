@@ -1,0 +1,206 @@
+
+
+.dashboard-section-01.dashboard-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.dashboard-left {
+    flex: 0 0 70%;
+}
+
+.dashboard-right {
+    flex: 1 1 30%;
+}
+
+.dashboard-section-01.dashboard-item {
+    background: #0066cc;
+    padding: 1rem 0rem 1rem 1.2rem;
+    border-radius: 4px;
+}
+
+.info-wrapper h2 {
+    font-size: 2rem;
+    color: #fff;
+    font-family: 'Jost';
+    line-height: 1.1;
+    padding-bottom: 1rem;
+}
+.info-wrapper p {
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 400;
+    font-family: 'Jost';
+    line-height: normal;
+}
+a.dashboard-btn-custom {
+    padding: 8px 15px;
+    margin-top: 1.2rem;
+    display: inline-block;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #fff;
+    transition: all .3s ease;
+}
+a.dashboard-btn-custom:hover {
+    background: #fff;
+    border-color: #fff;
+    color: #0066cc;
+    transition: all .3s ease;
+}
+
+.dashboard-section-02 {
+  width: 100%;
+  padding: 2.5rem 2rem;
+  /* background-color: #f9fafb; */
+}
+
+.dahboard-blocks {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.blcoks-item {
+  background-color: #ffffff;
+  flex: 1;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.title-transpose {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.block-info {
+  font-size: 38px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.dashboard-section-02.dashboard-item marquee{
+    display: block;
+    width: 100%;
+} 
+
+.explore-card img {
+    aspect-ratio: 1;
+}
+
+
+.dashboard-item-slider-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(32%, 1fr));
+    gap: .6rem;
+    padding: 1rem 2rem 2rem;
+}
+.dashboard-item-slider .explore-card:not(:nth-child(1),:nth-child(2),:nth-child(3),:nth-child(4),:nth-child(5),:nth-child(6)) {
+    display: none;
+}
+h2.dashboard-heading {
+    text-align: center; 
+    padding-bottom: .6rem !important; 
+    padding-bottom: 0;
+    margin: 0 !important;
+    font-size: 1.8rem;
+}
+
+.dashboard-item-slider  .explore-card .img img {
+
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+
+.dsh-btn a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1rem;
+    text-transform: uppercase;
+    background: #0066cc;
+    padding: 8px 18px;
+    border-radius: 8px;
+        transition: all .3s ease;
+}
+.dsh-btn a:hover{
+    color: #0066cc;
+    background: #fff;
+    transition: all .3s ease;
+    border: 1px solid #0066cc;
+}
+.dsh-btn {
+    display: block;
+    text-align: center;
+}
+
+.dashboard-section-04 {
+    padding: 2.5rem 2rem;
+}
+.dsh-announcement {
+    border-top: 1px solid #ffffff9c;
+    border-bottom: 1px solid #ffffff;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.announcement-item p span {
+    padding: 8px 11px;
+    background: #0066cc;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin-right: 1rem;
+    width: 20px !important;
+}
+
+p.bgg {
+    display: inline;
+    padding: 10px 10px;
+    background: #eee;
+    border-radius: 1rem;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.dsh-announcement-alert {
+    padding: 1rem;
+    color: #065f46;
+    background: #ecfdf5;
+    border: 1px solid #ecfdf5;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.dsh-announcement:before {
+    content: "ANNOUNCEMENTS..";
+    position: absolute;
+    font-family: 'Jost';
+    line-height: 0;
+    letter-spacing: 0em; 
+    color: #00000024;
+    text-align: center;
+    z-index: 1;
+    font-size: 4.4vw;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}

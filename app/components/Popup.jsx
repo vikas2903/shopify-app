@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import '../assets/style/popup.css';
 import { ExploreContext } from '../context/Explorecontext.jsx';
+import Imageslider from './Imageslider.jsx';
+import Installationguide from './Installationguide.jsx';
 
 function EyeIcon() {
     return (
@@ -87,7 +89,9 @@ function Popup() {
                     </div>
                 </div>
                 <div className="popupbody">
-                    <div className="youtube-video">
+
+
+                    {/* <div className="youtube-video">
                         {item.youtube ? (
                             <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}
                                 dangerouslySetInnerHTML={{ __html: item.youtube }}
@@ -95,9 +99,15 @@ function Popup() {
                         ) : (
                             <img src={item.image} alt={item.title} width="100%" height="100%" />
                         )}
-                    </div>
+                    </div> */}
+                    < Imageslider />
+                    < Installationguide />
+
+
+
+
                     <div className="pop-content">
-                        <div dangerouslySetInnerHTML={{ __html: item.popupcontent }} />
+                        {/* <div dangerouslySetInnerHTML={{ __html: item.popupcontent }} /> */}
                     </div>
                 </div>
             </div>

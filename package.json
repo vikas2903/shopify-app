@@ -47,6 +47,7 @@
     "get-port": "^7.1.0",
     "graphql": "^16.11.0",
     "isbot": "^5.1.0",
+    "jquery": "^3.7.1",
     "mongoose": "^8.15.0",
     "node-fetch": "^3.3.2",
     "prisma": "^6.2.1",
@@ -54,7 +55,9 @@
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.5.3",
+    "react-slick": "^0.30.3",
     "router": "^2.2.0",
+    "slick-carousel": "^1.8.1",
     "vite-tsconfig-paths": "^5.0.1"
   },
   "devDependencies": {
