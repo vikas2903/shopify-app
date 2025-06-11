@@ -49,12 +49,13 @@ const Help = () => {
   <div className="support-wrapper">
     <div className="support-image">
       <div className="support-image-inner">
-        <img src="https://pagedone.io/asset/uploads/1696488602.png" alt="Support" />
+        <img src="https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds.png?v=1749643248" alt="Support" />
 
         <div className="support-info">
           <div className="si">
             <a href="mailto:support@digisidekick.com"><i className='fas fa-envelope-open'></i> Support@digisidekick.com</a>
-            <a href=""><i className='fas '></i> Address: A-25 Noida Section 16</a>
+            <a href=""><i class="fa-solid fa-building"></i> Address: A-25 Noida Section 16</a>
+            <a href="https://digisidekick.com/"><i className='fas fa-globe'></i> digisidekick.com</a>
           </div>
         </div>
       </div> 

@@ -4,6 +4,8 @@ import { ExploreContext } from '../context/Explorecontext.jsx';
 import Imageslider from './Imageslider.jsx';
 import Installationguide from './Installationguide.jsx';
 
+import {  Page, Layout } from '@shopify/polaris';
+
 function EyeIcon() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="30" viewBox="0 0 312 312" width="30">
@@ -55,15 +57,9 @@ function Popup() {
     if (!item) return null;
 
     return (
+       <div className="overlay">
         <div className="popip-container">
-            <button
-                type="button"
-                className="popup-close"
-                onClick={() => setShowPopup(false)}
-                aria-label="Close popup"
-            >
-                <CloseIcon />
-            </button>
+          
             <div className="popup-wrapper">
                 <div className="popup-header">
                     <div className="pop-header-wrapper">
@@ -81,15 +77,24 @@ function Popup() {
                                 type="button"
                                 className="action-button"
                                 aria-label="Add to collection 1 "
+                                onClick={() =>{window.open(`https://d2c-apps.myshopify.com/admin/themes/173246185506/editor?context=sections&template=product`, '_blank');}}
                           
                             >
                                 <PlusIcon />
                             </button>
+                              <button
+                type="button"
+                className="popup-close"
+                onClick={() => setShowPopup(false)}
+                aria-label="Close popup"
+            >
+                <CloseIcon />
+            </button>
                         </div>
-                    </div>
+                    </div> 
                 </div>
                 <div className="popupbody">
-
+                    <Page fullWidth>
 
                     {/* <div className="youtube-video">
                         {item.youtube ? (
@@ -99,10 +104,12 @@ function Popup() {
                         ) : (
                             <img src={item.image} alt={item.title} width="100%" height="100%" />
                         )}
-                    </div> */}
-                    < Imageslider />
-                    < Installationguide />
-
+                    </div> */} 
+                  <Layout>  
+                    <Layout.Section><div className='sticky-wrapper'>< Imageslider /> </div></Layout.Section>  
+                    <Layout.Section variant="oneThird">  < Installationguide /> </Layout.Section>
+                 </Layout>   
+                </Page>
 
 
 
@@ -111,7 +118,8 @@ function Popup() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div>  
+        </div> 
     );
 }
 

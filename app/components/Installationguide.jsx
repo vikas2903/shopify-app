@@ -2,12 +2,12 @@ import React from 'react';
 
 const Installationguide = () => {
   return (
-    <div style={{ padding: '30px', maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-      <h2 style={{ fontSize: '28px', marginBottom: '20px' }}>
+    <div style={{ padding: '10px 8px', maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif', background:"#eee", borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+      <h2 style={{ fontSize: '1rem' , marginBottom: '20px' , lineHeight: '1.2'}}> 
         How to Install App Blocks in Your Shopify Theme
       </h2>
 
-      <ol style={{ lineHeight: 1.8, fontSize: '16px', paddingLeft: '20px' }}>
+      <ol style={{ lineHeight: 1.6, fontSize: '12px', paddingLeft: '20px' }}>
         <li style={{ marginBottom: '20px' }}>
           <strong>Go to Your Theme Editor</strong>
           <br />

@@ -191,11 +191,11 @@ p.bgg {
 }
 
 .dsh-announcement:before {
-    content: "ANNOUNCEMENTS..";
+   content: "UPDATES";
     position: absolute;
     font-family: 'Jost';
     line-height: 0;
-    letter-spacing: 0em; 
+    letter-spacing: 0em;
     color: #00000024;
     text-align: center;
     z-index: 1;

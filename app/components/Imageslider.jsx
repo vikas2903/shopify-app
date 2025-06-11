@@ -21,7 +21,7 @@ const StepSlider = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>How It Works</h2>
+      
       <div style={styles.imageWrapper}>
         <img
           src={stepImages[currentStep]}
@@ -37,7 +37,7 @@ const StepSlider = () => {
 const styles = {
   container: {
     textAlign: 'center',
-    padding: '40px 20px',
+    padding: '0px',
   },
   heading: {
     fontSize: '28px',
