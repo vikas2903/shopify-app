@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://extent-annual-nz-possibility.trycloudflare.com"
+application_url = "https://sorry-pulled-korea-distances.trycloudflare.com"
 embedded = true
 
 [build]
@@ -23,13 +23,13 @@ api_version = "2025-04"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,write_customers,read_products,read_orders,read_discounts,read_customers,read_analytics "
+scopes = "read_themes,write_themes"
 
 [auth]
 redirect_urls = [
-  "https://extent-annual-nz-possibility.trycloudflare.com/auth/callback",
-  "https://extent-annual-nz-possibility.trycloudflare.com/auth/shopify/callback",
-  "https://extent-annual-nz-possibility.trycloudflare.com/api/auth/callback"
+  "https://sorry-pulled-korea-distances.trycloudflare.com/auth/callback",
+  "https://sorry-pulled-korea-distances.trycloudflare.com/auth/shopify/callback",
+  "https://sorry-pulled-korea-distances.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

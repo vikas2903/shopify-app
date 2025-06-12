@@ -3,6 +3,8 @@ import {
   ApiVersion,
   AppDistribution,
   shopifyApp,
+  BillingInterval,
+  DeliveryMethod
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
@@ -24,6 +26,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+export const MONTHLY_PLAN = 'Monthly subscription';
+export const ANNUAL_PLAN = 'Annual subscription';
 
 const connectDB = async () => {
   try {
@@ -130,6 +134,18 @@ const shopify = shopifyApp({
   appUrl: process.env.SHOPIFY_APP_URL,
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
+  billing: {
+    [MONTHLY_PLAN]: {
+      amount: 10,
+      currencyCode: 'USD',
+      interval: BillingInterval.Every30Days,
+    },
+    [ANNUAL_PLAN]: {
+      amount: 100,
+      currencyCode: 'USD',
+      interval: BillingInterval.Annual,
+    },
+  },
   distribution: AppDistribution.AppStore,
   future: {
     unstable_newEmbeddedAuthStrategy: true,
@@ -154,8 +170,8 @@ export const sessionStorage = shopify.sessionStorage;
 if (process.env.NODE_ENV !== 'test') {
   const PORT = 5000;
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log("sahi chal raha h sab")
+
+    console.log("Working Properly..")
   });
 }
 
