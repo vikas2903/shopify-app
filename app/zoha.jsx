@@ -8,7 +8,7 @@ import {
 import { useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 
-export default function App() {
+export default function App() { 
   useEffect(() => {
     // Zoho config script
     const configScript = document.createElement("script");
