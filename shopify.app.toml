@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://sorry-pulled-korea-distances.trycloudflare.com"
+application_url = "https://density-lid-ml-privileges.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "read_themes,write_themes"
 
 [auth]
 redirect_urls = [
-  "https://sorry-pulled-korea-distances.trycloudflare.com/auth/callback",
-  "https://sorry-pulled-korea-distances.trycloudflare.com/auth/shopify/callback",
-  "https://sorry-pulled-korea-distances.trycloudflare.com/api/auth/callback"
+  "https://density-lid-ml-privileges.trycloudflare.com/auth/callback",
+  "https://density-lid-ml-privileges.trycloudflare.com/auth/shopify/callback",
+  "https://density-lid-ml-privileges.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
