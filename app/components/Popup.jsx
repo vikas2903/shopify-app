@@ -66,7 +66,7 @@ function Popup() {
                         <div className="pop-title">{item.title}</div>
                         <div className="pop-btn">
                             <a
-                                href="https://d2c-apps.myshopify.com/"
+                                href={item.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="View on Shopify"
