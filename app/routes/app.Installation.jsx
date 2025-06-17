@@ -65,6 +65,17 @@ const Installation = () => {
                               <img src={wishlist_image1} alt=""/>
                           </div>
 
+
+
+                             <br />
+
+<h3>Step 3: Paste this code at any page template</h3>
+              <pre style={{ background: '#f4f4f4', padding: '10px', borderLeft: '4px solid #0a6' }}>
+                                {`<div class="wishlistProducts-container page-width">
+<div class="wishlist-inner"  id="wishlist-inner"></div>
+</div>`}
+                            </pre>
+                            <br />
                             <h3>✅ Final Step</h3>
                             <ol>
                                 <li>Save the changes to your theme files.</li>
