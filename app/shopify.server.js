@@ -17,8 +17,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import dashboardroute from "./backend/route/dashboardRoutes.js";
-import  { getDashboardData }  from "./backend/controller/dashboardController.js"
- 
+import  { getDashboardData }  from "./backend/controller/dashboardController.js";
+
+
+ import { json } from "@remix-run/node";
+import { getShopSession } from "./backend/getShopSession.js";
+
+
 // Load environment variables
 dotenv.config();
 
@@ -28,6 +33,22 @@ app.use(cors());
 
 export const MONTHLY_PLAN = 'Monthly subscription';
 export const ANNUAL_PLAN = 'Annual subscription';
+
+
+
+export const loader = async ({ request }) => {
+  const { shop, accessToken, host } = await getShopSession(request);
+
+  console.log("Shop vs:", shop); 
+  console.log("Token:", accessToken);
+
+  return json({
+    shop,
+    host,
+  });
+};
+ 
+
 
 const connectDB = async () => {
   try {
@@ -42,10 +63,11 @@ const connectDB = async () => {
     process.exit(1); // Exit if cannot connect to database
   }
 };
+
 console.log(getDashboardData); 
 connectDB();
 
-console.log("###################### Vikas Prasad ######################");
+
 
 
 app.get("/auth/callback", async (req, res) => {
@@ -58,6 +80,12 @@ app.get("/auth/callback", async (req, res) => {
   console.log("Shop:", shop);
   console.log("Code:", code);
 
+
+const shopdata = { Shop: shop, Code: code };
+localStorage.setItem("shopData", JSON.stringify(shopdata));
+
+  
+ 
   try {
     if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
       throw new Error('Shopify credentials are not properly configured');
@@ -118,9 +146,13 @@ app.get("/auth/callback", async (req, res) => {
   }
 });
 
-app.get("/issue", (req, res) => {
-  res.send("working");
-});
+
+
+
+
+
+
+
 
 mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);
@@ -164,7 +196,7 @@ export const authenticate = shopify.authenticate;
 export const unauthenticated = shopify.unauthenticated;
 export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
-export const sessionStorage = shopify.sessionStorage;
+export const sessionStorage = shopify.sessionStorage; 
 
 // Start Express server if not in test environment
 if (process.env.NODE_ENV !== 'test') {
