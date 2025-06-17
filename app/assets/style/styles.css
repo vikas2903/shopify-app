@@ -1505,3 +1505,6 @@ button {
     margin-bottom: 1.4rem;
 }
 
+.Polaris-Layout{
+    margin: 1.4rem auto 0 auto !important;
+}

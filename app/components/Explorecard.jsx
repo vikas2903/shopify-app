@@ -1,6 +1,5 @@
-import React from "react";
+import React, {useContext}  from "react";
 import {ExploreContext} from "../context/Explorecontext.jsx";
-import {useContext} from "react";
 
 import Popup from '../components/Popup.jsx';
 

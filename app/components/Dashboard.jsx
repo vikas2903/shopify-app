@@ -49,16 +49,16 @@ function Dashboard() {
  
             <div className="blcoks-item">
               <div className="title-transpose">Total Available Blocks</div>
-              <div className="block-info">09</div>
+              <div className="block-info">11</div>
             </div>
 
               <div className="blcoks-item">
-              <div className="title-transpose"> Total Blocks Added to Store</div>
-              <div className="block-info">06</div>
+              <div className="title-transpose"> Free / Premium Blocks</div>
+              <div className="block-info">11/0 </div>
             </div>
 
                <div className="blcoks-item">
-              <div className="title-transpose"> Most Used Block Type</div>
+              <div className="title-transpose"> Most Used Block</div>
               <div className="block-info">06</div>
             </div>
 
@@ -86,11 +86,13 @@ function Dashboard() {
         <div className="dashboard-section-04">
           <div className="dsh-announcement">
             <div className="announcement-item">
-              <p><span>DS</span> <p className="bgg">We have added Progress bar ui , its available at explore section</p></p>
+              <p><span>DS</span> <p className="bgg">Cart drawer progress bar has been added. Just enable it in the product page blocks.</p></p>
             </div>
-               <div className="announcement-item">
+
+            {/* <div className="announcement-item">
               <p><span>DS</span> <p className="bgg">We have added Progress bar ui , its available at explore section</p></p>
-            </div>
+            </div> */}
+
           </div>
         </div> 
 
