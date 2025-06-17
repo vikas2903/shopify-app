@@ -4,7 +4,7 @@ import {
   AppDistribution,
   shopifyApp,
   BillingInterval,
-  DeliveryMethod
+  // DeliveryMethod
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";

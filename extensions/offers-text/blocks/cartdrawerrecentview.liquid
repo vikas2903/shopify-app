@@ -51,6 +51,7 @@
             font-size: 16px;
             line-height: 20px;
             min-height: 40px;
+            color:#000;
         }
 
         p.rv-compare_price {
@@ -63,6 +64,7 @@
             position: relative;
             justify-content: center;
             flex-wrap: wrap;
+            margin-bottom:20px;
         }
 
         .custom-next {
@@ -76,7 +78,11 @@
             font-size: 16px;
             font-family: 'Montserrat';
             /* font-weight: 500; */
+            color:#000;
         }
+        p.rv-compare_price {
+    opacity: .7;
+}
 
         .rv-badge {
             position: absolute;
@@ -145,7 +151,7 @@
         }
 </style>
   
-<h2 style="text-align: center; text-align: center; padding-bottom: 20px; text-transform: capitalize; font-family: 'Poppins'; font-weight: 400;" class="related-products__heading inline-richtext h2">{{ block.settings.text }}</h2>
+<h2 class="recent-view-title" style=" color:#000; font-size:1.4rem; text-align: center; text-align: center; padding-bottom: 0px; text-transform: capitalize; font-family: 'Poppins'; font-weight: 400;" class="related-products__heading inline-richtext h2">{{ block.settings.text }}</h2>
 <div class="js-recentPdpBlock o-flex page-width"></div>
 <script>
     function setRecentlyViewedPdp() {

@@ -20,15 +20,10 @@
 
 } */
 
-body {
-    font-family: var(--primary-font);
-    background-color: #f5f7fa;
-    color: #000;
-    line-height: 1.6;
-}
 
 
 .grid-wrapper {
+    font-family: var(--primary-font);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-template-rows: auto;
@@ -1507,4 +1502,10 @@ button {
 
 .Polaris-Layout{
     margin: 1.4rem auto 0 auto !important;
+}
+.Polaris-Page.Polaris-Page--fullWidth h1 {
+    font-size: 2rem;
+    margin: 1.5rem 0;
+    display: inline-block;
+    line-height: 1;
 }
