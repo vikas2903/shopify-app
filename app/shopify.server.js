@@ -17,19 +17,15 @@ import cors from "cors";
 import dotenv from "dotenv";
 import dashboardroute from "./backend/route/dashboardRoutes.js";
 import { getDashboardData } from "./backend/controller/dashboardController.js";
-import * as build from "../build/server/index.js";
+
 import { json } from "@remix-run/node";
 import { getShopSession } from "./backend/getShopSession.js";
 import { isValidShopifyWebhook } from "./utils/verifyWebhookHmac.js";
-import { createRequestHandler } from "@remix-run/express";
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
-
-app.use("/webhooks", express.raw({ type: "application/json" }));
-
 app.use(express.json());
 app.use(cors());
 
@@ -37,7 +33,6 @@ export const MONTHLY_PLAN = "Monthly subscription";
 export const ANNUAL_PLAN = "Annual subscription";
 
 // ############### Start : WebHooks  ###############
-
 app.post("/webhooks/customers/data_request", (req, res) => {
   if (!isValidShopifyWebhook(req)) {
     console.warn("Invalid HMAC on data_request webhook");
@@ -111,7 +106,8 @@ app.get("/auth/callback", async (req, res) => {
   console.log("Shop:", shop);
   console.log("Code:", code);
 
-
+  const shopdata = { Shop: shop, Code: code };
+  localStorage.setItem("shopData", JSON.stringify(shopdata));
 
   try {
     if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
@@ -218,9 +214,7 @@ export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
 
-app.all("*", createRequestHandler({ build }));
-
-
+// Start Express server if not in test environment
 if (process.env.NODE_ENV !== "test") {
   const PORT = 5000;
   app.listen(PORT, () => {
