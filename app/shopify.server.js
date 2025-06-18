@@ -14,12 +14,10 @@ import mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-// import dashboardroute from "./backend/route/dashboardRoutes.js";
-// import { getDashboardData } from "./backend/controller/dashboardController.js";
 import { json } from "@remix-run/node";
 import { isValidShopifyWebhook } from './utils/verifyWebhookHmac.js';
 import { createRequestHandler } from "@remix-run/express";
-import * as build from '../build/server/index.js'
+import * as build from '../build/server/index.js';
 
 // Load environment variables
 dotenv.config();
@@ -27,10 +25,9 @@ dotenv.config();
 const app = express();
 
 // Webhook routes must parse raw body to validate HMAC
-app.use("/webhooks", express.raw({ type: '*/*' }));
+app.use("/webhooks", express.raw({ type: 'application/json' }));
 
 // General middleware
-app.use(express.json());
 app.use(cors());
 
 export const MONTHLY_PLAN = 'Monthly subscription';
@@ -170,5 +167,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-
-console.log("Everything working fine!")
+console.log("Everything working fine! Getting this error")
