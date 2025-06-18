@@ -22,7 +22,7 @@ import  { getDashboardData }  from "./backend/controller/dashboardController.js"
 
  import { json } from "@remix-run/node";
 import { getShopSession } from "./backend/getShopSession.js";
-
+import { isValidShopifyWebhook  } from './utils/verifyWebhookHmac.js'
 
 // Load environment variables
 dotenv.config();
@@ -33,6 +33,45 @@ app.use(cors());
 
 export const MONTHLY_PLAN = 'Monthly subscription';
 export const ANNUAL_PLAN = 'Annual subscription';
+
+
+
+
+// ############### Start : WebHooks  ###############
+app.post("/webhooks/customers/data_request", (req, res) => {
+  if (!isValidShopifyWebhook(req)) {
+    console.warn("Invalid HMAC on data_request webhook");
+    return res.status(401).send("Unauthorized");
+  }
+
+  console.log("✅ Valid customer data request");
+  res.status(200).send("OK");
+});
+
+
+app.post("/webhooks/customers/redact", (req, res) => {
+  if (!isValidShopifyWebhook(req)) {
+    console.warn("Invalid HMAC on redact webhook");
+    return res.status(401).send("Unauthorized");
+  }
+
+  console.log("✅ Valid customer redact request");
+  res.status(200).send("OK");
+});
+
+
+
+app.post("/webhooks/shop/redact", (req, res) => {
+  if (!isValidShopifyWebhook(req)) {
+    console.warn("Invalid HMAC on shop redact webhook");
+    return res.status(401).send("Unauthorized");
+  }
+
+  console.log("✅ Valid shop redact request");
+  res.status(200).send("OK");
+});
+
+// ############### End :  WebHooks  ###############
 
 
 
