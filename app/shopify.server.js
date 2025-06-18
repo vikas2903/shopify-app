@@ -4,132 +4,85 @@ import {
   AppDistribution,
   shopifyApp,
   BillingInterval,
-  // DeliveryMethod
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
 
-
 import axios from 'axios';
-import Store from './backend/modals/store.js'
+import Store from './backend/modals/store.js';
 import mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import dashboardroute from "./backend/route/dashboardRoutes.js";
-import  { getDashboardData }  from "./backend/controller/dashboardController.js";
-
-
- import { json } from "@remix-run/node";
+import { getDashboardData } from "./backend/controller/dashboardController.js";
+import { json } from "@remix-run/node";
 import { getShopSession } from "./backend/getShopSession.js";
-import { isValidShopifyWebhook  } from './utils/verifyWebhookHmac.js'
+import { isValidShopifyWebhook } from './utils/verifyWebhookHmac.js';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ type: "*/*" })); // ensure raw body for HMAC
 app.use(cors());
 
 export const MONTHLY_PLAN = 'Monthly subscription';
 export const ANNUAL_PLAN = 'Annual subscription';
 
-
-
-
-// ############### Start : WebHooks  ###############
+// ################## Webhook Routes (before Remix handler) ##################
 app.post("/webhooks/customers/data_request", (req, res) => {
   if (!isValidShopifyWebhook(req)) {
-    console.warn("Invalid HMAC on data_request webhook");
     return res.status(401).send("Unauthorized");
   }
-
   console.log("✅ Valid customer data request");
   res.status(200).send("OK");
 });
 
-
 app.post("/webhooks/customers/redact", (req, res) => {
   if (!isValidShopifyWebhook(req)) {
-    console.warn("Invalid HMAC on redact webhook");
     return res.status(401).send("Unauthorized");
   }
-
   console.log("✅ Valid customer redact request");
   res.status(200).send("OK");
 });
 
-
-
 app.post("/webhooks/shop/redact", (req, res) => {
   if (!isValidShopifyWebhook(req)) {
-    console.warn("Invalid HMAC on shop redact webhook");
     return res.status(401).send("Unauthorized");
   }
-
   console.log("✅ Valid shop redact request");
   res.status(200).send("OK");
 });
-
-// ############### End :  WebHooks  ###############
-
-
+// ###########################################################################
 
 export const loader = async ({ request }) => {
   const { shop, accessToken, host } = await getShopSession(request);
-
-  console.log("Shop vs:", shop); 
-  console.log("Token:", accessToken);
-
-  return json({
-    shop,
-    host,
-  });
+  return json({ shop, host });
 };
- 
-
 
 const connectDB = async () => {
   try {
     if (!process.env.MONGO_URI) {
       throw new Error('MONGO_URI is not defined in environment variables');
     }
-    
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Connected Successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);
-    process.exit(1); // Exit if cannot connect to database
+    process.exit(1);
   }
 };
 
-console.log(getDashboardData); 
 connectDB();
-
-
-
 
 app.get("/auth/callback", async (req, res) => {
   const { shop, code } = req.query;
-
   if (!shop || !code) {
     return res.status(400).json({ success: false, message: "Missing shop or code" });
   }
 
-  console.log("Shop:", shop);
-  console.log("Code:", code);
-
-
-const shopdata = { Shop: shop, Code: code };
-localStorage.setItem("shopData", JSON.stringify(shopdata));
-
-  
- 
   try {
-    if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
-      throw new Error('Shopify credentials are not properly configured');
-    }
-
     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
     const payload = {
       client_id: process.env.SHOPIFY_CLIENT_ID,
@@ -140,58 +93,30 @@ localStorage.setItem("shopData", JSON.stringify(shopdata));
     const tokenResponse = await axios.post(tokenUrl, payload);
     const accessToken = tokenResponse.data.access_token;
 
-    console.log("Access Token received successfully");
-
-    // Check if store already exists
     let store = await Store.findOne({ shop });
-    
     if (store) {
-      // Update existing store
       store.accessToken = accessToken;
       store.updatedAt = new Date();
-      console.log(`Updating existing store: ${shop}`);
     } else {
-      // Create new store
-      store = new Store({
-        shop,
-        accessToken,
-        updatedAt: new Date(),
-      });
-      console.log(`Creating new store: ${shop}`);
+      store = new Store({ shop, accessToken, updatedAt: new Date() });
     }
-
     await store.save();
-    console.log(`Store ${shop} saved successfully`);
-
-    if (!process.env.SHOPIFY_APP_NAME) {
-      throw new Error('SHOPIFY_APP_NAME is not defined in environment variables');
-    }
 
     const redirectURL = `https://admin.shopify.com/store/${shop.replace(
       ".myshopify.com",
       ""
     )}/apps/${process.env.SHOPIFY_APP_NAME}`;
 
-    console.log("Redirecting to:", redirectURL);
     return res.redirect(redirectURL);
 
   } catch (error) {
-    console.error("Callback Error:", error.response?.data || error.message);
-    return res.status(500).json({ 
-      success: false, 
+    return res.status(500).json({
+      success: false,
       message: "Failed to process authentication",
-      error: error.message 
+      error: error.message
     });
   }
 });
-
-
-
-
-
-
-
-
 
 mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);
@@ -222,12 +147,9 @@ const shopify = shopifyApp({
     unstable_newEmbeddedAuthStrategy: true,
     removeRest: true,
   },
-  ...(process.env.SHOP_CUSTOM_DOMAIN
-    ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
-    : {}),
+  ...(process.env.SHOP_CUSTOM_DOMAIN ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] } : {}),
 });
 
-// Export Shopify app utilities
 export default shopify;
 export const apiVersion = ApiVersion.January25;
 export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
@@ -235,16 +157,11 @@ export const authenticate = shopify.authenticate;
 export const unauthenticated = shopify.unauthenticated;
 export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
-export const sessionStorage = shopify.sessionStorage; 
+export const sessionStorage = shopify.sessionStorage;
 
-// Start Express server if not in test environment
 if (process.env.NODE_ENV !== 'test') {
   const PORT = 5000;
   app.listen(PORT, () => {
-
-    console.log("Working Properly..")
+    console.log("🚀 Server running on http://localhost:" + PORT);
   });
 }
-
-
-
