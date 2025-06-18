@@ -17,7 +17,7 @@ import dotenv from 'dotenv';
 import dashboardroute from "./backend/route/dashboardRoutes.js";
 import { getDashboardData } from "./backend/controller/dashboardController.js";
 import { json } from "@remix-run/node";
-import { getShopSession } from "./backend/getShopSession.js";
+// import { getShopSession } from "./backend/getShopSession.js";
 import { isValidShopifyWebhook } from './utils/verifyWebhookHmac.js';
 import { createRequestHandler } from "@remix-run/express";
 import * as build from '../build/server/index.js'
@@ -58,10 +58,10 @@ app.post("/webhooks/shop/redact", (req, res) => {
 });
 // ###########################################################################
 
-export const loader = async ({ request }) => {
-  const { shop, accessToken, host } = await getShopSession(request);
-  return json({ shop, host });
-};
+// export const loader = async ({ request }) => {
+//   const { shop, accessToken, host } = await getShopSession(request);
+//   return json({ shop, host });
+// };
 
 const connectDB = async () => {
   try {
