@@ -3,7 +3,11 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
+<<<<<<< HEAD
 application_url = "https://atomic-yesterday-hampton-quest.trycloudflare.com"
+=======
+application_url = "https://obviously-cookie-pdt-fusion.trycloudflare.com"
+>>>>>>> parent of a79201b (gettingh shop name)
 embedded = true
 
 [build]
@@ -27,9 +31,15 @@ scopes = "read_themes,write_themes"
 
 [auth]
 redirect_urls = [
+<<<<<<< HEAD
   "https://atomic-yesterday-hampton-quest.trycloudflare.com/auth/callback",
   "https://atomic-yesterday-hampton-quest.trycloudflare.com/auth/shopify/callback",
   "https://atomic-yesterday-hampton-quest.trycloudflare.com/api/auth/callback"
+=======
+  "https://obviously-cookie-pdt-fusion.trycloudflare.com/auth/callback",
+  "https://obviously-cookie-pdt-fusion.trycloudflare.com/auth/shopify/callback",
+  "https://obviously-cookie-pdt-fusion.trycloudflare.com/api/auth/callback"
+>>>>>>> parent of a79201b (gettingh shop name)
 ]
 
 [pos]
