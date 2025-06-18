@@ -4,15 +4,24 @@ import crypto from 'crypto';
  * Verifies Shopify webhook HMAC signature
  */
 export function isValidShopifyWebhook(req) {
-  const hmacHeader = req.get("X-Shopify-Hmac-Sha256");
-  const rawBody = JSON.stringify(req.body);
-  const generatedHmac = crypto
-    .createHmac("sha256", process.env.SHOPIFY_API_SECRET)
-    .update(rawBody, "utf8")
-    .digest("base64");
+  const hmacHeader = req.headers['x-shopify-hmac-sha256'];
+  const secret = process.env.SHOPIFY_API_SECRET;
 
-  return crypto.timingSafeEqual(
-    Buffer.from(generatedHmac, "utf8"),
-    Buffer.from(hmacHeader, "utf8")
-  );
+  if (!hmacHeader || !secret || !Buffer.isBuffer(req.body)) {
+    return false;
+  }
+
+  const generatedHmac = crypto
+    .createHmac('sha256', secret)
+    .update(req.body)
+    .digest('base64');
+
+  const hmacBuffer = Buffer.from(hmacHeader, 'utf8');
+  const generatedBuffer = Buffer.from(generatedHmac, 'utf8');
+
+  if (hmacBuffer.length !== generatedBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(hmacBuffer, generatedBuffer);
 }

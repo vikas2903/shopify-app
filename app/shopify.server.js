@@ -14,10 +14,9 @@ import mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import dashboardroute from "./backend/route/dashboardRoutes.js";
-import { getDashboardData } from "./backend/controller/dashboardController.js";
+// import dashboardroute from "./backend/route/dashboardRoutes.js";
+// import { getDashboardData } from "./backend/controller/dashboardController.js";
 import { json } from "@remix-run/node";
-// import { getShopSession } from "./backend/getShopSession.js";
 import { isValidShopifyWebhook } from './utils/verifyWebhookHmac.js';
 import { createRequestHandler } from "@remix-run/express";
 import * as build from '../build/server/index.js'
@@ -26,7 +25,12 @@ import * as build from '../build/server/index.js'
 dotenv.config();
 
 const app = express();
-app.use(express.json({ type: "*/*" })); // ensure raw body for HMAC
+
+// Webhook routes must parse raw body to validate HMAC
+app.use("/webhooks", express.raw({ type: '*/*' }));
+
+// General middleware
+app.use(express.json());
 app.use(cors());
 
 export const MONTHLY_PLAN = 'Monthly subscription';
@@ -57,11 +61,6 @@ app.post("/webhooks/shop/redact", (req, res) => {
   res.status(200).send("OK");
 });
 // ###########################################################################
-
-// export const loader = async ({ request }) => {
-//   const { shop, accessToken, host } = await getShopSession(request);
-//   return json({ shop, host });
-// };
 
 const connectDB = async () => {
   try {
@@ -161,6 +160,7 @@ export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
 
+// Remix handler fallback for other requests
 app.all("*", createRequestHandler({ build }));
 
 if (process.env.NODE_ENV !== 'test') {
@@ -169,3 +169,6 @@ if (process.env.NODE_ENV !== 'test') {
     console.log("🚀 Server running on http://localhost:" + PORT);
   });
 }
+
+
+console.log("Everything working fine!")
