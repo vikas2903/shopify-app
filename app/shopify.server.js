@@ -19,6 +19,7 @@ import { getDashboardData } from "./backend/controller/dashboardController.js";
 import { json } from "@remix-run/node";
 import { getShopSession } from "./backend/getShopSession.js";
 import { isValidShopifyWebhook } from './utils/verifyWebhookHmac.js';
+import { createRequestHandler } from "@remix-run/express";
 
 // Load environment variables
 dotenv.config();
@@ -158,6 +159,8 @@ export const unauthenticated = shopify.unauthenticated;
 export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
+
+app.all("*", createRequestHandler({ build: require("./build") }));
 
 if (process.env.NODE_ENV !== 'test') {
   const PORT = 5000;
