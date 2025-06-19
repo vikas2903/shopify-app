@@ -159,12 +159,42 @@ const shopify = shopifyApp({
   //   },
   // },
 
-  webhooks: {
+
+  // Appennded this code for webhook
+  // webhooks: {
+  //   SHOP_REDACT: {
+  //     deliveryMethod: DeliveryMethod.Http,
+  //     callbackUrl: "/webhooks/shop/redact",
+  //     callback: async (topic, shop, body) => {
+  //       console.log("Webhook received [SHOP_REDACT]:", shop, body);
+  //     },
+  //   },
+
+  //   CUSTOMERS_REDACT: {
+  //     deliveryMethod: DeliveryMethod.Http,
+  //     callbackUrl: "/webhooks/customers/redact",
+  //     callback: async (topic, shop, body) => {
+  //       console.log("Webhook received [CUSTOMERS_REDACT]:", shop, body);
+  //     },
+  //   },
+
+  //   CUSTOMERS_DATA_REQUEST: {
+  //     deliveryMethod: DeliveryMethod.Http,
+  //     callbackUrl: "/webhooks/customers/data_request",
+  //     callback: async (topic, shop, body) => {
+  //       console.log("Webhook received [CUSTOMERS_DATA_REQUEST]:", shop, body);
+  //     },
+  //   },
+  // },
+
+   webhooks: {
     SHOP_REDACT: {
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: "/webhooks/shop/redact",
       callback: async (topic, shop, body) => {
-        console.log("Webhook received [SHOP_REDACT]:", shop, body);
+        console.log("SHOP_REDACT webhook received:");
+        console.log("Shop:", shop);
+        console.log("Body:", body);
       },
     },
 
@@ -172,7 +202,9 @@ const shopify = shopifyApp({
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: "/webhooks/customers/redact",
       callback: async (topic, shop, body) => {
-        console.log("Webhook received [CUSTOMERS_REDACT]:", shop, body);
+        console.log("CUSTOMERS_REDACT webhook received:");
+        console.log("Shop:", shop);
+        console.log("Body:", body);
       },
     },
 
@@ -180,7 +212,9 @@ const shopify = shopifyApp({
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: "/webhooks/customers/data_request",
       callback: async (topic, shop, body) => {
-        console.log("Webhook received [CUSTOMERS_DATA_REQUEST]:", shop, body);
+        console.log("CUSTOMERS_DATA_REQUEST webhook received:");
+        console.log("Shop:", shop);
+        console.log("Body:", body);
       },
     },
   },
