@@ -201,6 +201,6 @@ export const sessionStorage = shopify.sessionStorage;
 if (process.env.NODE_ENV !== "test") {
   const PORT = 5000;
   app.listen(PORT, () => {
-    console.log("Working Properly.. digisidekick");
+    console.log("Working Properly.. digisidekick 01");
   });
 }
