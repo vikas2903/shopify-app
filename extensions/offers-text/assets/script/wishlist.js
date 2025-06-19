@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
 
             let product_id = button.getAttribute('data-product_id');
-            let variant_id = button.getAttribute('data-variant_id');
+            // let variant_id = button.getAttribute('data-variant_id');
             let product_handle = button.getAttribute('data-product-handle');
 
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(wishlist_api_url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(backendData),
+                // body: JSON.stringify(backendData),
             }).then((response) => {
                 return response.json();
             }).then((data) => {

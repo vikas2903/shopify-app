@@ -17,7 +17,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
-import { json } from "@remix-run/node";
+// import { json } from "@remix-run/node";
 // import { getShopSession } from "./backend/getShopSession.js";
 
 // Load environment variables

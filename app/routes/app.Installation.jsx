@@ -1,6 +1,6 @@
 import React from "react";
 import wishlist_image from '../assets/images/body-wishlist.png';
-import wishlist_image1 from '../assets/images/wishlist image.png'
+import wishlist_image1 from '../assets/images/wishlist-image.png'
 
 const Installation = () => {
   
