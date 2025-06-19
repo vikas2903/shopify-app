@@ -1,4 +1,4 @@
-// /app/utils/verifyWebhookHMAC.js
+// /app/utils/verifyWebhookHmac.js
 import crypto from "crypto";
 
 export function verifyWebhookHMAC(rawBody, hmacHeader, secret) {
@@ -7,8 +7,12 @@ export function verifyWebhookHMAC(rawBody, hmacHeader, secret) {
     .update(rawBody, "utf8")
     .digest("base64");
 
-  return crypto.timingSafeEqual(
-    Buffer.from(generatedHmac),
-    Buffer.from(hmacHeader)
-  );
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(generatedHmac, "utf8"),
+      Buffer.from(hmacHeader, "utf8")
+    );
+  } catch (error) {
+    return false;
+  }
 }

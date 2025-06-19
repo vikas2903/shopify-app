@@ -1,46 +1,43 @@
 // /app/webhooks/gdprWebhooks.js
 import express from "express";
-import { verifyWebhookHMAC } from "../utils/verifyWebhookhamc.js";
+import { verifyWebhookHMAC } from "../utils/verifyWebhookhamc.js"; // ✅ corrected filename casing
 
 const gdprRouter = express.Router();
 const secret = process.env.SHOPIFY_API_SECRET;
 
-gdprRouter.use(express.raw({ type: "application/json" }));
+// ✅ Ensure raw body is available for HMAC verification
+gdprRouter.use(express.raw({ type: "*/*" }));
 
-// Customer Data Request
-gdprRouter.post("/customers/data_request", (req, res) => {
+// ✅ Utility to parse and verify
+function handleGDPRWebhook(req, res, label) {
   const hmac = req.headers["x-shopify-hmac-sha256"];
-  if (!verifyWebhookHMAC(req.body, hmac, secret)) {
+  const rawBody = req.body;
+
+  if (!verifyWebhookHMAC(rawBody, hmac, secret)) {
     return res.status(401).send("Unauthorized");
   }
 
-  const payload = JSON.parse(req.body.toString("utf8"));
-  console.log("Customer Data Request:", payload);
-  res.status(200).send("Received");
-});
-
-// Customer Data Erasure
-gdprRouter.post("/customers/redact", (req, res) => {
-  const hmac = req.headers["x-shopify-hmac-sha256"];
-  if (!verifyWebhookHMAC(req.body, hmac, secret)) {
-    return res.status(401).send("Unauthorized");
+  try {
+    const payload = JSON.parse(rawBody.toString("utf8"));
+    console.log(`${label}:`, payload);
+    res.status(200).send("Received");
+  } catch (err) {
+    console.error("Invalid JSON in webhook payload:", err);
+    res.status(400).send("Invalid JSON");
   }
+}
 
-  const payload = JSON.parse(req.body.toString("utf8"));
-  console.log("Customer Data Erasure:", payload);
-  res.status(200).send("Received");
-});
+// 🎯 Shopify Webhook Routes
+gdprRouter.post("/customers/data_request", (req, res) =>
+  handleGDPRWebhook(req, res, "Customer Data Request")
+);
 
-// Shop Data Erasure
-gdprRouter.post("/shop/redact", (req, res) => {
-  const hmac = req.headers["x-shopify-hmac-sha256"];
-  if (!verifyWebhookHMAC(req.body, hmac, secret)) {
-    return res.status(401).send("Unauthorized");
-  }
+gdprRouter.post("/customers/redact", (req, res) =>
+  handleGDPRWebhook(req, res, "Customer Data Erasure")
+);
 
-  const payload = JSON.parse(req.body.toString("utf8"));
-  console.log("Shop Data Erasure:", payload);
-  res.status(200).send("Received");
-});
+gdprRouter.post("/shop/redact", (req, res) =>
+  handleGDPRWebhook(req, res, "Shop Data Erasure")
+);
 
 export default gdprRouter;
