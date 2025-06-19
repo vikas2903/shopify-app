@@ -3,7 +3,7 @@ import {
   ApiVersion,
   AppDistribution,
   shopifyApp,
-  BillingInterval,
+  // BillingInterval,
   // DeliveryMethod
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
@@ -12,42 +12,34 @@ import prisma from "./db.server";
 import axios from "axios";
 import Store from "./backend/modals/store.js";
 import mongoose from "mongoose";
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
-import  { getDashboardData }  from "./backend/controller/dashboardController.js";
-
-
- import { json } from "@remix-run/node";
-import { getShopSession } from "./backend/getShopSession.js";
-
+// import { getDashboardData } from "./backend/controller/dashboardController.js";
+import { json } from "@remix-run/node";
+// import { getShopSession } from "./backend/getShopSession.js";
 
 // Load environment variables
 dotenv.config();
-
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-export const MONTHLY_PLAN = 'Monthly subscription';
-export const ANNUAL_PLAN = 'Annual subscription';
+// export const MONTHLY_PLAN = 'Monthly subscription';
+// export const ANNUAL_PLAN = 'Annual subscription';
 
+// export const loader = async ({ request }) => {
+//   const { shop, accessToken, host } = await getShopSession(request);
 
+//   console.log("Shop vs:", shop);
+//   console.log("Token:", accessToken);
 
-export const loader = async ({ request }) => {
-  const { shop, accessToken, host } = await getShopSession(request);
-
-  console.log("Shop vs:", shop); 
-  console.log("Token:", accessToken);
-
-  return json({
-    shop,
-    host,
-  });
-};
- 
-
+//   return json({
+//     shop,
+//     host,
+//   });
+// };
 
 const connectDB = async () => {
   try {
@@ -59,15 +51,12 @@ const connectDB = async () => {
     console.log("MongoDB Connected Successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);
-    process.exit(1); // Exit if cannot connect to database
+    process.exit(1);
   }
 };
 
-console.log(getDashboardData); 
+// console.log(getDashboardData);
 connectDB();
-
-
-
 
 app.get("/auth/callback", async (req, res) => {
   const { shop, code } = req.query;
@@ -78,12 +67,6 @@ app.get("/auth/callback", async (req, res) => {
       .json({ success: false, message: "Missing shop or code" });
   }
 
-  console.log("Shop:", shop);
-  console.log("Code:", code);
-
-
-  
- 
   try {
     if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
       throw new Error("Shopify credentials are not properly configured");
@@ -145,16 +128,8 @@ app.get("/auth/callback", async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
-mongoose.connection.on('error', (err) => {
-  console.error('MongoDB connection error:', err);
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
 });
 
 const shopify = shopifyApp({
@@ -165,18 +140,20 @@ const shopify = shopifyApp({
   appUrl: process.env.SHOPIFY_APP_URL,
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
-  billing: {
-    [MONTHLY_PLAN]: {
-      amount: 10,
-      currencyCode: "USD",
-      interval: BillingInterval.Every30Days,
-    },
-    [ANNUAL_PLAN]: {
-      amount: 100,
-      currencyCode: "USD",
-      interval: BillingInterval.Annual,
-    },
-  },
+
+  // billing: {
+  //   [MONTHLY_PLAN]: {
+  //     amount: 10,
+  //     currencyCode: "USD",
+  //     interval: BillingInterval.Every30Days,
+  //   },
+  //   [ANNUAL_PLAN]: {
+  //     amount: 100,
+  //     currencyCode: "USD",
+  //     interval: BillingInterval.Annual,
+  //   },
+  // },
+
   distribution: AppDistribution.AppStore,
   future: {
     unstable_newEmbeddedAuthStrategy: true,
