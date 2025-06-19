@@ -21,18 +21,20 @@ import dotenv from "dotenv";
 // import { json } from "@remix-run/node";
 // import { getShopSession } from "./backend/getShopSession.js";
 import gdprRouter  from './webhooks/gdprWebhooks.js';
-import {verifyWebhookHMAC } from './utils/verifyWebhookhamc.js'
-
 
 // Load environment variables
 dotenv.config();
 const app = express();
+
+
+// app.use("/webhooks", express.raw({ type: "application/json" }), gdprRouter);
+
+
+app.use("/webhooks", gdprRouter);
 app.use(express.json());
 app.use(cors());
 
-app.use("/webhooks", gdprRouter);
-
-
+console.log(">>> Hit /webhooks/shop/redact route");
 // export const MONTHLY_PLAN = 'Monthly subscription';
 // export const ANNUAL_PLAN = 'Annual subscription';
 
