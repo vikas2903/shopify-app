@@ -14,48 +14,14 @@ import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-// import dashboardroute from "./backend/route/dashboardRoutes.js";
-// import { getDashboardData } from "./backend/controller/dashboardController.js";
-// import { json } from "@remix-run/node";
-// import { getShopSession } from "./backend/getShopSession.js";
 
-
-// Load environment variables
 dotenv.config();
 const app = express();
-
-
-// app.use("/webhooks", express.raw({ type: "application/json" }), gdprRouter);
-
-
-
 app.use(express.json());
 app.use(cors());
 
-console.log(">>> Hit /webhooks/shop/redact route");
 // export const MONTHLY_PLAN = 'Monthly subscription';
 // export const ANNUAL_PLAN = 'Annual subscription';
-
-
-// Webhook
-
- 
-
-
-
-
-// Webhook
-// export const loader = async ({ request }) => {
-//   const { shop, accessToken, host } = await getShopSession(request);
-
-//   console.log("Shop vs:", shop);
-//   console.log("Token:", accessToken);
-
-//   return json({
-//     shop,
-//     host,
-//   });
-// };
 
 const connectDB = async () => {
   try {
@@ -157,49 +123,6 @@ const shopify = shopifyApp({
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
 
-  // billing: {
-  //   [MONTHLY_PLAN]: {
-  //     amount: 10,
-  //     currencyCode: "USD",
-  //     interval: BillingInterval.Every30Days,
-  //   },
-  //   [ANNUAL_PLAN]: {
-  //     amount: 100,
-  //     currencyCode: "USD",
-  //     interval: BillingInterval.Annual,
-  //   },
-  // },
-
-
-  // Appennded this code for webhook
-  // webhooks: {
-  //   SHOP_REDACT: {
-  //     deliveryMethod: DeliveryMethod.Http,
-  //     callbackUrl: "/webhooks/shop/redact",
-  //     callback: async (topic, shop, body) => {
-  //       console.log("Webhook received [SHOP_REDACT]:", shop, body);
-  //     },
-  //   },
-
-  //   CUSTOMERS_REDACT: {
-  //     deliveryMethod: DeliveryMethod.Http,
-  //     callbackUrl: "/webhooks/customers/redact",
-  //     callback: async (topic, shop, body) => {
-  //       console.log("Webhook received [CUSTOMERS_REDACT]:", shop, body);
-  //     },
-  //   },
-
-  //   CUSTOMERS_DATA_REQUEST: {
-  //     deliveryMethod: DeliveryMethod.Http,
-  //     callbackUrl: "/webhooks/customers/data_request",
-  //     callback: async (topic, shop, body) => {
-  //       console.log("Webhook received [CUSTOMERS_DATA_REQUEST]:", shop, body);
-  //     },
-  //   },
-  // },
-
-
-
   distribution: AppDistribution.AppStore,
   future: {
     unstable_newEmbeddedAuthStrategy: true,
@@ -209,7 +132,6 @@ const shopify = shopifyApp({
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),
 });
-
 
 // Export Shopify app utilities
 export default shopify;
@@ -228,6 +150,3 @@ if (process.env.NODE_ENV !== "test") {
     console.log("Working Properly.. digisidekick 01");
   });
 }
-
-
-
