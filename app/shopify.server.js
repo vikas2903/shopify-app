@@ -32,6 +32,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/webhooks", gdprRouter);
+
 app.use("/webhooks", express.raw({ type: "application/json" }));
 
 // export const MONTHLY_PLAN = 'Monthly subscription';
@@ -79,7 +80,7 @@ app.use("/webhooks", express.raw({ type: "application/json" }));
       res.status(200).send("Received securely");
     });
 
-        app.post("/webhooks/customers/data_request", async (req, res) => {
+    app.post("/webhooks/customers/data_request", async (req, res) => {
       const hmacHeader = req.headers["x-shopify-hmac-sha256"];
       const rawBody = req.body; // This is already a Buffer due to express.raw
 
