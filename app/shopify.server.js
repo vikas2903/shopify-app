@@ -22,6 +22,8 @@ import dotenv from "dotenv";
 // import { getShopSession } from "./backend/getShopSession.js";
 import gdprRouter  from './webhooks/gdprWebhooks.js';
 
+import {verifyWebhookHMAC } from './utils/verifyWebhookhamc.js'
+
 
 // Load environment variables
 dotenv.config();
@@ -30,10 +32,76 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/webhooks", gdprRouter);
+app.use("/webhooks", express.raw({ type: "application/json" }));
 
 // export const MONTHLY_PLAN = 'Monthly subscription';
 // export const ANNUAL_PLAN = 'Annual subscription';
 
+
+// Webhook
+
+    app.post("/webhooks/shop/redact", async (req, res) => {
+      const hmacHeader = req.headers["x-shopify-hmac-sha256"];
+      const rawBody = req.body; // This is already a Buffer due to express.raw
+
+      const secret = process.env.SHOPIFY_API_SECRET;
+
+      const isVerified = verifyWebhookHMAC(rawBody, hmacHeader, secret);
+
+      if (!isVerified) {
+        console.warn("Webhook failed HMAC verification");
+        return res.status(401).send("Unauthorized");
+      }
+
+      const payload = JSON.parse(rawBody.toString("utf8"));
+      console.log("Verified SHOP_REDACT webhook:", payload);
+
+      res.status(200).send("Received securely");
+    });
+
+
+    app.post("/webhooks/customers/redact", async (req, res) => {
+      const hmacHeader = req.headers["x-shopify-hmac-sha256"];
+      const rawBody = req.body; // This is already a Buffer due to express.raw
+
+      const secret = process.env.SHOPIFY_API_SECRET;
+
+      const isVerified = verifyWebhookHMAC(rawBody, hmacHeader, secret);
+
+      if (!isVerified) {
+        console.warn("Webhook failed HMAC verification");
+        return res.status(401).send("Unauthorized");
+      }
+
+      const payload = JSON.parse(rawBody.toString("utf8"));
+      console.log("Verified SHOP_REDACT webhook:", payload);
+
+      res.status(200).send("Received securely");
+    });
+
+        app.post("/webhooks/customers/data_request", async (req, res) => {
+      const hmacHeader = req.headers["x-shopify-hmac-sha256"];
+      const rawBody = req.body; // This is already a Buffer due to express.raw
+
+      const secret = process.env.SHOPIFY_API_SECRET;
+
+      const isVerified = verifyWebhookHMAC(rawBody, hmacHeader, secret);
+
+      if (!isVerified) {
+        console.warn("Webhook failed HMAC verification");
+        return res.status(401).send("Unauthorized");
+      }
+
+      const payload = JSON.parse(rawBody.toString("utf8"));
+      console.log("Verified SHOP_REDACT webhook:", payload);
+
+      res.status(200).send("Received securely");
+    });
+
+
+
+
+// Webhook
 // export const loader = async ({ request }) => {
 //   const { shop, accessToken, host } = await getShopSession(request);
 
@@ -187,37 +255,37 @@ const shopify = shopifyApp({
   //   },
   // },
 
-   webhooks: {
-    SHOP_REDACT: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/shop/redact",
-      callback: async (topic, shop, body) => {
-        console.log("SHOP_REDACT webhook received:");
-        console.log("Shop:", shop);
-        console.log("Body:", body);
-      },
-    },
-
-    CUSTOMERS_REDACT: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/customers/redact",
-      callback: async (topic, shop, body) => {
-        console.log("CUSTOMERS_REDACT webhook received:");
-        console.log("Shop:", shop);
-        console.log("Body:", body);
-      },
-    },
-
-    CUSTOMERS_DATA_REQUEST: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/customers/data_request",
-      callback: async (topic, shop, body) => {
-        console.log("CUSTOMERS_DATA_REQUEST webhook received:");
-        console.log("Shop:", shop);
-        console.log("Body:", body);
-      },
+ webhooks: {
+  SHOP_REDACT: {
+    deliveryMethod: DeliveryMethod.Http,
+    callbackUrl: "/webhooks/shop/redact",
+    callback: async (topic, shop, body) => {
+      console.log("SHOP_REDACT webhook received:");
+      console.log("Shop:", shop);
+      console.log("Body:", body);
     },
   },
+
+  CUSTOMERS_REDACT: {
+    deliveryMethod: DeliveryMethod.Http,
+    callbackUrl: "/webhooks/customers/redact",
+    callback: async (topic, shop, body) => {
+      console.log("CUSTOMERS_REDACT webhook received:");
+      console.log("Shop:", shop);
+      console.log("Body:", body);
+    },
+  },
+
+  CUSTOMERS_DATA_REQUEST: {
+    deliveryMethod: DeliveryMethod.Http,
+    callbackUrl: "/webhooks/customers/data_request",
+    callback: async (topic, shop, body) => {
+      console.log("CUSTOMERS_DATA_REQUEST webhook received:");
+      console.log("Shop:", shop);
+      console.log("Body:", body);
+    },
+  },
+},
 
   distribution: AppDistribution.AppStore,
   future: {

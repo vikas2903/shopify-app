@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "ds-app"
 handle = "ds-app-6"
-application_url = "https://there-simulation-armed-bodies.trycloudflare.com"
+application_url = "https://provision-always-snake-oman.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "read_themes,write_themes"
 
 [auth]
 redirect_urls = [
-  "https://there-simulation-armed-bodies.trycloudflare.com/auth/callback",
-  "https://there-simulation-armed-bodies.trycloudflare.com/auth/shopify/callback",
-  "https://there-simulation-armed-bodies.trycloudflare.com/api/auth/callback"
+  "https://provision-always-snake-oman.trycloudflare.com/auth/callback",
+  "https://provision-always-snake-oman.trycloudflare.com/auth/shopify/callback",
+  "https://provision-always-snake-oman.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
