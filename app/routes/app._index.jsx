@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
-import Homee from "../components/Home";
+// import Homee from "../components/Home";
 import {
   Page,
   Layout,
