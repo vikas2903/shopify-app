@@ -4,8 +4,6 @@ import {
   AppDistribution,
   shopifyApp,
   // BillingInterval,
-  DeliveryMethod
-
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
@@ -20,7 +18,7 @@ import dotenv from "dotenv";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
 // import { json } from "@remix-run/node";
 // import { getShopSession } from "./backend/getShopSession.js";
-import gdprRouter  from './webhooks/gdprWebhooks.js';
+
 
 // Load environment variables
 dotenv.config();
@@ -30,7 +28,7 @@ const app = express();
 // app.use("/webhooks", express.raw({ type: "application/json" }), gdprRouter);
 
 
-app.use("/webhooks", gdprRouter);
+
 app.use(express.json());
 app.use(cors());
 
@@ -200,37 +198,7 @@ const shopify = shopifyApp({
   //   },
   // },
 
- webhooks: {
-  SHOP_REDACT: {
-    deliveryMethod: DeliveryMethod.Http,
-    callbackUrl: "/webhooks/shop/redact",
-    callback: async (topic, shop, body) => {
-      console.log("SHOP_REDACT webhook received:");
-      console.log("Shop:", shop);
-      console.log("Body:", body);
-    },
-  },
 
-  CUSTOMERS_REDACT: {
-    deliveryMethod: DeliveryMethod.Http,
-    callbackUrl: "/webhooks/customers/redact",
-    callback: async (topic, shop, body) => {
-      console.log("CUSTOMERS_REDACT webhook received:");
-      console.log("Shop:", shop);
-      console.log("Body:", body);
-    },
-  },
-
-  CUSTOMERS_DATA_REQUEST: {
-    deliveryMethod: DeliveryMethod.Http,
-    callbackUrl: "/webhooks/customers/data_request",
-    callback: async (topic, shop, body) => {
-      console.log("CUSTOMERS_DATA_REQUEST webhook received:");
-      console.log("Shop:", shop);
-      console.log("Body:", body);
-    },
-  },
-},
 
   distribution: AppDistribution.AppStore,
   future: {
