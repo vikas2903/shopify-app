@@ -4,7 +4,8 @@ import {
   AppDistribution,
   shopifyApp,
   // BillingInterval,
-  // DeliveryMethod
+  DeliveryMethod
+
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
@@ -19,12 +20,16 @@ import dotenv from "dotenv";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
 // import { json } from "@remix-run/node";
 // import { getShopSession } from "./backend/getShopSession.js";
+import gdprRouter  from './webhooks/gdprWebhooks.js';
+
 
 // Load environment variables
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+app.use("/webhooks", gdprRouter);
 
 // export const MONTHLY_PLAN = 'Monthly subscription';
 // export const ANNUAL_PLAN = 'Annual subscription';
@@ -154,6 +159,32 @@ const shopify = shopifyApp({
   //   },
   // },
 
+  webhooks: {
+    SHOP_REDACT: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: "/webhooks/shop/redact",
+      callback: async (topic, shop, body) => {
+        console.log("Webhook received [SHOP_REDACT]:", shop, body);
+      },
+    },
+
+    CUSTOMERS_REDACT: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: "/webhooks/customers/redact",
+      callback: async (topic, shop, body) => {
+        console.log("Webhook received [CUSTOMERS_REDACT]:", shop, body);
+      },
+    },
+
+    CUSTOMERS_DATA_REQUEST: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: "/webhooks/customers/data_request",
+      callback: async (topic, shop, body) => {
+        console.log("Webhook received [CUSTOMERS_DATA_REQUEST]:", shop, body);
+      },
+    },
+  },
+
   distribution: AppDistribution.AppStore,
   future: {
     unstable_newEmbeddedAuthStrategy: true,
@@ -163,6 +194,7 @@ const shopify = shopifyApp({
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),
 });
+
 
 // Export Shopify app utilities
 export default shopify;
@@ -181,3 +213,6 @@ if (process.env.NODE_ENV !== "test") {
     console.log("Working Properly.. digisidekick 01");
   });
 }
+
+
+
