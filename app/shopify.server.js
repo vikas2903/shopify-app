@@ -21,7 +21,6 @@ import dotenv from "dotenv";
 // import { json } from "@remix-run/node";
 // import { getShopSession } from "./backend/getShopSession.js";
 import gdprRouter  from './webhooks/gdprWebhooks.js';
-
 import {verifyWebhookHMAC } from './utils/verifyWebhookhamc.js'
 
 
@@ -33,7 +32,6 @@ app.use(cors());
 
 app.use("/webhooks", gdprRouter);
 
-app.use("/webhooks", express.raw({ type: "application/json" }));
 
 // export const MONTHLY_PLAN = 'Monthly subscription';
 // export const ANNUAL_PLAN = 'Annual subscription';
@@ -41,63 +39,7 @@ app.use("/webhooks", express.raw({ type: "application/json" }));
 
 // Webhook
 
-    app.post("/webhooks/shop/redact", async (req, res) => {
-      const hmacHeader = req.headers["x-shopify-hmac-sha256"];
-      const rawBody = req.body; // This is already a Buffer due to express.raw
-
-      const secret = process.env.SHOPIFY_API_SECRET;
-
-      const isVerified = verifyWebhookHMAC(rawBody, hmacHeader, secret);
-
-      if (!isVerified) {
-        console.warn("Webhook failed HMAC verification");
-        return res.status(401).send("Unauthorized");
-      }
-
-      const payload = JSON.parse(rawBody.toString("utf8"));
-      console.log("Verified SHOP_REDACT webhook:", payload);
-
-      res.status(200).send("Received securely");
-    });
-
-
-    app.post("/webhooks/customers/redact", async (req, res) => {
-      const hmacHeader = req.headers["x-shopify-hmac-sha256"];
-      const rawBody = req.body; // This is already a Buffer due to express.raw
-
-      const secret = process.env.SHOPIFY_API_SECRET;
-
-      const isVerified = verifyWebhookHMAC(rawBody, hmacHeader, secret);
-
-      if (!isVerified) {
-        console.warn("Webhook failed HMAC verification");
-        return res.status(401).send("Unauthorized");
-      }
-
-      const payload = JSON.parse(rawBody.toString("utf8"));
-      console.log("Verified SHOP_REDACT webhook:", payload);
-
-      res.status(200).send("Received securely");
-    });
-
-    app.post("/webhooks/customers/data_request", async (req, res) => {
-      const hmacHeader = req.headers["x-shopify-hmac-sha256"];
-      const rawBody = req.body; // This is already a Buffer due to express.raw
-
-      const secret = process.env.SHOPIFY_API_SECRET;
-
-      const isVerified = verifyWebhookHMAC(rawBody, hmacHeader, secret);
-
-      if (!isVerified) {
-        console.warn("Webhook failed HMAC verification");
-        return res.status(401).send("Unauthorized");
-      }
-
-      const payload = JSON.parse(rawBody.toString("utf8"));
-      console.log("Verified SHOP_REDACT webhook:", payload);
-
-      res.status(200).send("Received securely");
-    });
+ 
 
 
 
