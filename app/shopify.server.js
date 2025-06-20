@@ -15,6 +15,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import crypto from 'crypto';
+
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
 // import { getShopSession } from "./backend/getShopSession.js";
@@ -252,7 +253,7 @@ export const sessionStorage = shopify.sessionStorage;
 if (process.env.NODE_ENV !== "test") {
   const PORT = 5000;
   app.listen(PORT, () => {
-    console.log("Digisidekick ~unstopable");
+    console.log("Digisidekick ~unstoppable");
   });
 }
- console.log("Digisidekick ~unstopable");
+ console.log("Digisidekick ~unstoppable");
