@@ -3,27 +3,24 @@ import {
   ApiVersion,
   AppDistribution,
   shopifyApp,
-  BillingInterval,
+  // BillingInterval,
   // DeliveryMethod
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
-
 import axios from "axios";
 import Store from "./backend/modals/store.js";
 import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { json } from "@remix-run/node";
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
-
-import { json } from "@remix-run/node";
 // import { getShopSession } from "./backend/getShopSession.js";
 
 // Load environment variables
 dotenv.config();
-
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -54,10 +51,9 @@ const connectDB = async () => {
     console.log("MongoDB Connected Successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);
-    process.exit(1); // Exit if cannot connect to database
+    process.exit(1); 
   }
 };
-
 // console.log(getDashboardData);
 connectDB();
 
@@ -69,9 +65,6 @@ app.get("/auth/callback", async (req, res) => {
       .status(400)
       .json({ success: false, message: "Missing shop or code" });
   }
-
-  console.log("Shop:", shop);
-  console.log("Code:", code);
 
   try {
     if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
@@ -147,7 +140,6 @@ const shopify = shopifyApp({
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
 
-
   // billing: {
   //   [MONTHLY_PLAN]: {
   //     amount: 10,
@@ -160,7 +152,6 @@ const shopify = shopifyApp({
   //     interval: BillingInterval.Annual,
   //   },
   // },
-
 
   distribution: AppDistribution.AppStore,
   future: {
@@ -186,6 +177,7 @@ export const sessionStorage = shopify.sessionStorage;
 if (process.env.NODE_ENV !== "test") {
   const PORT = 5000;
   app.listen(PORT, () => {
-    console.log("Working Properly.. ds vs");
+    console.log("Digisidekick ~unstopable");
   });
 }
+ console.log("Digisidekick ~unstopable");
