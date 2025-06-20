@@ -1,12 +1,18 @@
 import { json } from "@remix-run/node";
 import crypto from "crypto";
 
+// This is required to prevent Remix from thinking it's a page route
+export default function Webhook() {
+  return null;
+}
+
 export async function action({ request }) {
   const rawBody = await request.text();
   const hmacHeader = request.headers.get("X-Shopify-Hmac-Sha256");
   const secret = process.env.SHOPIFY_API_SECRET;
 
   if (!hmacHeader || !secret) {
+    console.error("Missing HMAC or secret");
     return new Response("Unauthorized", { status: 401 });
   }
 
