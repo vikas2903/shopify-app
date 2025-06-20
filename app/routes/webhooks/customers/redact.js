@@ -1,28 +1,27 @@
-import { json } from "@remix-run/node";
-import crypto from "crypto";
+import crypto from 'crypto';
+import { json } from '@remix-run/node';
 
-export default function Webhook() {
-  return null;
-}
-
-export async function action({ request }) {
-  const rawBody = await request.text();
-  const hmacHeader = request.headers.get("X-Shopify-Hmac-Sha256");
+export const action = async ({ request }) => {
   const secret = process.env.SHOPIFY_API_SECRET;
+  const hmacHeader = request.headers.get("x-shopify-hmac-sha256");
+  const rawBody = await request.text();
 
-  if (!hmacHeader || !secret) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+  const digest = crypto
+    .createHmac("sha256", secret)
+    .update(rawBody, "utf8")
+    .digest("base64");
 
-  const hash = crypto.createHmac("sha256", secret).update(rawBody, "utf8").digest("base64");
+  const verified = crypto.timingSafeEqual(
+    Buffer.from(hmacHeader, "base64"),
+    Buffer.from(digest, "base64")
+  );
 
-  if (hash !== hmacHeader) {
-    console.error("❌ HMAC mismatch:", { expected: hmacHeader, calculated: hash });
+  if (!verified) {
     return new Response("Unauthorized", { status: 401 });
   }
 
   const payload = JSON.parse(rawBody);
-  console.log("🧹 Customer Redact Webhook:", payload);
+  console.log("✅ CUSTOMER REDACT WEBHOOK:", payload);
 
   return json({ success: true });
-}
+};
