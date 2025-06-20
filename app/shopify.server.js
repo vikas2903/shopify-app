@@ -14,7 +14,7 @@ import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import {verifyhmac } from './utils/verifyhmac.js'
+import crypto from 'crypto';
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
 // import { getShopSession } from "./backend/getShopSession.js";
@@ -42,54 +42,58 @@ app.use(cors());
 //   });
 // };
 
+function verifyHmac(rawBody, hmacHeader, secret) {
+  const generatedHmac = crypto
+    .createHmac('sha256', secret)
+    .update(rawBody, 'utf8')
+    .digest('base64');
 
-app.post('/webhooks', (req, res) => {
-  const hmacHeader = req.headers['x-shopify-hmac-sha256'];
-  const rawBody = req.body;
-  const secret = process.env.SHOPIFY_API_SECRET;
-
-  if (verifyhmac(rawBody, hmacHeader, secret)) {
-    const data = JSON.parse(rawBody.toString('utf8'));
-    console.log('✅ Webhook Verified:', data);
-
-    // Your processing logic here
-    res.status(200).send('Webhook Received & Verified');
-  } else {
-    console.log('❌ Webhook HMAC verification failed.');
-    res.status(401).send('Unauthorized Webhook');
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(generatedHmac, 'utf8'),
+      Buffer.from(hmacHeader, 'utf8')
+    );
+  } catch {
+    return false;
   }
-});
+}
+
 
 app.post('/webhooks/customers/data_request', (req, res) => {
   const hmac = req.headers['x-shopify-hmac-sha256'];
-  const verified = verifyhmac(req.body, hmac, process.env.SHOPIFY_API_SECRET);
+  if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
+    console.log('❌ Invalid HMAC - data_request');
+    return res.status(401).send('Unauthorized');
+  }
 
-  if (!verified) return res.status(401).send('Unauthorized');
-
-  const data = JSON.parse(req.body.toString('utf8'));
-  console.log('📦 Customer Data Request:', data);
+  const payload = JSON.parse(req.body.toString('utf8'));
+  console.log('📦 Customer data request webhook:', payload);
   res.sendStatus(200);
 });
 
+// 4️⃣ GDPR: Customer redact
 app.post('/webhooks/customers/redact', (req, res) => {
   const hmac = req.headers['x-shopify-hmac-sha256'];
-  const verified = verifyhmac(req.body, hmac, process.env.SHOPIFY_API_SECRET);
+  if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
+    console.log('❌ Invalid HMAC - customers/redact');
+    return res.status(401).send('Unauthorized');
+  }
 
-  if (!verified) return res.status(401).send('Unauthorized');
-
-  const data = JSON.parse(req.body.toString('utf8'));
-  console.log('❌ Customer Data Redact:', data);
+  const payload = JSON.parse(req.body.toString('utf8'));
+  console.log('🧹 Customer redact webhook:', payload);
   res.sendStatus(200);
 });
 
+// 5️⃣ GDPR: Shop redact
 app.post('/webhooks/shop/redact', (req, res) => {
   const hmac = req.headers['x-shopify-hmac-sha256'];
-  const verified = verifyhmac(req.body, hmac, process.env.SHOPIFY_API_SECRET);
+  if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
+    console.log('❌ Invalid HMAC - shop/redact');
+    return res.status(401).send('Unauthorized');
+  }
 
-  if (!verified) return res.status(401).send('Unauthorized');
-
-  const data = JSON.parse(req.body.toString('utf8'));
-  console.log('🏪 Shop Data Redact:', data);
+  const payload = JSON.parse(req.body.toString('utf8'));
+  console.log('🏪 Shop redact webhook:', payload);
   res.sendStatus(200);
 });
 
