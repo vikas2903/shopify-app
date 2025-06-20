@@ -14,7 +14,7 @@ import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { json } from "@remix-run/node";
+import {verifyhmac } from './utils/verifyhmac.js'
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
 // import { getShopSession } from "./backend/getShopSession.js";
@@ -22,6 +22,7 @@ import { json } from "@remix-run/node";
 // Load environment variables
 dotenv.config();
 const app = express();
+app.use('/webhooks', express.raw({ type: '*/*' }));
 app.use(express.json());
 app.use(cors());
 
@@ -40,6 +41,57 @@ app.use(cors());
 //     host,
 //   });
 // };
+
+
+app.post('/webhooks', (req, res) => {
+  const hmacHeader = req.headers['x-shopify-hmac-sha256'];
+  const rawBody = req.body;
+  const secret = process.env.SHOPIFY_API_SECRET;
+
+  if (verifyhmac(rawBody, hmacHeader, secret)) {
+    const data = JSON.parse(rawBody.toString('utf8'));
+    console.log('✅ Webhook Verified:', data);
+
+    // Your processing logic here
+    res.status(200).send('Webhook Received & Verified');
+  } else {
+    console.log('❌ Webhook HMAC verification failed.');
+    res.status(401).send('Unauthorized Webhook');
+  }
+});
+
+app.post('/webhooks/customers/data_request', (req, res) => {
+  const hmac = req.headers['x-shopify-hmac-sha256'];
+  const verified = verifyhmac(req.body, hmac, process.env.SHOPIFY_API_SECRET);
+
+  if (!verified) return res.status(401).send('Unauthorized');
+
+  const data = JSON.parse(req.body.toString('utf8'));
+  console.log('📦 Customer Data Request:', data);
+  res.sendStatus(200);
+});
+
+app.post('/webhooks/customers/redact', (req, res) => {
+  const hmac = req.headers['x-shopify-hmac-sha256'];
+  const verified = verifyhmac(req.body, hmac, process.env.SHOPIFY_API_SECRET);
+
+  if (!verified) return res.status(401).send('Unauthorized');
+
+  const data = JSON.parse(req.body.toString('utf8'));
+  console.log('❌ Customer Data Redact:', data);
+  res.sendStatus(200);
+});
+
+app.post('/webhooks/shop/redact', (req, res) => {
+  const hmac = req.headers['x-shopify-hmac-sha256'];
+  const verified = verifyhmac(req.body, hmac, process.env.SHOPIFY_API_SECRET);
+
+  if (!verified) return res.status(401).send('Unauthorized');
+
+  const data = JSON.parse(req.body.toString('utf8'));
+  console.log('🏪 Shop Data Redact:', data);
+  res.sendStatus(200);
+});
 
 const connectDB = async () => {
   try {
