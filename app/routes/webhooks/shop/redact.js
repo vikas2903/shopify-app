@@ -1,27 +1,35 @@
-import crypto from 'crypto';
-import { json } from '@remix-run/node';
+// import crypto from 'crypto';
+// import { json } from '@remix-run/node';
 
-export const action = async ({ request }) => {
-  const secret = process.env.SHOPIFY_API_SECRET;
-  const hmacHeader = request.headers.get("x-shopify-hmac-sha256");
-  const rawBody = await request.text();
+// export const action = async ({ request }) => {
+//   const secret = process.env.SHOPIFY_API_SECRET;
+//   const hmacHeader = request.headers.get("x-shopify-hmac-sha256");
+//   const rawBody = await request.text();
 
-  const digest = crypto
-    .createHmac("sha256", secret)
-    .update(rawBody, "utf8")
-    .digest("base64");
+//   const digest = crypto
+//     .createHmac("sha256", secret)
+//     .update(rawBody, "utf8")
+//     .digest("base64");
 
-  const verified = crypto.timingSafeEqual(
-    Buffer.from(hmacHeader, "base64"),
-    Buffer.from(digest, "base64")
-  );
+//   const verified = crypto.timingSafeEqual(
+//     Buffer.from(hmacHeader, "base64"),
+//     Buffer.from(digest, "base64")
+//   );
 
-  if (!verified) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+//   if (!verified) {
+//     return new Response("Unauthorized", { status: 401 });
+//   }
 
-  const payload = JSON.parse(rawBody);
-  console.log("✅ SHOP REDACT WEBHOOK:", payload);
+//   const payload = JSON.parse(rawBody);
+//   console.log("✅ SHOP REDACT WEBHOOK:", payload);
 
-  return json({ success: true });
+//   return json({ success: true });
+// };
+
+
+
+// app/routes/webhooks/shop/redact.js
+export const action = async () => {
+  console.log("✅ /webhooks/shop/redact was hit!");
+  return new Response("Webhook received", { status: 200 });
 };
