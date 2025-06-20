@@ -4,7 +4,7 @@ import {
   AppDistribution,
   shopifyApp,
   // BillingInterval,
-  // DeliveryMethod
+  DeliveryMethod
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
@@ -208,6 +208,25 @@ const shopify = shopifyApp({
   //     interval: BillingInterval.Annual,
   //   },
   // },
+
+  webhooks: {
+    APP_UNINSTALLED: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: "/webhooks", // only if you're handling it in a single route
+    },
+    CUSTOMERS_DATA_REQUEST: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: "/webhooks/customers/data_request", // ✅ matches file
+    },
+    CUSTOMERS_REDACT: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: "/webhooks/customers/redact", // ✅ matches file
+    },
+    SHOP_REDACT: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: "/webhooks/shop/redact", // ✅ matches file
+    },
+  },
 
   distribution: AppDistribution.AppStore,
   future: {
