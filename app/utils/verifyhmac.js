@@ -15,8 +15,8 @@ export function verifyhmac(rawBody, hmacHeader, secret) {
 
   try {
     return crypto.timingSafeEqual(
-      Buffer.from(hash, 'utf8'),
-      Buffer.from(hmacHeader, 'utf8')
+      Buffer.from(hash, 'base64'),
+      Buffer.from(hmacHeader, 'base64')
     );
   } catch (err) {
     return false;

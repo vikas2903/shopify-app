@@ -24,8 +24,59 @@ import crypto from 'crypto';
 dotenv.config();
 const app = express();
 app.use('/webhooks', express.raw({ type: '*/*' }));
-app.use(express.json());
+// app.use(express.json());
+
+
+
+app.use((req, res, next) => {
+  let data = "";
+  req.setEncoding("utf8");
+  req.on("data", (chunk) => (data += chunk));
+  req.on("end", () => {
+    req.rawBody = data;
+    next();
+  });
+});
+
+
 app.use(cors());
+
+
+const sigHeaderName = 'X-Shopify-Hmac-Sha256';
+const sigHashAlg = 'sha256';
+const secret = process.env.SHOPIFY_API_SECRET;
+
+
+// Perform HMAC verification
+function authenticateSignature(req, res, next) {
+  if (req.method !== "POST") {
+    return next('Request must be POST');
+  }
+
+  if (!req.rawBody) {
+    return next('Request body empty');
+  }
+
+  const body = req.rawBody;
+  const hmacHeader = req.get(sigHeaderName);
+
+  // Create a hash based on the parsed body
+  const hash = crypto
+    .createHmac(sigHashAlg, secret)
+    .update(body, "utf8", "hex")
+    .digest("base64");
+
+  // Compare the created hash with the value of the X-Shopify-Hmac-Sha256 Header
+  if (hash !== hmacHeader) {
+    return res.status(401).send({
+      message: `Request body digest (${hash}) did not match ${sigHeaderName} (${hmacHeader})`
+    });
+  }
+
+  return next();
+}
+
+app.use('/webhooks', authenticateSignature);
 
 // export const MONTHLY_PLAN = "Monthly subscription";
 // export const ANNUAL_PLAN = "Annual subscription";
@@ -43,6 +94,7 @@ app.use(cors());
 //   });
 // };
 
+
 function verifyHmac(rawBody, hmacHeader, secret) {
   const generatedHmac = crypto
     .createHmac('sha256', secret)
@@ -51,14 +103,13 @@ function verifyHmac(rawBody, hmacHeader, secret) {
 
   try {
     return crypto.timingSafeEqual(
-      Buffer.from(generatedHmac, 'utf8'),
-      Buffer.from(hmacHeader, 'utf8')
+      Buffer.from(generatedHmac, 'base64'),
+      Buffer.from(hmacHeader, 'base64')
     );
   } catch {
     return false;
   }
 }
-
 
 app.post('/webhooks/customers/data_request', (req, res) => {
   const hmac = req.headers['x-shopify-hmac-sha256'];
@@ -210,22 +261,22 @@ const shopify = shopifyApp({
   //   },
   // },
 
-  webhooks: {
+ webhooks: {
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks", // only if you're handling it in a single route
+      callbackUrl: "/webhooks",
     },
     CUSTOMERS_DATA_REQUEST: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/customers/data_request", // ✅ matches file
+      callbackUrl: "/webhooks/customers/data_request",
     },
     CUSTOMERS_REDACT: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/customers/redact", // ✅ matches file
+      callbackUrl: "/webhooks/customers/redact",
     },
     SHOP_REDACT: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/shop/redact", // ✅ matches file
+      callbackUrl: "/webhooks/shop/redact",
     },
   },
 
