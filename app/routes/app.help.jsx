@@ -53,9 +53,9 @@ const Help = () => {
 
         <div className="support-info">
           <div className="si">
-            <a href="mailto:support@digisidekick.com"><i className='fas fa-envelope-open'></i> Support@digisidekick.com</a>
-            <a href=""><i class="fa-solid fa-building"></i> Address: A-25 Noida Section 16</a>
-            <a href="https://digisidekick.com/"><i className='fas fa-globe'></i> digisidekick.com</a>
+            <a href="mailto:support@digisidekick.com"><i className='fas fa-envelope-open'></i>support@digisidekick.com</a>
+            {/* <a href=""><i class="fa-solid fa-building"></i> Address: A-25 Noida Section 16</a> */}
+            <a href="https://d2c-apps.myshopify.com/"><i className='fas fa-globe'></i> d2c-apps.myshopify.com</a>
           </div>
         </div>
       </div> 

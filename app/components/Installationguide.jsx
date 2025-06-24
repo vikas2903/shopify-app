@@ -69,7 +69,7 @@ const Installationguide = () => {
       <p style={{ fontSize: "14px", color: "#555" }}>
         Need help?{" "}
         <a
-          href="mailto:support@yourappdomain.com"
+          href="mailto:support@digisidekick.com"
           style={{ color: "#007ace", textDecoration: "none" }}
           target="_blank"
           rel="noopener noreferrer"

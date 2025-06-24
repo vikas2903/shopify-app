@@ -36,10 +36,8 @@ function Dashboard() {
           </div>
           <div className="dashboard-right">
             <div className="dshboard-image">
-              <img
-                src="https://cdn.shopify.com/s/files/1/0796/7847/2226/files/bg-remove-app-image.png?v=1749469415"
-                alt="dashboard image"
-              />
+              <img  src="https://cdn.shopify.com/s/files/1/0796/7847/2226/files/bg-remove-app-image.png?v=1749469415"
+                alt="dashboard image" />
             </div>
           </div>
         </div>
@@ -49,7 +47,7 @@ function Dashboard() {
  
             <div className="blcoks-item">
               <div className="title-transpose">Total Available Blocks</div>
-              <div className="block-info">11</div>
+              <div className="block-info">13</div>
             </div>
 
               <div className="blcoks-item">
@@ -59,7 +57,7 @@ function Dashboard() {
 
                <div className="blcoks-item">
               <div className="title-transpose"> Most Used Block</div>
-              <div className="block-info">06</div>
+              <div className="block-info">13</div>
             </div>
 
           </div>
