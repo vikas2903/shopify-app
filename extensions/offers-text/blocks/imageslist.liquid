@@ -7,6 +7,8 @@
     --border-radius: {{ block.settings.border_radius }}%;
     --font-size: {{ block.settings.font_size }}rem;
     --section-margin-y: {{block.settings.section-margin-y}}px;
+    --border-size:{{block.settings.border_size}}px;
+    --border-color:{{block.settings.border_color}}px;
   }
 
 .logo-container::-webkit-scrollbar {
@@ -43,9 +45,10 @@
     width: 100%;
     height: 100%;
     border-radius: var(--border-radius);
-    border: 1px solid #eee;
+    border: var(--border_size) solid var(--border_color);
     object-fit: cover;
     display: block; 
+    object-position: top;
   }
 
   .logo-item span {
@@ -164,6 +167,21 @@
       "id": "heading",
       "label": "Heading",
       "default": "Brand Name"
+    },
+    {
+      "type": "range",
+      "id": "border_size",
+      "label": "Border size (px)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#000000"
     },
     {
       "type": "range",
