@@ -158,7 +158,7 @@ const connectDB = async () => {
     }
 
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB Connected Successfully");
+    console.log("MongoDB Connected Successfully : shopify.server.js");
   } catch (error) {
     console.error("MongoDB connection error:", error);
     process.exit(1);
