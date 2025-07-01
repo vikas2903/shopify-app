@@ -4,7 +4,7 @@ import {
   AppDistribution,
   shopifyApp,
   // BillingInterval,
-  DeliveryMethod
+  DeliveryMethod,
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
@@ -14,12 +14,10 @@ import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import crypto from 'crypto';
+import crypto from "crypto";
 
-import installRoute  from "./routes/install.js";
-import authCallbackRoute from "./routes/authCallback.js";
-
-
+// import installRoute  from "./routes/install.js";
+// import authCallbackRoute from "./routes/authCallback.js";
 
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
@@ -28,11 +26,11 @@ import authCallbackRoute from "./routes/authCallback.js";
 // Load environment variables
 dotenv.config();
 const app = express();
-app.use('/webhooks', express.raw({ type: '*/*' }));
+app.use("/webhooks", express.raw({ type: "*/*" }));
 // app.use(express.json());
 
-app.use("/install", installRoute);
-app.use("/auth/callback", authCallbackRoute);
+// app.use("/install", installRoute);
+// app.use("/auth/callback", authCallbackRoute);
 
 app.use((req, res, next) => {
   let data = "";
@@ -44,23 +42,20 @@ app.use((req, res, next) => {
   });
 });
 
-
 app.use(cors());
 
-
-const sigHeaderName = 'X-Shopify-Hmac-Sha256';
-const sigHashAlg = 'sha256';
+const sigHeaderName = "X-Shopify-Hmac-Sha256";
+const sigHashAlg = "sha256";
 const secret = process.env.SHOPIFY_API_SECRET;
-
 
 // Perform HMAC verification
 function authenticateSignature(req, res, next) {
   if (req.method !== "POST") {
-    return next('Request must be POST');
+    return next("Request must be POST");
   }
 
   if (!req.rawBody) {
-    return next('Request body empty');
+    return next("Request body empty");
   }
 
   const body = req.rawBody;
@@ -75,14 +70,14 @@ function authenticateSignature(req, res, next) {
   // Compare the created hash with the value of the X-Shopify-Hmac-Sha256 Header
   if (hash !== hmacHeader) {
     return res.status(401).send({
-      message: `Request body digest (${hash}) did not match ${sigHeaderName} (${hmacHeader})`
+      message: `Request body digest (${hash}) did not match ${sigHeaderName} (${hmacHeader})`,
     });
   }
 
   return next();
 }
 
-app.use('/webhooks', authenticateSignature);
+app.use("/webhooks", authenticateSignature);
 
 // export const MONTHLY_PLAN = "Monthly subscription";
 // export const ANNUAL_PLAN = "Annual subscription";
@@ -100,58 +95,57 @@ app.use('/webhooks', authenticateSignature);
 //   });
 // };
 
-
 function verifyHmac(rawBody, hmacHeader, secret) {
   const generatedHmac = crypto
-    .createHmac('sha256', secret)
-    .update(rawBody, 'utf8')
-    .digest('base64');
+    .createHmac("sha256", secret)
+    .update(rawBody, "utf8")
+    .digest("base64");
 
   try {
     return crypto.timingSafeEqual(
-      Buffer.from(generatedHmac, 'base64'),
-      Buffer.from(hmacHeader, 'base64')
+      Buffer.from(generatedHmac, "base64"),
+      Buffer.from(hmacHeader, "base64"),
     );
   } catch {
     return false;
   }
 }
 
-app.post('/webhooks/customers/data_request', (req, res) => {
-  const hmac = req.headers['x-shopify-hmac-sha256'];
+app.post("/webhooks/customers/data_request", (req, res) => {
+  const hmac = req.headers["x-shopify-hmac-sha256"];
   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-    console.log('❌ Invalid HMAC - data_request');
-    return res.status(401).send('Unauthorized');
+    console.log("❌ Invalid HMAC - data_request");
+    return res.status(401).send("Unauthorized");
   }
 
-  const payload = JSON.parse(req.body.toString('utf8'));
-  console.log('📦 Customer data request webhook:', payload);
+  const payload = JSON.parse(req.body.toString("utf8"));
+  console.log("📦 Customer data request webhook:", payload);
   res.sendStatus(200);
 });
 
 // 4️⃣ GDPR: Customer redact
-app.post('/webhooks/customers/redact', (req, res) => {
-  const hmac = req.headers['x-shopify-hmac-sha256'];
+app.post("/webhooks/customers/redact", (req, res) => {
+  const hmac = req.headers["x-shopify-hmac-sha256"];
   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-    console.log('❌ Invalid HMAC - customers/redact');
-    return res.status(401).send('Unauthorized');
+    console.log("❌ Invalid HMAC - customers/redact");
+    return res.status(401).send("Unauthorized");
   }
 
-  const payload = JSON.parse(req.body.toString('utf8'));
-  console.log('🧹 Customer redact webhook:', payload);
+  const payload = JSON.parse(req.body.toString("utf8"));
+  console.log("🧹 Customer redact webhook:", payload);
   res.sendStatus(200);
 });
 
 // 5️⃣ GDPR: Shop redact
-app.post('/webhooks/shop/redact', (req, res) => {
-  const hmac = req.headers['x-shopify-hmac-sha256'];
+app.post("/webhooks/shop/redact", (req, res) => {
+  const hmac = req.headers["x-shopify-hmac-sha256"];
   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-    console.log('❌ Invalid HMAC - shop/redact');
-    return res.status(401).send('Unauthorized');
+    console.log("❌ Invalid HMAC - shop/redact");
+    return res.status(401).send("Unauthorized");
   }
 
-  const payload = JSON.parse(req.body.toString('utf8'));
-  console.log('🏪 Shop redact webhook:', payload);
+  const payload = JSON.parse(req.body.toString("utf8"));
+  console.log("🏪 Shop redact webhook:", payload);
   res.sendStatus(200);
 });
 
@@ -165,7 +159,7 @@ const connectDB = async () => {
     console.log("MongoDB Connected Successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);
-    process.exit(1); 
+    process.exit(1);
   }
 };
 // console.log(getDashboardData);
@@ -267,7 +261,7 @@ const shopify = shopifyApp({
   //   },
   // },
 
- webhooks: {
+  webhooks: {
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: "/webhooks",
@@ -283,6 +277,35 @@ const shopify = shopifyApp({
     SHOP_REDACT: {
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: "/webhooks/shop/redact",
+    },
+  },
+  auth: {
+    path: "/auth",
+    callbackPath: "/auth/callback",
+    afterAuth: async ({ session, billing, req, res }) => {
+      const shop = session.shop;
+      const accessToken = session.accessToken;
+
+      await connectDB();
+
+      let store = await Store.findOne({ shop });
+
+      if (store) {
+        store.accessToken = accessToken;
+        store.updatedAt = new Date();
+      } else {
+        store = new Store({
+          shop,
+          accessToken,
+        });
+      }
+
+      await store.save();
+      console.log("✅ Access token saved to MongoDB for:", shop);
+
+      // Redirect to app home in Shopify admin
+      const redirectUrl = `https://admin.shopify.com/store/${shop.replace(".myshopify.com", "")}/apps/${process.env.SHOPIFY_APP_NAME}`;
+      res.redirect(redirectUrl);
     },
   },
 
@@ -313,4 +336,4 @@ if (process.env.NODE_ENV !== "test") {
     console.log("Digisidekick ~unstoppable");
   });
 }
- console.log("Digisidekick ~unstoppable");
+console.log("Digisidekick ~unstoppable");
