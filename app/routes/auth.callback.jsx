@@ -15,7 +15,7 @@ export const loader = async ({ request }) => {
   try {
     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
     const payload = {
-      client_id: process.env.SHOPIFY_CLIENT_ID,
+      client_id: process.env.SHOPIFY_API_KEY,
       client_secret: process.env.SHOPIFY_CLIENT_SECRET,
       code,
     };
