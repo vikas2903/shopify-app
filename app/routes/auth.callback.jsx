@@ -1,4 +1,5 @@
-import { redirect } from "@remix-run/node";
+// app/routes/auth.callback.jsx
+import { json, redirect } from "@remix-run/node";
 import axios from "axios";
 import Store from "../backend/modals/store.js";
 
@@ -6,46 +7,34 @@ export const loader = async ({ request }) => {
   const url = new URL(request.url);
   const shop = url.searchParams.get("shop");
   const code = url.searchParams.get("code");
-  const host = url.searchParams.get("host");
 
   if (!shop || !code) {
-    throw new Response("Missing shop or code", { status: 400 });
+    return json({ success: false, message: "Missing shop or code" }, { status: 400 });
   }
 
   try {
-    // Exchange code for access token
-    const tokenResponse = await axios.post(
-      `https://${shop}/admin/oauth/access_token`,
-      {
-        client_id: process.env.SHOPIFY_API_KEY,
-        client_secret: process.env.SHOPIFY_API_SECRET,
-        code,
-      }
-    );
+    const tokenUrl = `https://${shop}/admin/oauth/access_token`;
+    const payload = {
+      client_id: process.env.SHOPIFY_CLIENT_ID,
+      client_secret: process.env.SHOPIFY_CLIENT_SECRET,
+      code,
+    };
 
+    const tokenResponse = await axios.post(tokenUrl, payload);
     const accessToken = tokenResponse.data.access_token;
 
-    if (!accessToken) {
-      throw new Error("Failed to get access token");
+    let store = await Store.findOne({ shop });
+    if (store) {
+      store.accessToken = accessToken;
+      store.updatedAt = new Date();
+    } else {
+      store = new Store({ shop, accessToken, updatedAt: new Date() });
     }
+    await store.save();
 
-    // Save store data
-    await Store.create({
-      shop,
-      accessToken,
-      updatedAt: new Date(),
-      status: "active",
-    });
-
-    // Redirect to the app dashboard inside Shopify admin
-    return redirect(
-      `https://admin.shopify.com/store/${shop.replace(
-        ".myshopify.com",
-        ""
-      )}/apps/${process.env.SHOPIFY_APP_HANDLE}`
-    );
+    const redirectURL = `https://admin.shopify.com/store/${shop.replace(".myshopify.com", "")}/apps/${process.env.SHOPIFY_APP_NAME}`;
+    return redirect(redirectURL);
   } catch (error) {
-    console.error("Auth callback error:", error.message);
-    throw new Response("Authentication failed", { status: 500 });
+    return json({ success: false, message: "Failed to process authentication", error: error.message }, { status: 500 });
   }
 };
