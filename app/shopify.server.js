@@ -321,8 +321,7 @@ const shopify = shopifyApp({
     : {}),
 });
 
-app.use(shopify.cspHeaders());
-app.use(shopify.authenticate());
+
 
 // Export Shopify app utilities
 export default shopify;
