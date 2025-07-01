@@ -48,7 +48,7 @@ export const loader = async ({ request }) => {
     console.error("Auth Callback Error:", error.response?.data || error.message);
     return json({
       success: false,
-      message: "Failed to process authentication",
+      message: "Failed to process authentication Vs",
       error: error.message,
     }, { status: 500 });
   }
