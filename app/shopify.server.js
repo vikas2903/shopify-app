@@ -16,6 +16,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import crypto from 'crypto';
 
+import installRoute  from "./routes/install.js";
+import authCallbackRoute from "./routes/authCallback.js";
+
+
+
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
 // import { getShopSession } from "./backend/getShopSession.js";
@@ -26,7 +31,8 @@ const app = express();
 app.use('/webhooks', express.raw({ type: '*/*' }));
 // app.use(express.json());
 
-
+app.use("/install", installRoute);
+app.use("/auth/callback", authCallbackRoute);
 
 app.use((req, res, next) => {
   let data = "";
@@ -165,75 +171,75 @@ const connectDB = async () => {
 // console.log(getDashboardData);
 connectDB();
 
-app.get("/auth/callback", async (req, res) => {
-  const { shop, code } = req.query;
+// app.get("/auth/callback", async (req, res) => {
+//   const { shop, code } = req.query;
 
-  if (!shop || !code) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Missing shop or code" });
-  }
+//   if (!shop || !code) {
+//     return res
+//       .status(400)
+//       .json({ success: false, message: "Missing shop or code" });
+//   }
 
-  try {
-    if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
-      throw new Error("Shopify credentials are not properly configured");
-    }
+//   try {
+//     if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
+//       throw new Error("Shopify credentials are not properly configured");
+//     }
 
-    const tokenUrl = `https://${shop}/admin/oauth/access_token`;
-    const payload = {
-      client_id: process.env.SHOPIFY_CLIENT_ID,
-      client_secret: process.env.SHOPIFY_CLIENT_SECRET,
-      code,
-    };
+//     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
+//     const payload = {
+//       client_id: process.env.SHOPIFY_CLIENT_ID,
+//       client_secret: process.env.SHOPIFY_CLIENT_SECRET,
+//       code,
+//     };
 
-    const tokenResponse = await axios.post(tokenUrl, payload);
-    const accessToken = tokenResponse.data.access_token;
+//     const tokenResponse = await axios.post(tokenUrl, payload);
+//     const accessToken = tokenResponse.data.access_token;
 
-    console.log("Access Token received successfully");
+//     console.log("Access Token received successfully");
 
-    // Check if store already exists
-    let store = await Store.findOne({ shop });
+//     // Check if store already exists
+//     let store = await Store.findOne({ shop });
 
-    if (store) {
-      // Update existing store
-      store.accessToken = accessToken;
-      store.updatedAt = new Date();
-      console.log(`Updating existing store: ${shop}`);
-    } else {
-      // Create new store
-      store = new Store({
-        shop,
-        accessToken,
-        updatedAt: new Date(),
-      });
-      console.log(`Creating new store: ${shop}`);
-    }
+//     if (store) {
+//       // Update existing store
+//       store.accessToken = accessToken;
+//       store.updatedAt = new Date();
+//       console.log(`Updating existing store: ${shop}`);
+//     } else {
+//       // Create new store
+//       store = new Store({
+//         shop,
+//         accessToken,
+//         updatedAt: new Date(),
+//       });
+//       console.log(`Creating new store: ${shop}`);
+//     }
 
-    await store.save();
-    console.log(`Store ${shop} saved successfully`);
+//     await store.save();
+//     console.log(`Store ${shop} saved successfully`);
 
-    if (!process.env.SHOPIFY_APP_NAME) {
-      throw new Error(
-        "SHOPIFY_APP_NAME is not defined in environment variables",
-      );
-    }
+//     if (!process.env.SHOPIFY_APP_NAME) {
+//       throw new Error(
+//         "SHOPIFY_APP_NAME is not defined in environment variables",
+//       );
+//     }
 
-    const redirectURL = `https://admin.shopify.com/store/${shop.replace(
-      ".myshopify.com",
-      "",
-    )}/apps/${process.env.SHOPIFY_APP_NAME}`;
+//     const redirectURL = `https://admin.shopify.com/store/${shop.replace(
+//       ".myshopify.com",
+//       "",
+//     )}/apps/${process.env.SHOPIFY_APP_NAME}`;
 
-    console.log("Redirecting to:", redirectURL);
-    return res.redirect(redirectURL);
-  } catch (error) {
-    console.error("Callback Error:", error.response?.data || error.message);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to process authentication",
-      error: error.message,
-    });
-  }
-});
+//     console.log("Redirecting to:", redirectURL);
+//     return res.redirect(redirectURL);
+//   } catch (error) {
+//     console.error("Callback Error:", error.response?.data || error.message);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to process authentication",
+//       error: error.message,
+//     });
+//   }
+// });
 
 mongoose.connection.on("error", (err) => {
   console.error("MongoDB connection error:", err);
