@@ -8,7 +8,7 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
-// import axios from "axios";
+import axios from "axios";
 import Store from "./backend/modals/store.js";
 import mongoose from "mongoose";
 import express from "express";
@@ -337,4 +337,4 @@ if (process.env.NODE_ENV !== "test") {
     console.log("Digisidekick ~unstoppable");
   });
 }
-console.log("Digisidekick ~unstoppable");
+console.log("Digisidekick ~unstoppable"); 
