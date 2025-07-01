@@ -27,6 +27,7 @@ import crypto from "crypto";
 // Load environment variables
 dotenv.config();
 const app = express();
+
 app.use("/webhooks", express.raw({ type: "*/*" }));
 // app.use(express.json());
 
@@ -319,6 +320,9 @@ const shopify = shopifyApp({
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),
 });
+
+app.use(shopify.cspHeaders());
+app.use(shopify.authenticate());
 
 // Export Shopify app utilities
 export default shopify;
