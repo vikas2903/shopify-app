@@ -17,11 +17,11 @@ const Installationguide = () => {
         boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
       }}
     >
-      <h2 style={{ fontSize: "1rem", marginBottom: "20px", lineHeight: "1.2" }}>
+      <h2 style={{ fontSize: "1rem", marginBottom: "20px", lineHeight: "1.2", fontWeight: "bold"  }}>
         How to Install App Blocks in Your Shopify Theme
       </h2>
 
-      <ol style={{ lineHeight: 1.6, fontSize: "12px", paddingLeft: "20px" }}>
+      <ol style={{ lineHeight: 1.6, fontSize: "11px", paddingLeft: "20px" }}>
         <li style={{ marginBottom: "20px" }}>
           <strong>Go to Your Theme Editor</strong>
           <br />
@@ -66,7 +66,7 @@ const Installationguide = () => {
         </li>
       </ol>
 
-      <p style={{ fontSize: "14px", color: "#555" }}>
+      <p style={{ fontSize: "11px", color: "#555" }}>
         Need help?{" "}
         <a
           href="mailto:support@digisidekick.com"

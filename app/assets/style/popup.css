@@ -1,5 +1,5 @@
 .popip-container {
-     position: fixed;
+    position: fixed;
     padding: 20px;
     transition: padding 0.25s linear;
     transition-delay: 0.15s;
@@ -10,7 +10,7 @@
     left: 50px;
     top: 50%;
     right: 50px;
-    max-width: 96%;
+    max-width: 76%;
     margin: auto;
     transform: translateY(-50%);
     height: 450px;

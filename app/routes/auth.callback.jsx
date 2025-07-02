@@ -61,6 +61,7 @@ import Store from "../backend/modals/store.js";
 import mongoose from "mongoose";
 
 export const loader = async ({ request }) => {
+
   try {
     // Authenticate and create session
     const { session } = await authenticate.admin(request);
@@ -105,6 +106,9 @@ export const loader = async ({ request }) => {
     )}/apps/${process.env.SHOPIFY_APP_NAME}`;
 
     return redirect(redirectUrl);
+
+
+    
   } catch (error) {
     console.error("❌ Error in auth callback:", error);
     throw new Response("Failed to complete authentication vs:002", { status: 500 });
