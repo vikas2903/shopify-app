@@ -1,10 +1,5 @@
 import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
-
-import axios from "axios";
-import mongoose from "mongoose";
-import { json } from "@remix-run/node";
-import Store from "../backend/modals/store.js";
 // import Homee from "../components/Home";
 import {
   Page,
@@ -26,62 +21,11 @@ import "../assets/style/card.css";
 import "../assets/style/dashboard.css";
 import Dashboard from "../components/Dashboard.jsx";
 
-
-
-
-
-
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
-  const { session } = await authenticate.admin(request);
 
-  const shop = session.shop;
-
-  if (mongoose.connection.readyState === 0) {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  }
-
-  const store = await Store.findOne({ shop });
-  const accessToken = store?.accessToken;
-
-  if (!accessToken) {
-    throw new Error("Access token not found for shop: " + shop);
-  }
-
-  const themesResponse = await axios.get(
-    `https://${shop}/admin/api/2024-01/themes.json`,
-    {
-      headers: {
-        "X-Shopify-Access-Token": accessToken,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  const publishedTheme = themesResponse.data.themes.find(theme => theme.role === "main");
-
-  if (!publishedTheme) {
-    throw new Error("No published theme found for shop: " + shop);
-  }
-
-  return json({
-    shop,
-    themeId: publishedTheme.id,
-  });
+  return null;
 };
-
-
-// export const loader = async ({ request }) => {
-//   await authenticate.admin(request);
-//   return null;
-// };
-
-
-
-
 
 export const action = async ({ request }) => {
   const { admin } = await authenticate.admin(request);
@@ -164,7 +108,7 @@ export default function Index() {
       shopify.toast.show("Product created");
     }
   }, [productId, shopify]);
-  // const generateProduct = () => fetcher.submit({}, { method: "POST" });
+  const generateProduct = () => fetcher.submit({}, { method: "POST" });
 
   return (
     <Page fullWidth >
