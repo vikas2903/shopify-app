@@ -15,16 +15,61 @@ import {
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
+import mongoose from "mongoose";
 // import Home from "../components/Home";
 import '../assets/style/styles.css'
 import "../assets/style/card.css";
 import "../assets/style/dashboard.css";
 import Dashboard from "../components/Dashboard.jsx";
+import Store from "../backend/modals/store.js"
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
+   const { session } = await authenticate.admin(request);
+     const shop = session.shop;
 
-  return null;
+       if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  }
+
+  const store = await Store.findOne({ shop });
+  const accessToken = store?.accessToken;
+
+
+  if (!accessToken) {
+    throw new Error("Access token not found for shop: " + shop);
+  }
+
+
+    console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", shop);
+    console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", accessToken);
+  
+
+
+    const response = await fetch(`https://${shop}/admin/api/2024-01/themes.json`, {
+  method: "GET",
+  headers: {
+    "X-Shopify-Access-Token": accessToken,
+    "Content-Type": "application/json",
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Failed to fetch themes: ${response.status} ${response.statusText}`);
+}
+
+const data = await response.json();
+const publishedTheme = data.themes.find(theme => theme.role === "main");
+
+if (!publishedTheme) {
+  throw new Error("No published theme found for shop: " + shop);
+}
+
+  console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", publishedTheme.id);
+  return shop;
 };
 
 export const action = async ({ request }) => {
