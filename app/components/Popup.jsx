@@ -3,8 +3,10 @@ import '../assets/style/popup.css';
 import { ExploreContext } from '../context/Explorecontext.jsx';
 import Imageslider from './Imageslider.jsx';
 import Installationguide from './Installationguide.jsx';
-
+import { useLoaderData } from "@remix-run/react";
 import {  Page, Layout } from '@shopify/polaris';
+
+
 
 function EyeIcon() {
     return (
@@ -48,7 +50,7 @@ function Popup() {
     
     const { showPopup, setShowPopup, exploreData, selectedId } = useContext(ExploreContext);
 
-
+ const { shop, themeId } = useLoaderData();
 
 
     if (!showPopup || !exploreData || !selectedId) return null;
@@ -77,8 +79,9 @@ function Popup() {
                                 type="button"
                                 className="action-button"
                                 aria-label="Add to collection 1 "
-                                onClick={() =>{window.open(`https://d2c-apps.myshopify.com/admin/themes/173246185506/editor?context=sections&template=product`, '_blank');}}
-                          
+                                onClick={() => {
+                                        window.open(`https://${shop}/admin/themes/${themeId}/editor?context=sections&template=product`, '_blank');
+                                    }}
                             >
                                 <PlusIcon />
                             </button>
