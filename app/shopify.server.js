@@ -8,7 +8,7 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
-import axios from "axios";
+// import axios from "axios";
 import Store from "./backend/modals/store.js";
 import mongoose from "mongoose";
 import express from "express";
@@ -17,8 +17,7 @@ import dotenv from "dotenv";
 import crypto from "crypto";
 // import connectDatabase from "./backend/database/connect.js";
 
-// import installRoute  from "./routes/install.js";
-// import authCallbackRoute from "./routes/authCallback.js";
+
 
 // import dashboardroute from "./backend/route/dashboardRoutes.js";
 // import { getDashboardData } from "./backend/controller/dashboardController.js";
@@ -31,8 +30,7 @@ const app = express();
 app.use("/webhooks", express.raw({ type: "*/*" }));
 // app.use(express.json());
 
-// app.use("/install", installRoute);
-// app.use("/auth/callback", authCallbackRoute);
+
 
 app.use((req, res, next) => {
   let data = "";
@@ -334,10 +332,10 @@ export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
 
 // Start Express server if not in test environment
-if (process.env.NODE_ENV !== "test") {
-  const PORT = 5000;
-  app.listen(PORT, () => {
-    console.log("Digisidekick ~unstoppable");
-  });
-}
-console.log("Digisidekick ~unstoppable"); 
+// if (process.env.NODE_ENV !== "test") {
+//   const PORT = 5000;
+//   app.listen(PORT, () => {
+//     console.log("Endpoint: http://localhost:" + PORT);
+//   });
+// }
+

@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
-name = "ds-app"
+name = "Layerup"
 handle = "ds-app-6"
-application_url = "https://app.digisidekick.com/"
+application_url = "https://app.digisidekick.com"
 embedded = true
 
 [build]
