@@ -2,7 +2,7 @@ import React, {useContext}  from "react";
 import {ExploreContext} from "../context/Explorecontext.jsx";
 
 import Popup from '../components/Popup.jsx';
-
+// import { useLoaderData } from "@remix-run/react";
 import { Button, InlineStack, Icon} from '@shopify/polaris';
 import {
   ViewIcon,
@@ -11,6 +11,7 @@ import {
 } from '@shopify/polaris-icons';
 
 function Explorecard() {
+    // const { shop } = useLoaderData();
   const {exploreData, setShowPopup, setSelectedId} = useContext(ExploreContext);
 
   if (!exploreData || !Array.isArray(exploreData)) {
@@ -81,7 +82,9 @@ function Explorecard() {
              <InlineStack  wrap spacing="400" style='var(--p-space-200)'>  
                   <Button  style={{marginLeft :'9px'}}  onClick={() => popupvisible(item.id)} variant="secondary" size="large" icon={ViewIcon} accessibilityLabel="View Details" />  &nbsp;  
                   <Button  variant="secondary" size="large" onClick={()=>{ window.open(`${item.url}`, '_blank');}} icon={ExternalIcon} accessibilityLabel="Open in new tab" />  &nbsp; 
-                  <Button  variant="secondary" size="large" onClick={() =>{window.open(`https://d2c-apps.myshopify.com/admin/themes/173246185506/editor?context=sections&template=product`, '_blank');}} icon={ PlusIcon } accessibilityLabel="Add new" /> 
+                 
+                  {/* <Button  variant="secondary" size="large"  onClick={() => window.open(`https://${shop}/admin`, '_blank')}
+      icon={ PlusIcon } accessibilityLabel="Add new" />  */}
               </InlineStack>
         
               </div>

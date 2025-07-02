@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
+import { json } from "@remix-run/node";
 // import Homee from "../components/Home";
 import {
   Page,
@@ -46,30 +47,35 @@ export const loader = async ({ request }) => {
 
     console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", shop);
     console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", accessToken);
-  
+
+//   const response = await fetch(`https://${shop}/admin/api/2024-01/themes.json`, {
+//   method: "GET",
+//   headers: {
+//     "X-Shopify-Access-Token": accessToken,
+//     "Content-Type": "application/json",
+//   },
+// });
+
+// if (!response.ok) {
+//   throw new Error(`Failed to fetch themes: ${response.status} ${response.statusText}`);
+// }
+
+// const data = await response.json();
+// const publishedTheme = data.themes.find(theme => theme.role === "main");
+
+// if (!publishedTheme) {
+//   throw new Error("No published theme found for shop: " + shop);
+// }
+
+//   console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", publishedTheme.id);
 
 
-    const response = await fetch(`https://${shop}/admin/api/2024-01/themes.json`, {
-  method: "GET",
-  headers: {
-    "X-Shopify-Access-Token": accessToken,
-    "Content-Type": "application/json",
-  },
-});
+// return json({
+//     shop,
+//     themeId: publishedTheme.id,
+//   });
 
-if (!response.ok) {
-  throw new Error(`Failed to fetch themes: ${response.status} ${response.statusText}`);
-}
-
-const data = await response.json();
-const publishedTheme = data.themes.find(theme => theme.role === "main");
-
-if (!publishedTheme) {
-  throw new Error("No published theme found for shop: " + shop);
-}
-
-  console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", publishedTheme.id);
-  return shop;
+  return json({ shop });
 };
 
 export const action = async ({ request }) => {

@@ -73,7 +73,8 @@ function Popup() {
                             >
                                 <EyeIcon />
                             </a>
-                            <button
+                          <span style={{padding: '0 2px'}}></span>
+                            {/* <button
                                 type="button"
                                 className="action-button"
                                 aria-label="Add to collection 1 "
@@ -81,7 +82,7 @@ function Popup() {
                           
                             >
                                 <PlusIcon />
-                            </button>
+                            </button> */}
                               <button
                 type="button"
                 className="popup-close"
