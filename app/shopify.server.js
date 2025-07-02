@@ -336,7 +336,7 @@ export const sessionStorage = shopify.sessionStorage;
 
 
 
-console.log("shopify.server.js loaded successfully");
+console.log("shopify.server.js loaded successfully ✅");
 
 
 // Start Express server if not in test environment
@@ -351,7 +351,11 @@ console.log("shopify.server.js loaded successfully");
 //   console.log("✅ Server running");
 // });
 
+// Start Express server unless running in test environment
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`✅ Server is running on port ${process.env.PORT || 3000}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`✅ Server running at http://localhost:${port}`);
+  });
+}
