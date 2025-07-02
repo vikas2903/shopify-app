@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+
 import "@shopify/shopify-app-remix/adapters/node";
 import {
   ApiVersion,
@@ -13,8 +15,9 @@ import Store from "./backend/modals/store.js";
 import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+
 import crypto from "crypto";
+dotenv.config();
 // import connectDatabase from "./backend/database/connect.js";
 
 
@@ -24,7 +27,7 @@ import crypto from "crypto";
 // import { getShopSession } from "./backend/getShopSession.js";
 
 // Load environment variables
-dotenv.config();
+
 const app = express();
 
 app.use("/webhooks", express.raw({ type: "*/*" }));
@@ -331,6 +334,11 @@ export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
 
+
+
+console.log("shopify.server.js loaded successfully");
+
+
 // Start Express server if not in test environment
 // if (process.env.NODE_ENV !== "development") {
 //  const port = process.env.PORT || 1080;
@@ -339,10 +347,6 @@ export const sessionStorage = shopify.sessionStorage;
 //   });
 // }
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`✅ Server is running on port ${PORT}`);
-});
-
-console.log("Shopify app initialized successfully"); 
+// app.listen(process.env.PORT || 3000, () => {
+//   console.log("✅ Server running");
+// });

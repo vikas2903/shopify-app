@@ -8,7 +8,7 @@ import axios from "axios";
 
 
 
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 dotenv.config();
 connectDatabase();
  
@@ -123,6 +123,8 @@ app.get("/auth/callback", async (req, res) => {
       return res.status(500).json({ success: false, message: "Failed to save token" });
     }
   });
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });

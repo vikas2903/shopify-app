@@ -3,15 +3,15 @@ import { useFetcher } from "@remix-run/react";
 // import Homee from "../components/Home";
 import {
   Page,
-  Layout,
-  Text,
-  Card,
-  Button,
-  BlockStack,
-  Box,
-  List,
-  Link,
-  InlineStack,
+  // Layout,
+  // Text,
+  // Card,
+  // Button,
+  // BlockStack,
+  // Box,
+  // List,
+  // Link,
+  // InlineStack,
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
@@ -108,7 +108,7 @@ export default function Index() {
       shopify.toast.show("Product created");
     }
   }, [productId, shopify]);
-  const generateProduct = () => fetcher.submit({}, { method: "POST" });
+  // const generateProduct = () => fetcher.submit({}, { method: "POST" });
 
   return (
     <Page fullWidth >
