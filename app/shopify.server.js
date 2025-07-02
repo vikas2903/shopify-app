@@ -332,10 +332,17 @@ export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
 
 // Start Express server if not in test environment
-// if (process.env.NODE_ENV !== "test") {
-//   const PORT = 5000;
-//   app.listen(PORT, () => {
-//     console.log("Endpoint: http://localhost:" + PORT);
+// if (process.env.NODE_ENV !== "development") {
+//  const port = process.env.PORT || 1080;
+//   app.listen(port, () => {
+//     console.log("Endpoint: http://localhost:" + port);
 //   });
 // }
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Server is running on port ${PORT}`);
+});
+
+console.log("Shopify app initialized successfully"); 

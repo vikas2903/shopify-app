@@ -14,9 +14,10 @@ import {
   InlineStack,
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { authenticate } from "../shopify.server";
+import { authenticate, shopify } from "../shopify.server";
+
 // import Home from "../components/Home";
-import '../assets/style/styles.css'
+import "../assets/style/styles.css";
 import "../assets/style/card.css";
 import "../assets/style/dashboard.css";
 import Dashboard from "../components/Dashboard.jsx";
@@ -28,7 +29,19 @@ export const loader = async ({ request }) => {
 };
 
 export const action = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
+  const { admin, session } = await authenticate.admin(request);
+  // You can now access:
+  const accessToken = session.accessToken;
+  const shop = session.shop;
+  console.log("------------------------------------------");
+  console.log("Request:", request);
+  console.log("Authenticated admin:", admin);
+  console.log("Admin:", admin);
+  console.log("Session:", session);
+  console.log("Shop:", shop);
+  console.log("Access token:", accessToken);
+  console.log("------------------------------------------");
+
   const color = ["Red", "Orange", "Yellow", "Green"][
     Math.floor(Math.random() * 4)
   ];
@@ -111,11 +124,11 @@ export default function Index() {
   const generateProduct = () => fetcher.submit({}, { method: "POST" });
 
   return (
-    <Page fullWidth >
-       <TitleBar title="Dashboard" /> 
+    <Page fullWidth>
+      <TitleBar title="Dashboard" />
 
-    {/* <Home /> */}
-    < Dashboard />
+      {/* <Home /> */}
+      <Dashboard />
       {/* <TitleBar title="Remix app template">
         <button variant="primary" onClick={generateProduct}>
           Generate a product
@@ -333,8 +346,6 @@ export default function Index() {
           </Layout.Section>
         </Layout>
       </BlockStack> */}
-      
-      
     </Page>
   );
 }
