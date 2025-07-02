@@ -337,6 +337,7 @@ export const sessionStorage = shopify.sessionStorage;
 
 
 console.log("shopify.server.js loaded successfully ✅");
+console.log("shopify.server.js loaded successfully 01");
 
 
 // Start Express server if not in test environment
