@@ -247,7 +247,7 @@ const shopify = shopifyApp({
   apiSecretKey: process.env.SHOPIFY_API_SECRET,
   apiVersion: ApiVersion.January25,
   scopes: process.env.SCOPES?.split(",") || [],
-  appUrl: process.env.SHOPIFY_APP_URL || "",
+  appUrl: process.env.SHOPIFY_APP_URL,
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
 
@@ -350,3 +350,8 @@ console.log("shopify.server.js loaded successfully");
 // app.listen(process.env.PORT || 3000, () => {
 //   console.log("✅ Server running");
 // });
+
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`✅ Server is running on port ${process.env.PORT || 3000}`);
+});
