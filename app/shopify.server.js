@@ -17,6 +17,11 @@ import express from "express";
 import cors from "cors";
 
 import crypto from "crypto";
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+
 dotenv.config();
 // import connectDatabase from "./backend/database/connect.js";
 
@@ -32,9 +37,13 @@ const app = express();
 
 app.use("/webhooks", express.raw({ type: "*/*" }));
 // app.use(express.json());
+// Serve the uploads folder
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
-
+ 
 app.use((req, res, next) => {
   let data = "";
   req.setEncoding("utf8");
@@ -46,7 +55,7 @@ app.use((req, res, next) => {
 });
 
 app.use(cors());
-
+app.use('/images', express.static(path.join(__dirname, 'public/uploads')));
 const sigHeaderName = "X-Shopify-Hmac-Sha256";
 const sigHashAlg = "sha256";
 const secret = process.env.SHOPIFY_API_SECRET;
