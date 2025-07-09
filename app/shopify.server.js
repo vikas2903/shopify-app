@@ -55,7 +55,9 @@ app.use((req, res, next) => {
 });
 
 app.use(cors());
-app.use('/images', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/images', express.static(path.join(__dirname, './public')));
+
+
 const sigHeaderName = "X-Shopify-Hmac-Sha256";
 const sigHashAlg = "sha256";
 const secret = process.env.SHOPIFY_API_SECRET;
