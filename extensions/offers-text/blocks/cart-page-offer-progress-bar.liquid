@@ -156,15 +156,6 @@
     }
   }
 
-  function appendProgressBarToDrawer() {
-    const drawerHeader = document.querySelector(".drawer__header");
-    const storedHTML = localStorage.getItem(PROGRESS_STORAGE_KEY);
-    const alreadyInserted = document.querySelector(".drawer__header + .progress-wrapper");
-
-    if (drawerHeader && storedHTML && !alreadyInserted) {
-      drawerHeader.insertAdjacentHTML("afterend", storedHTML);
-    }
-  }
 
   function updateProgressBar(cartTotal) {
     const progressBar = document.getElementById('progress');
@@ -193,8 +184,6 @@
 
     if (progressBar) progressBar.style.width = width;
     if (offerTextElement) offerTextElement.textContent = text;
-
-    appendProgressBarToDrawer();
   }
 
   function getCartDataAndUpdate() {
