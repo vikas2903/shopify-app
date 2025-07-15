@@ -114,7 +114,7 @@
 <div class="progress-wrapper">
   <div class="progress-note"><p>{{ block.settings.cart-heading }}</p></div>
   <div class="progress_offer_wrap">
-    <p>Spend ₹1299 or more – Get a Reusable Face Sponge (Free)</p>
+    <p>{{ block.settings.cp-text1 }}</p>
   </div>
   <div class="progress-container-bg-color">
     <div class="progress-container-wrap">
@@ -138,24 +138,14 @@
   </div>
 </div>
 
-<script>
-  const priceRange1 = parseFloat("{{ block.settings.cp-price-1 }}");
-  const priceRange2 = parseFloat("{{ block.settings.cp-price-2 }}");
-  const priceRange3 = parseFloat("{{ block.settings.cp-price-3 }}");
+<!-- <script>
+  const priceRange1 = parseFloat("{{ block.settings.cp-price-1 }}") || 0;
+  const priceRange2 = parseFloat("{{ block.settings.cp-price-2 }}") || 0;
+  const priceRange3 = parseFloat("{{ block.settings.cp-price-3 }}") || 0;
 
-  const priceText1 = "{{ block.settings.cp-text1 }}";
-  const priceText2 = "{{ block.settings.cp-text2 }}";
-  const priceText3 = "{{ block.settings.cp-text3 }}";
-
-  const PROGRESS_STORAGE_KEY = "progressHTML";
-
-  function storeProgressHTML() {
-    const progressWrapper = document.querySelector(".progress-wrapper");
-    if (progressWrapper && !localStorage.getItem(PROGRESS_STORAGE_KEY)) {
-      localStorage.setItem(PROGRESS_STORAGE_KEY, progressWrapper.outerHTML);
-    }
-  }
-
+  const priceText1 = `{{ block.settings.cp-text1 | escape }}`;
+  const priceText2 = `{{ block.settings.cp-text2 | escape }}`;
+  const priceText3 = `{{ block.settings.cp-text3 | escape }}`;
 
   function updateProgressBar(cartTotal) {
     const progressBar = document.getElementById('progress');
@@ -163,7 +153,7 @@
     const offerTextElement = document.querySelector('.progress_offer_wrap p');
 
     let width = '0%';
-    let text = '';
+    let text = "Add items to start unlocking offers!";
 
     circles.forEach(c => c.classList.remove('active'));
 
@@ -194,17 +184,71 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.circle').forEach(c => c.classList.remove('active')); // clear on load
-    storeProgressHTML();
     getCartDataAndUpdate();
-    setInterval(getCartDataAndUpdate, 3000);
+    setInterval(getCartDataAndUpdate, 5000); // optional: increase interval to reduce flicker
   });
-</script>
+</script> -->
 
+<script>
+  const priceRanges = [
+  parseFloat("{{ block.settings.cp-price-1 }}") || 0,
+  parseFloat("{{ block.settings.cp-price-2 }}") || 0,
+  parseFloat("{{ block.settings.cp-price-3 }}") || 0,
+];
+
+// Sort ranges strictly ascending
+priceRanges.sort((a, b) => a - b);
+
+const priceText1 = `{{ block.settings.cp-text1 | escape }}`;
+const priceText2 = `{{ block.settings.cp-text2 | escape }}`;
+const priceText3 = `{{ block.settings.cp-text3 | escape }}`;
+
+function updateProgressBar(cartTotal) {
+  const progressBar = document.getElementById('progress');
+  const circles = document.querySelectorAll('.circle');
+  const offerTextElement = document.querySelector('.progress_offer_wrap p');
+
+  let width = '0%';
+  let text = "Add items to start unlocking offers!";
+
+  circles.forEach(c => c.classList.remove('active'));
+
+  if (cartTotal >= priceRanges[0] && cartTotal < priceRanges[1]) {
+    width = '25%';
+    text = priceText1;
+    circles[0]?.classList.add('active');
+  } else if (cartTotal >= priceRanges[1] && cartTotal < priceRanges[2]) {
+    width = '50%';
+    text = priceText2;
+    circles[0]?.classList.add('active');
+    circles[1]?.classList.add('active');
+  } else if (cartTotal >= priceRanges[2]) {
+    width = '100%';
+    text = priceText3;
+    circles.forEach(c => c.classList.add('active'));
+  }
+
+  if (progressBar) progressBar.style.width = width;
+  if (offerTextElement) offerTextElement.textContent = text;
+}
+
+function getCartDataAndUpdate() {
+  fetch('/cart.js')
+    .then(res => res.ok ? res.json() : Promise.reject("Fetch error"))
+    .then(data => updateProgressBar(data.total_price / 100))
+    .catch(console.error);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  getCartDataAndUpdate();
+  setInterval(getCartDataAndUpdate, 3000);
+});
+
+</script>
 {% schema %}
 {
-  "name": "Ds-Cart Progress bar",
-  "target": "section",
+  "name": "Ds-Progress bar",
+  "target":"section",
   "settings": [
     {
       "type": "text",
