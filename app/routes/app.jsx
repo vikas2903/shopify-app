@@ -179,10 +179,11 @@ export default function App() {
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <ExploreContextProvider>
         <NavMenu>
-          <Link to="/app/explore">Blocks</Link>
           <Link to="/app" rel="home">Dashboard</Link>
-          <Link to="/app/support">Support</Link>
+          <Link to="/app/explore">Blocks</Link>
+          <Link to="/app/sections">Sections</Link>
           <Link to="/app/installation">Wishlist</Link>
+          <Link to="/app/support">Support</Link>
         </NavMenu>
         <Outlet />
       </ExploreContextProvider>

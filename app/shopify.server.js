@@ -10,7 +10,6 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
-// import axios from "axios";
 import Store from "./backend/modals/store.js";
 import mongoose from "mongoose";
 import express from "express";
@@ -23,15 +22,6 @@ import { fileURLToPath } from 'url';
 
 
 dotenv.config();
-// import connectDatabase from "./backend/database/connect.js";
-
-
-
-// import dashboardroute from "./backend/route/dashboardRoutes.js";
-// import { getDashboardData } from "./backend/controller/dashboardController.js";
-// import { getShopSession } from "./backend/getShopSession.js";
-
-// Load environment variables
 
 const app = express();
 
@@ -176,78 +166,10 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-// console.log(getDashboardData);
+
 connectDB();
 
-// app.get("/auth/callback", async (req, res) => {
-//   const { shop, code } = req.query;
 
-//   if (!shop || !code) {
-//     return res
-//       .status(400)
-//       .json({ success: false, message: "Missing shop or code" });
-//   }
-
-//   try {
-//     if (!process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
-//       throw new Error("Shopify credentials are not properly configured");
-//     }
-
-//     const tokenUrl = `https://${shop}/admin/oauth/access_token`;
-//     const payload = {
-//       client_id: process.env.SHOPIFY_CLIENT_ID,
-//       client_secret: process.env.SHOPIFY_CLIENT_SECRET,
-//       code,
-//     };
-
-//     const tokenResponse = await axios.post(tokenUrl, payload);
-//     const accessToken = tokenResponse.data.access_token;
-
-//     console.log("Access Token received successfully");
-
-//     // Check if store already exists
-//     let store = await Store.findOne({ shop });
-
-//     if (store) {
-//       // Update existing store
-//       store.accessToken = accessToken;
-//       store.updatedAt = new Date();
-//       console.log(`Updating existing store: ${shop}`);
-//     } else {
-//       // Create new store
-//       store = new Store({
-//         shop,
-//         accessToken,
-//         updatedAt: new Date(),
-//       });
-//       console.log(`Creating new store: ${shop}`);
-//     }
-
-//     await store.save();
-//     console.log(`Store ${shop} saved successfully`);
-
-//     if (!process.env.SHOPIFY_APP_NAME) {
-//       throw new Error(
-//         "SHOPIFY_APP_NAME is not defined in environment variables",
-//       );
-//     }
-
-//     const redirectURL = `https://admin.shopify.com/store/${shop.replace(
-//       ".myshopify.com",
-//       "",
-//     )}/apps/${process.env.SHOPIFY_APP_NAME}`;
-
-//     console.log("Redirecting to:", redirectURL);
-//     return res.redirect(redirectURL);
-//   } catch (error) {
-//     console.error("Callback Error:", error.response?.data || error.message);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Failed to process authentication",
-//       error: error.message,
-//     });
-//   }
-// });
 
 mongoose.connection.on("error", (err) => {
   console.error("MongoDB connection error:", err);
@@ -345,27 +267,5 @@ export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
 
-
-
 console.log("shopify.server.js loaded successfully ✅");
-console.log("shopify.server.js loaded successfully 01");
 
-
-// Start Express server if not in test environment
-// if (process.env.NODE_ENV !== "development") {
-//  const port = process.env.PORT || 1080;
-//   app.listen(port, () => {
-//     console.log("Endpoint: http://localhost:" + port);
-//   });
-// }
-
-// app.listen(process.env.PORT || 3000, () => {
-//   console.log("✅ Server running");
-// });
-
-// Start Express server unless running in test environment
-
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`✅ Server running on port ${PORT}`);
-// });

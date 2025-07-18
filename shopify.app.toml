@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
-name = "Layerup"
+name = "LayerUp"
 handle = "ds-app-6"
-application_url = "https://investment-king-clay-eos.trycloudflare.com"
+application_url = "https://alberta-promo-nature-diary.trycloudflare.com"
 embedded = true
 
 [build]
@@ -23,14 +23,10 @@ api_version = "2025-04"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_themes,write_themes"
+scopes = "read_themes,write_themes,read_files,write_files"
 
 [auth]
-redirect_urls = [
-  "https://investment-king-clay-eos.trycloudflare.com/auth/callback",
-  "https://investment-king-clay-eos.trycloudflare.com/auth/shopify/callback",
-  "https://investment-king-clay-eos.trycloudflare.com/api/auth/callback"
-]
+redirect_urls = ["https://alberta-promo-nature-diary.trycloudflare.com/auth/callback", "https://alberta-promo-nature-diary.trycloudflare.com/auth/shopify/callback", "https://alberta-promo-nature-diary.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false
