@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "LayerUp"
 handle = "ds-app-6"
-application_url = "https://alberta-promo-nature-diary.trycloudflare.com"
+application_url = "https://apps-url-fallen-bios.trycloudflare.com"
 embedded = true
 
 [build]
@@ -11,7 +11,7 @@ include_config_on_deploy = true
 automatically_update_urls_on_dev = true
 
 [webhooks]
-api_version = "2025-04"
+api_version = "2024-01"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
@@ -23,10 +23,14 @@ api_version = "2025-04"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_themes,write_themes,read_files,write_files"
+scopes = "read_themes,write_themes,read_files,write_files,read_products,write_products,read_orders,write_orders"
 
 [auth]
-redirect_urls = ["https://alberta-promo-nature-diary.trycloudflare.com/auth/callback", "https://alberta-promo-nature-diary.trycloudflare.com/auth/shopify/callback", "https://alberta-promo-nature-diary.trycloudflare.com/api/auth/callback"]
+redirect_urls = [
+  "https://apps-url-fallen-bios.trycloudflare.com/auth/callback",
+  "https://apps-url-fallen-bios.trycloudflare.com/auth/shopify/callback",
+  "https://apps-url-fallen-bios.trycloudflare.com/api/auth/callback"
+]
 
 [pos]
 embedded = false

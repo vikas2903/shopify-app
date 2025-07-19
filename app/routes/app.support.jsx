@@ -158,11 +158,11 @@ export default function SupportApp() {
 
   return (
     <>
-      <Page fullWidth={true}>
+      <Page  style={{width: '90%'}}>
         <TitleBar title="Setup Request" />
 
         <Button
-          url="/app/support"
+          url="/app"
           variant="plain"
           icon={ArrowLeftIcon}
           style={{ color: "black" }}
