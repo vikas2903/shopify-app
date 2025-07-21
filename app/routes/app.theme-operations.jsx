@@ -21,7 +21,7 @@ export const loader = async ({ request }) => {
             throw new Error('Insufficient permissions. App needs read_themes scope.');
         }
 
-        const themesEndpoint = `https://${shopFull}/admin/api/2024-01/themes.json`;
+        const themesEndpoint = `https://${shopFull}/admin/api/2023-10/themes.json`;
         
         logShopifyRequest('GET', themesEndpoint);
         
@@ -45,7 +45,7 @@ export const loader = async ({ request }) => {
         }
 
         // Get theme assets
-        const assetsEndpoint = `https://${shopFull}/admin/api/2024-01/themes/${mainTheme.id}/assets.json`;
+        const assetsEndpoint = `https://${shopFull}/admin/api/2023-10/themes/${mainTheme.id}/assets.json`;
         
         logShopifyRequest('GET', assetsEndpoint);
         
@@ -110,7 +110,7 @@ export const action = async ({ request }) => {
         switch (operation) {
             case 'get_asset':
                 // Get specific asset content
-                const getAssetEndpoint = `https://${shopFull}/admin/api/2024-01/themes/${themeId}/assets.json?asset[key]=${assetKey}`;
+                const getAssetEndpoint = `https://${shopFull}/admin/api/2023-10/themes/${themeId}/assets.json?asset[key]=${assetKey}`;
                 
                 logShopifyRequest('GET', getAssetEndpoint);
                 
@@ -133,7 +133,7 @@ export const action = async ({ request }) => {
 
             case 'update_asset':
                 // Update asset content
-                const updateAssetEndpoint = `https://${shopFull}/admin/api/2024-01/themes/${themeId}/assets.json`;
+                const updateAssetEndpoint = `https://${shopFull}/admin/api/2023-10/themes/${themeId}/assets.json`;
                 const updatePayload = {
                     asset: {
                         key: assetKey,
@@ -164,7 +164,7 @@ export const action = async ({ request }) => {
 
             case 'create_asset':
                 // Create new asset
-                const createAssetEndpoint = `https://${shopFull}/admin/api/2024-01/themes/${themeId}/assets.json`;
+                const createAssetEndpoint = `https://${shopFull}/admin/api/2023-10/themes/${themeId}/assets.json`;
                 const createPayload = {
                     asset: {
                         key: assetKey,
@@ -195,7 +195,7 @@ export const action = async ({ request }) => {
 
             case 'delete_asset':
                 // Delete asset
-                const deleteAssetEndpoint = `https://${shopFull}/admin/api/2024-01/themes/${themeId}/assets.json?asset[key]=${assetKey}`;
+                const deleteAssetEndpoint = `https://${shopFull}/admin/api/2023-10/themes/${themeId}/assets.json?asset[key]=${assetKey}`;
                 
                 logShopifyRequest('DELETE', deleteAssetEndpoint);
                 
@@ -217,7 +217,7 @@ export const action = async ({ request }) => {
 
             case 'get_sections':
                 // Get theme sections
-                const sectionsEndpoint = `https://${shopFull}/admin/api/2024-01/themes/${themeId}/assets.json`;
+                const sectionsEndpoint = `https://${shopFull}/admin/api/2023-10/themes/${themeId}/assets.json`;
                 
                 logShopifyRequest('GET', sectionsEndpoint);
                 
@@ -244,7 +244,7 @@ export const action = async ({ request }) => {
 
             case 'get_theme_info':
                 // Get detailed theme information
-                const themeInfoEndpoint = `https://${shopFull}/admin/api/2024-01/themes/${themeId}.json`;
+                const themeInfoEndpoint = `https://${shopFull}/admin/api/2023-10/themes/${themeId}.json`;
                 
                 logShopifyRequest('GET', themeInfoEndpoint);
                 

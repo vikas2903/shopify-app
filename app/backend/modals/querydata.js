@@ -32,4 +32,5 @@ const queryDataSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("QueryData", queryDataSchema);
+
+export default mongoose.models.QueryData ||  mongoose.model("QueryData", queryDataSchema);

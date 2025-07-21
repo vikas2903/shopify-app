@@ -184,7 +184,7 @@ export default function App() {
           <Link to="/app/sections">Sections</Link>
           <Link to="/app/installation">Wishlist</Link>
           <Link to="/app/support">Support</Link>
-          <Link to="/app/debug">Debug</Link>
+          {/* <Link to="/app/debug">Debug</Link> */}
         </NavMenu>
         <Outlet />
       </ExploreContextProvider>

@@ -9,6 +9,7 @@ import {
   OptionList,
   Select,
   Banner,
+  Link
 } from "@shopify/polaris";
 import { ArrowLeftIcon } from "@shopify/polaris-icons";
 import { TitleBar } from "@shopify/app-bridge-react";
@@ -158,22 +159,26 @@ export default function SupportApp() {
 
   return (
     <>
-      <Page  style={{width: '90%'}}>
+      <Page  fullWidth>
         <TitleBar title="Setup Request" />
 
-        <Button
+        {/* <Button
           url="/app"
           variant="plain"
           icon={ArrowLeftIcon}
           style={{ color: "black" }}
         >
           Back
-        </Button>
+        </Button>  */}
 
-        <br />
-        <br />
-
-        <Layout>
+        <Banner onDismiss={() => {}} style={{marginBottom: "10px"}}>
+      <p> 
+        App Dashboard – Your Storefront, Your Style{' '}
+        <Link url="/app">Back</Link>
+      </p>
+    </Banner>
+ 
+        <Layout fullWidth>
           <Layout.Section>
             <Card title="Support App" style={{ padding: "40px 10px" }}>
               {sessionWarning && (
@@ -262,8 +267,7 @@ export default function SupportApp() {
                 </FormLayout>
               </form>
             </Card>
-            <br />
-            <br />
+          
           </Layout.Section>
         </Layout>
       </Page>

@@ -25,7 +25,7 @@ export const loader = async ({ request }) => {
         console.log("Access Token:", accessToken);
 
         // Fetch themes from Shopify API with updated version
-        const response = await fetch(`https://${shopFull}/admin/api/2024-01/themes.json`, {
+        const response = await fetch(`https://${shopFull}/admin/api/2023-10/themes.json`, {
             method: "GET",
             headers: {
                 "X-Shopify-Access-Token": accessToken,
@@ -98,7 +98,7 @@ export const action = async ({ request }) => {
             case 'get_theme_assets':
                 // Fetch theme assets
                 const assetsResponse = await fetch(
-                    `https://${shopFull}/admin/api/2024-01/themes/${themeId}/assets.json`,
+                    `https://${shopFull}/admin/api/2023-10/themes/${themeId}/assets.json`,
                     {
                         method: "GET",
                         headers: {
