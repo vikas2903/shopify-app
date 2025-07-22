@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "LayerUp"
 handle = "ds-app-6"
-application_url = "https://bingo-again-counter-joining.trycloudflare.com"
+application_url = "https://skill-malaysia-standard-results.trycloudflare.com"
 embedded = true
 
 [build]
@@ -22,7 +22,7 @@ api_version = "2024-01"
 scopes = "read_themes,write_themes,read_files,write_files,read_products,"
 
 [auth]
-redirect_urls = ["https://bingo-again-counter-joining.trycloudflare.com/auth/callback", "https://bingo-again-counter-joining.trycloudflare.com/auth/shopify/callback", "https://bingo-again-counter-joining.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://skill-malaysia-standard-results.trycloudflare.com/auth/callback", "https://skill-malaysia-standard-results.trycloudflare.com/auth/shopify/callback", "https://skill-malaysia-standard-results.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

@@ -124,73 +124,23 @@ import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { authenticate } from "../shopify.server";
 import '../assets/style/styles.css';
 import { ExploreContextProvider } from '../context/Explorecontext.jsx';
-import {verifyShopifyHmac} from '../utils/verifyhmac.js';
+
 import Store from "../backend/modals/store.js";
-import mongoose from "mongoose"; 
+import mongoose from "mongoose";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
-// export const loader = async ({ request }) => {
-//   // Authenticate Shopify admin
-//   await authenticate.admin(request);
-//   const { session } = await authenticate.admin(request);
-
-//   const shop = session.shop;
-//   const accessToken = session.accessToken;
-
-//   console.log("🔑 Access token received for shop:", shop);
-
-//   // Connect MongoDB if not already connected
-//   if (mongoose.connection.readyState === 0) {
-//     await mongoose.connect(process.env.MONGO_URI, {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//     });
-//     console.log("✅ MongoDB connected");
-//   }
-
-//   // Find or create store
-//   let store = await Store.findOne({ shop });
-
-//   if (store) {
-//     store.accessToken = accessToken;
-//     store.updatedAt = new Date();
-//     console.log("🔄 Store updated in DB");
-//   } else {
-//     store = new Store({
-//       shop,
-//       accessToken,
-//       updatedAt: new Date(),
-//     });
-//     console.log("🆕 Store created in DB");
-//   }
-
-//   await store.save();
-//   console.log("✅ Access token saved to MongoDB for:", shop);
-
-//   // Return data for AppProvider
-//   return { apiKey: process.env.SHOPIFY_API_KEY || "" };
-// };
-
 export const loader = async ({ request }) => {
-  const url = new URL(request.url);
-  const params = Object.fromEntries(url.searchParams);
-
-  // ✅ Step 1: Verify HMAC
-  const isValid = verifyShopifyHmac(params, process.env.SHOPIFY_API_SECRET);
-  if (!isValid) {
-    console.error("❌ Invalid HMAC detected", params);
-    throw new Response("Forbidden: Invalid HMAC", { status: 403 });
-  }
-
-  // ✅ Step 2: Authenticate Shopify session
+  // Authenticate Shopify admin
+  await authenticate.admin(request);
   const { session } = await authenticate.admin(request);
+
   const shop = session.shop;
   const accessToken = session.accessToken;
 
   console.log("🔑 Access token received for shop:", shop);
 
-  // ✅ Step 3: Save to MongoDB
+  // Connect MongoDB if not already connected
   if (mongoose.connection.readyState === 0) {
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
@@ -199,6 +149,7 @@ export const loader = async ({ request }) => {
     console.log("✅ MongoDB connected");
   }
 
+  // Find or create store
   let store = await Store.findOne({ shop });
 
   if (store) {
@@ -217,7 +168,7 @@ export const loader = async ({ request }) => {
   await store.save();
   console.log("✅ Access token saved to MongoDB for:", shop);
 
-  // ✅ Step 4: Return App data
+  // Return data for AppProvider
   return { apiKey: process.env.SHOPIFY_API_KEY || "" };
 };
 

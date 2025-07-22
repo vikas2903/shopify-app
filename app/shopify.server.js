@@ -33,6 +33,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+ 
 app.use((req, res, next) => {
   let data = "";
   req.setEncoding("utf8");
@@ -267,3 +268,4 @@ export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
 
 console.log("shopify.server.js loaded successfully ✅");
+
