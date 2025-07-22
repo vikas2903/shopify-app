@@ -22,7 +22,7 @@
 
 import crypto from "crypto";
 
-function verifyShopifyHmac(params, secret) {
+export  function verifyShopifyHmac(params, secret) {
   const { hmac, ...rest } = params;
 
   const message = Object.keys(rest)
@@ -42,4 +42,3 @@ function verifyShopifyHmac(params, secret) {
 }
 
 
-export default verifyShopifyHmac;

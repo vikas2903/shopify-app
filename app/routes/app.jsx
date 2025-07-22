@@ -124,7 +124,7 @@ import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { authenticate } from "../shopify.server";
 import '../assets/style/styles.css';
 import { ExploreContextProvider } from '../context/Explorecontext.jsx';
-import verifyShopifyHmac from '../utils/verifyhmac.js';
+import {verifyShopifyHmac} from '../utils/verifyhmac.js';
 import Store from "../backend/modals/store.js";
 import mongoose from "mongoose"; 
 
