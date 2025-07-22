@@ -194,7 +194,7 @@ export const loader = () => {
                             the
                             app's features, ensuring it works as
                             expected.</li>
-                        <li><b>rovide Information: </b>To send you relevant
+                        <li><b>Provide Information: </b>To send you relevant
                             product or service updates, promotions, or
                             notifications regarding the app.</li>
                     </ul>
