@@ -6,6 +6,7 @@ import { authenticate } from '../shopify.server.js'
 import {json} from '@remix-run/node'
 import { useLoaderData } from "@remix-run/react";
  export const loader = async ({ request }) => {
+  
      try {
          const { session } = await authenticate.admin(request);
  
