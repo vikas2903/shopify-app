@@ -26,7 +26,7 @@ dotenv.config();
 const app = express();
 
 app.use("/webhooks", express.raw({ type: "*/*" }));
-// app.use(express.json());
+app.use(express.json());
 // Serve the uploads folder
 
 const __filename = fileURLToPath(import.meta.url);

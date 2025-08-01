@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "LayerUp"
 handle = "ds-app-6"
-application_url = "https://bottom-jenny-prayers-basename.trycloudflare.com"
+application_url = "https://claims-ordinary-effective-albert.trycloudflare.com"
 embedded = true
 
 [build]
@@ -19,10 +19,10 @@ api_version = "2024-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_themes,write_themes,read_files,write_files,read_products,"
+scopes = "read_themes,write_themes"
 
 [auth]
-redirect_urls = ["https://bottom-jenny-prayers-basename.trycloudflare.com/auth/callback", "https://bottom-jenny-prayers-basename.trycloudflare.com/auth/shopify/callback", "https://bottom-jenny-prayers-basename.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://claims-ordinary-effective-albert.trycloudflare.com/auth/callback", "https://claims-ordinary-effective-albert.trycloudflare.com/auth/shopify/callback", "https://claims-ordinary-effective-albert.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

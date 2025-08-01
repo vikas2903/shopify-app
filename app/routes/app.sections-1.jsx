@@ -1,6 +1,14 @@
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { Card, Page, BlockStack, Text, Select, Button } from "@shopify/polaris";
+import {
+  Card,
+  Page,
+  BlockStack,
+  Text,
+  Select,
+  Button,
+  InlineStack,
+} from "@shopify/polaris";
 import { useState } from "react";
 import { authenticate } from "../shopify.server";
 
@@ -20,9 +28,10 @@ export const loader = async ({ request }) => {
     }
   `);
   const { data } = await response.json();
+
   return json({
-    themes: data.themes.edges.map(edge => edge.node),
-    shop: session.shop
+    themes: data.themes.edges.map((edge) => edge.node),
+    shop: session.shop,
   });
 };
 
@@ -42,46 +51,59 @@ export default function ThemesPage() {
   }));
 
   const selectedTheme = themes.find((t) => t.id === selectedThemeId);
-  const themeId = selectedTheme?.id.split("/").pop(); // Get plain ID from gid
 
+  // Helper to extract plain ID from GID
+  const getThemeId = (gid) =>
+    typeof gid === "string" && gid.includes("Theme/") ? gid.split("Theme/")[1] : "";
+
+  const themeId = getThemeId(selectedTheme?.id);
   const themeEditorUrl = `https://${shop}/admin/themes/${themeId}/editor`;
   const codeEditorUrl = `https://${shop}/admin/themes/${themeId}`;
 
   return (
     <Page title="Store Themes">
-      <BlockStack gap="400">
-        <Select
-          label="Select a theme"
-          options={themeOptions}
-          onChange={handleSelectChange}
-          value={selectedThemeId}
-        />
+      {themes.length > 0 ? (
+        <BlockStack gap="400">
+          <Select
+            label="Select a theme"
+            options={themeOptions}
+            onChange={handleSelectChange}
+            value={selectedThemeId}
+          />
 
-        <Card>
-          <Text variant="bodyMd">
-            Selected theme:{" "}
-            {themes.find((t) => t.id === selectedThemeId)?.name || "None"}
-          </Text>
+          <Card>
+            <BlockStack gap="200">
+              <Text variant="bodyMd">
+                Selected theme: {selectedTheme?.name || "None"}
+              </Text>
 
-          {selectedTheme && (
-            <Button
-              onClick={() => window.open(themeEditorUrl, "_blank")}
-              variant="primary"
-            >
-              Customize
-            </Button>
-          )}
+              <InlineStack gap="300">
+                {selectedTheme && (
+                  <Button
+                    onClick={() => window.open(themeEditorUrl, "_blank", "noopener,noreferrer")}
+                    variant="primary"
+                  >
+                    Customize
+                  </Button>
+                )}
 
-          {selectedTheme && (
-            <Button
-              onClick={() => window.open(codeEditorUrl, "_blank")}
-              variant="primary"
-            >
-              Edit Code
-            </Button>
-          )}
-        </Card>
-      </BlockStack>
+                {selectedTheme && (
+                  <Button
+                    onClick={() => window.open(codeEditorUrl, "_blank", "noopener,noreferrer")}
+                    variant="primary"
+                  >
+                    Edit Code
+                  </Button>
+                )}
+              </InlineStack>
+            </BlockStack>
+          </Card>
+        </BlockStack>
+      ) : (
+        <Text variant="bodyMd" as="p">
+          No themes found in this store.
+        </Text>
+      )}
     </Page>
   );
 }
