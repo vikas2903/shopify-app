@@ -15,7 +15,7 @@ import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 
-import crypto from "crypto";
+// import crypto from "crypto";
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -48,40 +48,40 @@ app.use(cors());
 app.use('/images', express.static(path.join(__dirname, './public')));
 
 
-const sigHeaderName = "X-Shopify-Hmac-Sha256";
-const sigHashAlg = "sha256";
-const secret = process.env.SHOPIFY_API_SECRET;
+// const sigHeaderName = "X-Shopify-Hmac-Sha256";
+// const sigHashAlg = "sha256";
+// const secret = process.env.SHOPIFY_API_SECRET;
 
 // Perform HMAC verification
-function authenticateSignature(req, res, next) {
-  if (req.method !== "POST") {
-    return next("Request must be POST");
-  }
+// function authenticateSignature(req, res, next) {
+//   if (req.method !== "POST") {
+//     return next("Request must be POST");
+//   }
 
-  if (!req.rawBody) {
-    return next("Request body empty");
-  }
+//   if (!req.rawBody) {
+//     return next("Request body empty");
+//   }
 
-  const body = req.rawBody;
-  const hmacHeader = req.get(sigHeaderName);
+//   const body = req.rawBody;
+//   const hmacHeader = req.get(sigHeaderName);
 
-  // Create a hash based on the parsed body
-  const hash = crypto
-    .createHmac(sigHashAlg, secret)
-    .update(body, "utf8", "hex")
-    .digest("base64");
+//   // Create a hash based on the parsed body
+//   const hash = crypto
+//     .createHmac(sigHashAlg, secret)
+//     .update(body, "utf8", "hex")
+//     .digest("base64");
 
-  // Compare the created hash with the value of the X-Shopify-Hmac-Sha256 Header
-  if (hash !== hmacHeader) {
-    return res.status(401).send({
-      message: `Request body digest (${hash}) did not match ${sigHeaderName} (${hmacHeader})`,
-    });
-  }
+//   // Compare the created hash with the value of the X-Shopify-Hmac-Sha256 Header
+//   if (hash !== hmacHeader) {
+//     return res.status(401).send({
+//       message: `Request body digest (${hash}) did not match ${sigHeaderName} (${hmacHeader})`,
+//     });
+//   }
 
-  return next();
-}
+//   return next();
+// }
 
-app.use("/webhooks", authenticateSignature);
+// app.use("/webhooks", authenticateSignature);
 
 // export const MONTHLY_PLAN = "Monthly subscription";
 // export const ANNUAL_PLAN = "Annual subscription";
@@ -99,59 +99,59 @@ app.use("/webhooks", authenticateSignature);
 //   });
 // };
 
-function verifyHmac(rawBody, hmacHeader, secret) {
-  const generatedHmac = crypto
-    .createHmac("sha256", secret)
-    .update(rawBody, "utf8")
-    .digest("base64");
+// function verifyHmac(rawBody, hmacHeader, secret) {
+//   const generatedHmac = crypto
+//     .createHmac("sha256", secret)
+//     .update(rawBody, "utf8")
+//     .digest("base64");
 
-  try {
-    return crypto.timingSafeEqual(
-      Buffer.from(generatedHmac, "base64"),
-      Buffer.from(hmacHeader, "base64"),
-    );
-  } catch {
-    return false;
-  }
-}
+//   try {
+//     return crypto.timingSafeEqual(
+//       Buffer.from(generatedHmac, "base64"),
+//       Buffer.from(hmacHeader, "base64"),
+//     );
+//   } catch {
+//     return false;
+//   }
+// }
 
-app.post("/webhooks/customers/data_request", (req, res) => {
-  const hmac = req.headers["x-shopify-hmac-sha256"];
-  if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-    console.log("❌ Invalid HMAC - data_request");
-    return res.status(401).send("Unauthorized");
-  }
+// app.post("/webhooks/customers/data_request", (req, res) => {
+//   const hmac = req.headers["x-shopify-hmac-sha256"];
+//   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
+//     console.log("❌ Invalid HMAC - data_request");
+//     return res.status(401).send("Unauthorized");
+//   }
 
-  const payload = JSON.parse(req.body.toString("utf8"));
-  console.log("📦 Customer data request webhook:", payload);
-  res.sendStatus(200);
-});
+//   const payload = JSON.parse(req.body.toString("utf8"));
+//   console.log("📦 Customer data request webhook:", payload);
+//   res.sendStatus(200);
+// });
 
 // 4️⃣ GDPR: Customer redact
-app.post("/webhooks/customers/redact", (req, res) => {
-  const hmac = req.headers["x-shopify-hmac-sha256"];
-  if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-    console.log("❌ Invalid HMAC - customers/redact");
-    return res.status(401).send("Unauthorized");
-  }
+// app.post("/webhooks/customers/redact", (req, res) => {
+//   const hmac = req.headers["x-shopify-hmac-sha256"];
+//   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
+//     console.log("❌ Invalid HMAC - customers/redact");
+//     return res.status(401).send("Unauthorized");
+//   }
 
-  const payload = JSON.parse(req.body.toString("utf8"));
-  console.log("🧹 Customer redact webhook:", payload);
-  res.sendStatus(200);
-});
+//   const payload = JSON.parse(req.body.toString("utf8"));
+//   console.log("🧹 Customer redact webhook:", payload);
+//   res.sendStatus(200);
+// });
 
 // 5️⃣ GDPR: Shop redact
-app.post("/webhooks/shop/redact", (req, res) => {
-  const hmac = req.headers["x-shopify-hmac-sha256"];
-  if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-    console.log("❌ Invalid HMAC - shop/redact");
-    return res.status(401).send("Unauthorized");
-  }
+// app.post("/webhooks/shop/redact", (req, res) => {
+//   const hmac = req.headers["x-shopify-hmac-sha256"];
+//   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
+//     console.log("❌ Invalid HMAC - shop/redact");
+//     return res.status(401).send("Unauthorized");
+//   }
 
-  const payload = JSON.parse(req.body.toString("utf8"));
-  console.log("🏪 Shop redact webhook:", payload);
-  res.sendStatus(200);
-});
+//   const payload = JSON.parse(req.body.toString("utf8"));
+//   console.log("🏪 Shop redact webhook:", payload);
+//   res.sendStatus(200);
+// });
 
 const connectDB = async () => {
   try {
@@ -179,7 +179,7 @@ const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET,
   apiVersion: ApiVersion.January25,
-  scopes: process.env.SCOPES?.split(",") || [],
+  scopes: ["read_themes", "write_themes"],
   appUrl: process.env.SHOPIFY_APP_URL,
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
@@ -221,6 +221,11 @@ const shopify = shopifyApp({
     afterAuth: async ({ session, billing, req, res }) => {
       const shop = session.shop;
       const accessToken = session.accessToken;
+      const scopes = session.scope;
+
+      console.log("🔐 Auth completed for shop:", shop);
+      console.log("📋 Granted scopes:", scopes);
+      console.log("🔑 Access token present:", !!accessToken);
 
       // await connectDatabase();
 
@@ -237,7 +242,7 @@ const shopify = shopifyApp({
       }
 
       await store.save();
-      console.log("✅ Access token saved to MongoDB for:", shop);
+      // console.log("✅ Access token saved to MongoDB for:", shop);
 
       // Redirect to app home in Shopify admin
       const redirectUrl = `https://admin.shopify.com/store/${shop.replace(".myshopify.com", "")}/apps/${process.env.SHOPIFY_APP_NAME}`;
