@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "LayerUp"
 handle = "ds-app-6"
-application_url = "https://burner-retired-newman-gdp.trycloudflare.com"
+application_url = "https://ide-solve-electro-clara.trycloudflare.com"
 embedded = true
 
 [build]
@@ -22,7 +22,7 @@ api_version = "2024-01"
 scopes = "read_themes,write_themes,read_products"
 
 [auth]
-redirect_urls = ["https://burner-retired-newman-gdp.trycloudflare.com/auth/callback", "https://burner-retired-newman-gdp.trycloudflare.com/auth/shopify/callback", "https://burner-retired-newman-gdp.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://ide-solve-electro-clara.trycloudflare.com/auth/callback", "https://ide-solve-electro-clara.trycloudflare.com/auth/shopify/callback", "https://ide-solve-electro-clara.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

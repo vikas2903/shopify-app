@@ -1,13 +1,21 @@
+{% if template.name == 'product' %}
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <style>
   :root {
     --drawerColor: #64112f;
   }
-  .progress-wrapper { margin-bottom: 2rem; }
+ 
+.progress-wrapper {
+    margin-bottom: 2rem;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 6px;
+}
+  
   .progress-container-bg-color {
-    background-image: linear-gradient(-65deg, #fff, #fff);
-    height: 80px;
+    background: #fff;
+    height: 95px;
     padding: 3px 0;
   }
   .progress-container-wrap {
@@ -15,13 +23,13 @@
     text-align: center;
     margin-bottom: 60px;
   }
-  .progress-container-wrap .progress-container {
+  .progress-container {
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin: 0 50px 0 40px;
+    margin: 0 50px;
   }
-  .progress-container-wrap .progress-container::before {
+  .progress-container::before {
     content: "";
     background: #DCDCDC;
     position: absolute;
@@ -32,7 +40,10 @@
     width: 100%;
     z-index: 0;
   }
-  .progress-container-wrap .progress {
+  #progress {
+    display: block !important;
+}
+  .progress {
     background: var(--drawerColor);
     position: absolute;
     top: 50%;
@@ -43,17 +54,16 @@
     transition: 0.4s ease;
   }
   .progress_offer_wrap {
-    background-image: linear-gradient(-65deg, var(--drawerColor), var(--drawerColor));
+    background: var(--drawerColor);
     text-align: center;
     font-size: 13px;
-    letter-spacing: normal;
   }
   .progress_offer_wrap p {
-    margin: 5px 0 !important;
+    margin: 5px 0;
     color: #fff;
     padding: 2px 2px 4px 2px;
   }
-  .progress-container-wrap .circle {
+  .circle {
     background: #fff;
     color: #999;
     border-radius: 50%;
@@ -62,52 +72,66 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #64112f !important;
-    transition: 0.4s ease;
+    border: 2px solid #64112f;
     position: relative;
+    transition: 0.4s ease;
   }
-  .progress-container-wrap .circle.active {
-    border-color: var(--drawerColor);
+  .circle.active {
     background: var(--drawerColor);
     color: #fff;
   }
-  .progress-container-wrap .circle img {
+  .circle img {
     border-radius: 50%;
     filter: saturate(0.5);
   }
-  .progress-container-wrap .circle span {
-    margin-top: 95px;
-    width: 117px !important;
+  .circle span {
     position: absolute;
-    line-height: 1;
-  }
-  .progress-container-wrap p {
+    top: 100%;
+    margin-top: 10px;
+    width: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
     color: #000;
-    font-size: 9px;
-    padding: 0 4px !important;
   }
-  .progress-container-wrap .circle.active::after {
+  .circle.active::after {
     content: '';
-    background-image: url('https://cdn.shopify.com/s/files/1/0361/8553/8692/files/active-right-sign.png?v=1732347738');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    background: url('https://cdn.shopify.com/s/files/1/0361/8553/8692/files/active-right-sign.png?v=1732347738') no-repeat center/contain;
     position: absolute;
-    top: -39%;
+    top: -30%;
     left: 10px;
     height: 20px;
     width: 20px;
-    z-index: 0;
   }
-  div#progress { display: block; }
-  .progress-container { height: 100% !important; overflow: unset !important; background: transparent !important; }
   .progress-note p {
     padding: 8px 14px;
     text-align: center;
     margin: 0;
     font-size: 14px;
-    font-family: 'GOTHAM-2';
     color: #64112f;
+  }
+
+  @media(max-width:767px){
+    .progress-container {
+    margin: 0 21px !important;
+}
+.circle span {
+    position: absolute;
+    top: 100%;
+    margin-top: 10px;
+    width: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #000;
+    line-height: normal;
+}
+.progress-wrapper {
+    margin-bottom: 2rem;
+    border: 1px solid #eee;
+    padding: 0px;
+    border-radius: 6px;
+}
   }
 </style>
 
@@ -122,30 +146,34 @@
         <div class="progress" id="progress"></div>
 
         <div class="circle">
-          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px; height: auto;" loading="lazy">
-          <span><p>{{ block.settings.cp-text1 }}</p></span>
+          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px;" loading="lazy">
+          <span>{{ block.settings.cp-text1 }}</span>
         </div>
         <div class="circle">
-          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px; height: auto;" loading="lazy">
-          <span><p>{{ block.settings.cp-text2 }}</p></span>
+          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px;" loading="lazy">
+          <span>{{ block.settings.cp-text2 }}</span>
         </div>
         <div class="circle">
-          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px; height: auto;" loading="lazy">
-          <span><p>{{ block.settings.cp-text3 }}</p></span>
+          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px;" loading="lazy">
+          <span>{{ block.settings.cp-text3 }}</span>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- <script>
-  const priceRange1 = parseFloat("{{ block.settings.cp-price-1 }}") || 0;
-  const priceRange2 = parseFloat("{{ block.settings.cp-price-2 }}") || 0;
-  const priceRange3 = parseFloat("{{ block.settings.cp-price-3 }}") || 0;
+<script>
+  const priceRanges = [
+    parseFloat("{{ block.settings.cp-price-1 }}") || 0,
+    parseFloat("{{ block.settings.cp-price-2 }}") || 0,
+    parseFloat("{{ block.settings.cp-price-3 }}") || 0,
+  ].sort((a, b) => a - b);
 
-  const priceText1 = `{{ block.settings.cp-text1 | escape }}`;
-  const priceText2 = `{{ block.settings.cp-text2 | escape }}`;
-  const priceText3 = `{{ block.settings.cp-text3 | escape }}`;
+  const priceTexts = [
+    `{{ block.settings.cp-text1 | escape }}`,
+    `{{ block.settings.cp-text2 | escape }}`,
+    `{{ block.settings.cp-text3 | escape }}`
+  ];
 
   function updateProgressBar(cartTotal) {
     const progressBar = document.getElementById('progress');
@@ -153,27 +181,25 @@
     const offerTextElement = document.querySelector('.progress_offer_wrap p');
 
     let width = '0%';
-    let text = "Add items to start unlocking offers!";
+    let activeCount = 0;
 
-    circles.forEach(c => c.classList.remove('active'));
-
-    if (cartTotal >= priceRange1 && cartTotal < priceRange2) {
-      width = '25%';
-      text = priceText1;
-      circles[0]?.classList.add('active');
-    } else if (cartTotal >= priceRange2 && cartTotal < priceRange3) {
-      width = '50%';
-      text = priceText2;
-      circles[0]?.classList.add('active');
-      circles[1]?.classList.add('active');
-    } else if (cartTotal >= priceRange3) {
+    if (cartTotal >= priceRanges[2]) {
       width = '100%';
-      text = priceText3;
-      circles.forEach(c => c.classList.add('active'));
+      activeCount = 3;
+    } else if (cartTotal >= priceRanges[1]) {
+      width = '66%';
+      activeCount = 2;
+    } else if (cartTotal >= priceRanges[0]) {
+      width = '33%';
+      activeCount = 1;
     }
 
     if (progressBar) progressBar.style.width = width;
-    if (offerTextElement) offerTextElement.textContent = text;
+    if (offerTextElement) offerTextElement.textContent = priceTexts[activeCount - 1] || priceTexts[0];
+
+    circles.forEach((c, i) => {
+      c.classList.toggle('active', i < activeCount);
+    });
   }
 
   function getCartDataAndUpdate() {
@@ -185,112 +211,57 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     getCartDataAndUpdate();
-    setInterval(getCartDataAndUpdate, 5000); // optional: increase interval to reduce flicker
+    setInterval(getCartDataAndUpdate, 3000);
   });
-</script> -->
-
-<script>
-  const priceRanges = [
-  parseFloat("{{ block.settings.cp-price-1 }}") || 0,
-  parseFloat("{{ block.settings.cp-price-2 }}") || 0,
-  parseFloat("{{ block.settings.cp-price-3 }}") || 0,
-];
-
-// Sort ranges strictly ascending
-priceRanges.sort((a, b) => a - b);
-
-const priceText1 = `{{ block.settings.cp-text1 | escape }}`;
-const priceText2 = `{{ block.settings.cp-text2 | escape }}`;
-const priceText3 = `{{ block.settings.cp-text3 | escape }}`;
-
-function updateProgressBar(cartTotal) {
-  const progressBar = document.getElementById('progress');
-  const circles = document.querySelectorAll('.circle');
-  const offerTextElement = document.querySelector('.progress_offer_wrap p');
-
-  let width = '0%';
-  let text = "Add items to start unlocking offers!";
-
-  circles.forEach(c => c.classList.remove('active'));
-
-  if (cartTotal >= priceRanges[0] && cartTotal < priceRanges[1]) {
-    width = '25%';
-    text = priceText1;
-    circles[0]?.classList.add('active');
-  } else if (cartTotal >= priceRanges[1] && cartTotal < priceRanges[2]) {
-    width = '50%';
-    text = priceText2;
-    circles[0]?.classList.add('active');
-    circles[1]?.classList.add('active');
-  } else if (cartTotal >= priceRanges[2]) {
-    width = '100%';
-    text = priceText3;
-    circles.forEach(c => c.classList.add('active'));
-  }
-
-  if (progressBar) progressBar.style.width = width;
-  if (offerTextElement) offerTextElement.textContent = text;
-}
-
-function getCartDataAndUpdate() {
-  fetch('/cart.js')
-    .then(res => res.ok ? res.json() : Promise.reject("Fetch error"))
-    .then(data => updateProgressBar(data.total_price / 100))
-    .catch(console.error);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  getCartDataAndUpdate();
-  setInterval(getCartDataAndUpdate, 3000);
-});
-
 </script>
+{% endif %}
+
 {% schema %}
 {
   "name": "Ds-Progress bar",
-  "target":"section",
+  "target": "section",
   "settings": [
     {
       "type": "text",
       "id": "cart-heading",
-      "label": "Progressbar Heading",
-      "info": "Free Gift Available at Checkout"
+      "label": "Progress Bar Heading",
+      "default": "Free Gift Available at Checkout"
     },
     {
       "type": "text",
       "id": "cp-text1",
-      "label": "Price Range Text-1",
-      "info": "e.g: Spend ₹1000 – Get a 10% discount on an order"
+      "label": "Milestone 1 Text",
+      "default": "Spend ₹1000 – Get a FREE gift"
     },
     {
       "type": "text",
       "id": "cp-text2",
-      "label": "Price Range Text-2",
-      "info": "e.g: Spend ₹2000 – Get a 15% discount on an order"
+      "label": "Milestone 2 Text",
+      "default": "Spend ₹2000 – Get 2 FREE gifts"
     },
     {
       "type": "text",
       "id": "cp-text3",
-      "label": "Price Range Text-3",
-      "info": "e.g: Spend ₹3000 – Get a 20% discount on an order"
+      "label": "Milestone 3 Text",
+      "default": "Spend ₹3000 – Get a Premium Gift"
     },
     {
       "type": "text",
       "id": "cp-price-1",
-      "label": "Price Range Amount -1",
-      "info": "e.g: 1000"
+      "label": "Price Range 1 (₹)",
+      "default": "1000"
     },
     {
       "type": "text",
       "id": "cp-price-2",
-      "label": "Price Range Amount -2",
-      "info": "e.g: 2000"
+      "label": "Price Range 2 (₹)",
+      "default": "2000"
     },
     {
       "type": "text",
       "id": "cp-price-3",
-      "label": "Price Range Amount -3",
-      "info": "e.g: 3000"
+      "label": "Price Range 3 (₹)",
+      "default": "3000"
     }
   ]
 }

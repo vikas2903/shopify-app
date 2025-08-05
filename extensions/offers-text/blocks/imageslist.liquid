@@ -1,1 +1,236 @@
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"> <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> <style> :root { --image-height: {{ block.settings.image_height }}px; --border-radius: {{ block.settings.border_radius }}%; --font-size: {{ block.settings.font_size }}rem; --section-margin-y: {{block.settings.section-margin-y}}px; --border-size:{{block.settings.border_size}}px; --border-color:{{block.settings.border_color}}px; } .logo-container::-webkit-scrollbar { display: none; } .logo-container { padding: .5rem 0 2rem 0; display: flex; flex-wrap: nowrap; justify-content: center; gap: 1rem; overflow-x: scroll; } @media(max-width:767px){ .logo-container {    justify-content: flex-start;} } .logo-item { padding: 10px 0 20px 0; box-sizing: border-box; text-align: center; flex: 0 0 calc(100% / 10); display: flex; align-items: center; justify-content: center; } .logo-item a { display: block; height: var(--image-height); width: var(--image-height); text-decoration: none; } .logo-item img { width: 100%; height: 100%; border-radius: var(--border-radius); border: var(--border-size) solid var(--border-color); object-fit: cover; display: block; object-position: top; } .logo-item span { font-size: var(--font-size); margin-top: 4px; color: #000; display: block; } @media (max-width: 767px) { .logo-item span { font-size:0.6rem; } .logo-container { padding: 1rem 0 1.5rem; display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 1rem; flex-direction: row; overflow-x: scroll; } .logo-item { flex: 0 0 calc(100% / 30px); } } </style> <div class="logo-container"> {% if block.settings.image1 != blank %} <div class="logo-item"> <a href="{{ block.settings.url1 }}"> <img src="{{ block.settings.image1 | img_url: '525x' }}" alt="{{ block.settings.image1.alt | escape }}"> <span class="logo-heading">{{ block.settings.image1.alt }}</span> </a> </div> {% endif %} {% if block.settings.image2 != blank %} <div class="logo-item"> <a href="{{ block.settings.url2 }}"> <img src="{{ block.settings.image2 | img_url: '525x' }}" alt="{{ block.settings.image2.alt | escape }}"> <span class="logo-heading">{{ block.settings.image2.alt }}</span> </a> </div> {% endif %} {% if block.settings.image3 != blank %} <div class="logo-item"> <a href="{{ block.settings.url3 }}"> <img src="{{ block.settings.image3 | img_url: '525x' }}" alt="{{ block.settings.image3.alt | escape }}"> <span class="logo-heading">{{ block.settings.image3.alt }}</span> </a> </div> {% endif %} {% if block.settings.image4 != blank %} <div class="logo-item"> <a href="{{ block.settings.url4 }}"> <img src="{{ block.settings.image4 | img_url: '525x' }}" alt="{{ block.settings.image4.alt | escape }}"> <span class="logo-heading">{{ block.settings.image4.alt }}</span> </a> </div> {% endif %} {% if block.settings.image5 != blank %} <div class="logo-item"> <a href="{{ block.settings.url5 }}"> <img src="{{ block.settings.image5 | img_url: '525x' }}" alt="{{ block.settings.image5.alt | escape }}"> <span class="logo-heading">{{ block.settings.image5.alt }}</span> </a> </div> {% endif %} {% if block.settings.image6 != blank %} <div class="logo-item"> <a href="{{ block.settings.url6 }}"> <img src="{{ block.settings.image6 | img_url: '525x' }}" alt="{{ block.settings.image6.alt | escape }}"> <span class="logo-heading">{{ block.settings.image6.alt }}</span> </a> </div> {% endif %} {% if block.settings.image7 != blank %} <div class="logo-item"> <a href="{{ block.settings.url7 }}"> <img src="{{ block.settings.image7 | img_url: '525x' }}" alt="{{ block.settings.image7.alt | escape }}"> <span class="logo-heading">{{ block.settings.image7.alt }}</span> </a> </div> {% endif %} {% if block.settings.image8 != blank %} <div class="logo-item"> <a href="{{ block.settings.url8 }}"> <img src="{{ block.settings.image8 | img_url: '525x' }}" alt="{{ block.settings.image8.alt | escape }}"> <span class="logo-heading">{{ block.settings.image8.alt }}</span> </a> </div> {% endif %} </div> {% schema %} { "name": "DS-Subcollections List", "target": "section", "settings": [ { "type": "text", "id": "heading", "label": "Heading", "default": "Brand Name" }, { "type": "range", "id": "border_size", "label": "Border size (px)", "min": 1, "max": 5, "step": 1, "default": 2 }, { "type": "color", "id": "border_color", "label": "Border Color", "default": "#000000" }, { "type": "range", "id": "image_height", "label": "Image Height (px)", "min": 60, "max": 300, "step": 5, "default": 85 }, { "type": "range", "id": "border_radius", "label": "Border Radius (%)", "min": 0, "max": 100, "default": 50 }, { "type": "range", "id": "font_size", "label": "Title Font Size (rem)", "min": 0.5, "max": 3, "step": 0.1, "default": 1.4 }, { "type": "range", "id": "section-margin-y", "label": "Section Margin (px)", "min": 20, "max": 100, "step": 5, "default": 20 }, { "type": "range", "id": "section-margin-x", "label": "Section Margin (px)", "min": 20, "max": 100, "step": 5, "default": 20 }, { "type": "image_picker", "id": "image1", "label": "Image", }, { "type": "url", "id": "url1", "label": "URL" }, { "type": "image_picker", "id": "image2", "label": "Image" }, { "type": "url", "id": "url2", "label": "URL" }, { "type": "image_picker", "id": "image3", "label": "Image" }, { "type": "url", "id": "url3", "label": "URL" }, { "type": "image_picker", "id": "image4", "label": "Image" }, { "type": "url", "id": "url4", "label": "URL" }, { "type": "image_picker", "id": "image5", "label": "Image" }, { "type": "url", "id": "url5", "label": "URL" }, { "type": "image_picker", "id": "image6", "label": "Image" }, { "type": "url", "id": "url6", "label": "URL" }, { "type": "image_picker", "id": "image7", "label": "Image" }, { "type": "url", "id": "url7", "label": "URL" }, { "type": "image_picker", "id": "image8", "label": "Image" }, { "type": "url", "id": "url8", "label": "URL" } ] } {% endschema %}
+<!-- Dependencies -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<!-- Styles -->
+<style>
+  .subcollection-section {
+    margin-top: {{ block.settings.section_margin_y }}px;
+    margin-bottom: {{ block.settings.section_margin_y }}px;
+  }
+
+  .logo-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0;
+    scrollbar-width: none;
+  }
+
+  .logo-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .logo-item {
+    text-align: center;
+    flex: 0 0 auto;
+    width: var(--image-size);
+  }
+
+  .logo-item a {
+    display: block;
+    text-decoration: none;
+  }
+
+  .logo-item img {
+    width: var(--image-height);
+    height: var(--image-height);
+    border-radius: {{ block.settings.border_radius }}%;
+    border: {{ block.settings.border_size }}px solid {{ block.settings.border_color }};
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .logo-item span {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: {{ block.settings.font_size }}rem;
+    color: #000;
+  }
+
+  @media (max-width: 767px) {
+    .logo-item span {
+      font-size: 0.6rem;
+    }
+    .logo-container {
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+    }
+  }
+</style>
+
+<!-- Subcollection Section -->
+<div class="subcollection-section">
+  <div class="logo-container">
+    {% for i in (1..8) %}
+      {% assign image_setting = 'image' | append: i %}
+      {% assign url_setting = 'url' | append: i %}
+      {% assign collection_handle = block.settings[url_setting] | split: '/' | last %}
+      {% assign collection = collections[collection_handle] %}
+
+      {% if block.settings[image_setting] != blank or collection != nil %}
+        <div class="logo-item">
+          <a href="{{ block.settings[url_setting] }}">
+            <img 
+              src="{{ block.settings[image_setting] | default: collection.image | img_url: '525x' }}" 
+              alt="{{ block.settings[image_setting].alt | default: collection.title | escape }}">
+            <span>{{ block.settings[image_setting].alt | default: collection.title }}</span>
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- CSS Variables -->
+<style>
+  :root {
+    --image-height: {{ block.settings.image_height }}px;
+  }
+</style>
+{% schema %}
+{
+  "name": "Subcollections List",
+  "target": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "border_size",
+      "label": "Border size (px)",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image Height (px)",
+      "min": 60,
+      "max": 300,
+      "step": 5,
+      "default": 85
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border Radius (%)",
+      "min": 0,
+      "max": 100,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size (rem)",
+      "min": 0.5,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "section_margin_y",
+      "label": "Top & Bottom Margin (px)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Subcollections List"
+    },
+    {
+      "type": "image_picker",
+      "id": "image1",
+      "label": "Image 1 (optional)"
+    },
+    {
+      "type": "url",
+      "id": "url1",
+      "label": "Collection URL 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image2",
+      "label": "Image 2 (optional)"
+    },
+    {
+      "type": "url",
+      "id": "url2",
+      "label": "Collection URL 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image3",
+      "label": "Image 3 (optional)"
+    },
+    {
+      "type": "url",
+      "id": "url3",
+      "label": "Collection URL 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image4",
+      "label": "Image 4 (optional)"
+    },
+    {
+      "type": "url",
+      "id": "url4",
+      "label": "Collection URL 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "image5",
+      "label": "Image 5 (optional)"
+    },
+    {
+      "type": "url",
+      "id": "url5",
+      "label": "Collection URL 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "image6",
+      "label": "Image 6 (optional)"
+    },
+    {
+      "type": "url",
+      "id": "url6",
+      "label": "Collection URL 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "image7",
+      "label": "Image 7 (optional)"
+    },
+    {
+      "type": "url",
+      "id": "url7",
+      "label": "Collection URL 7"
+    },
+    {
+      "type": "image_picker",
+      "id": "image8",
+      "label": "Image 8 (optional)"
+    },
+    {
+      "type": "url",
+      "id": "url8",
+      "label": "Collection URL 8"
+    }
+  ]
+}
+{% endschema %}

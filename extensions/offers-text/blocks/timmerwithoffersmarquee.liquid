@@ -1,5 +1,3 @@
-
-
 <style>
   .announcement-bar {
     display: flex;
@@ -49,16 +47,13 @@
     justify-content: space-between;
     gap: 4px;
     font-family: 'Segoe UI', Arial, sans-serif;
-  } 
+  }
 
   .timer-value {
-    font-size: 20px; 
+    font-size: 20px;
     font-weight: bold;
     color: {{ block.settings.text_color }};
     letter-spacing: 2px;
-  }
-  .timer-value+span{
-     color: {{ block.settings.text_color }};
   }
 
   .timer-labels {
@@ -90,12 +85,8 @@
   }
 
   @media(max-width: 1200px){
-    .right-section{
-      width: 40%;
-    }
-    .scrolling-text {
-        width: calc(60% - 20px);
-    }
+    .right-section{ width: 40%; }
+    .scrolling-text { width: calc(60% - 20px); }
   }
   @media (max-width: 700px) {
     .announcement-bar {
@@ -114,105 +105,119 @@
       width: 100%;
       justify-content: center;
       min-width: unset;
-         padding: 3px 0;
+      padding: 3px 0;
       border-top: 2px solid #ffffff;
     }
-    .cta-btn{
-      padding: 4px 10px;
-    }
-    .timer span {
-        line-height: 1.5;
-    }
-    .right-section{
-        justify-content: center;
-    }
+    .cta-btn{ padding: 4px 10px; }
+    .timer span { line-height: 1.5; }
+    .right-section{ justify-content: center; }
   }
+
+{% if block.settings.enable_timer == false and block.settings.enable_cta_button == false %}
+  .right-section {
+    display: none;
+  }
+  .scrolling-text{width:100%;}
+{% endif %}
+
+
 </style>
 
 <div class="announcement-bar">
-  <div class="scrolling-text">
-    <span class="scrolling-text-inner" id="scrollingText">
-      {{ block.settings.announcement_text_1 }} &nbsp; &nbsp; 
-      {{ block.settings.announcement_text_2 }} &nbsp; &nbsp; 
-      {{ block.settings.announcement_text_3 }} &nbsp; &nbsp; 
-      {{ block.settings.announcement_text_4 }} &nbsp; &nbsp; 
-      {{ block.settings.announcement_text_5 }} &nbsp; &nbsp; 
-    </span>
-  </div>
-  <div class="right-section">
-    <div> 
-      <div class="timer" id="timer">
-        <span class="timer-value" id="days">00</span> 
-        <span style="font-size: 20px; font-weight: 600;">:</span>
-        <span class="timer-value" id="hours">00</span> 
-        <span style="font-size: 20px; font-weight: 600;">:</span>
-        <span class="timer-value" id="minutes">00</span> 
-        <span style="font-size: 20px; font-weight: 600;">:</span>
-        <span class="timer-value" id="seconds">00</span>
-      </div>
-      <div class="timer-labels">
-        <span>Days</span>
-        <span>Hours</span>
-        <span>Mins</span>
-        <span>Secs</span>
-      </div>
+  {% if block.settings.enable_marquee %}
+    <div class="scrolling-text">
+      <span class="scrolling-text-inner" id="scrollingText">
+        {{ block.settings.announcement_text_1 }} &nbsp; &nbsp;
+        {{ block.settings.announcement_text_2 }} &nbsp; &nbsp;
+        {{ block.settings.announcement_text_3 }} &nbsp; &nbsp;
+        {{ block.settings.announcement_text_4 }} &nbsp; &nbsp;
+        {{ block.settings.announcement_text_5 }} &nbsp; &nbsp;
+      </span>
     </div>
-    <a href="{{ block.settings.button_link }}" class="cta-btn">{{ block.settings.button_text }}</a>
+  {% endif %}
+
+  <div class="right-section">
+    {% if block.settings.enable_timer %}
+      <div>
+        <div class="timer" id="timer">
+          <span class="timer-value" id="hours">00</span>
+          <span style="font-size: 20px; font-weight: 600;">:</span>
+          <span class="timer-value" id="minutes">00</span>
+          <span style="font-size: 20px; font-weight: 600;">:</span>
+          <span class="timer-value" id="seconds">00</span>
+        </div>
+        <div class="timer-labels">
+          <span>Hrs</span><span>Mins</span><span>Secs</span>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if block.settings.enable_cta_button %}
+      <a href="{{ block.settings.button_link }}" class="cta-btn">{{ block.settings.button_text }}</a>
+    {% endif %}
   </div>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Countdown timer logic
-    const endTime = new Date('{{ block.settings.countdown_end_date }}').getTime();
-    
-    function pad(n) { return n.toString().padStart(2, '0'); }
-    
-    function updateTimer() {
-      const now = new Date().getTime();
-      let distance = endTime - now;
-      
-      if (distance < 0) {
-        distance = 0;
-        clearInterval(timerInterval);
-      }
-      
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      
-      document.getElementById('days').textContent = pad(days);
-      document.getElementById('hours').textContent = pad(hours);
-      document.getElementById('minutes').textContent = pad(minutes);
-      document.getElementById('seconds').textContent = pad(seconds);
-    }
-    
-    updateTimer();
-    const timerInterval = setInterval(updateTimer, 1000);
-
-    // Seamless marquee duplication logic
+    // Marquee duplication
     const scrollingText = document.getElementById('scrollingText');
-    const text = scrollingText.innerHTML;
-    scrollingText.innerHTML = text + text; // Duplicate for seamless scroll
+    if (scrollingText) {
+      const text = scrollingText.innerHTML;
+      scrollingText.innerHTML = text + text;
+    }
+
+    // 24-hour countdown reset daily
+    function pad(n) { return n.toString().padStart(2, '0'); }
+
+    function updateTimer() {
+      const now = new Date();
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999); // End of current day
+      let distance = endOfDay - now;
+
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      const h = document.getElementById('hours');
+      const m = document.getElementById('minutes');
+      const s = document.getElementById('seconds');
+
+      if (h && m && s) {
+        h.textContent = pad(hours);
+        m.textContent = pad(minutes);
+        s.textContent = pad(seconds);
+      }
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
   });
 </script>
+
 {% schema %}
 {
-  "name": "DS-Announcementbar Timer",
-  "target":"section",
-
+  "name": "Smart Announcement Bar",
+  "target": "section",
   "settings": [
     {
-      "type": "header",
-      "content": "Countdown Timer Settings"
+      "type": "checkbox",
+      "id": "enable_marquee",
+      "label": "Show Marquee",
+      "default": true
     },
     {
-      "type": "text",
-      "id": "countdown_end_date",
-      "label": "Countdown End Date",
-      "info": "Enter date in format: YYYY-MM-DD HH:mm:ss (e.g., 2024-12-31 23:59:59)",
-      "default": "2024-12-31 23:59:59"
+      "type": "checkbox",
+      "id": "enable_timer",
+      "label": "Show 24-Hour Timer",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cta_button",
+      "label": "Show CTA Button",
+      "default": true
     },
     {
       "type": "header",
@@ -222,31 +227,31 @@
       "type": "text",
       "id": "announcement_text_1",
       "label": "Announcement Text 1",
-      "default": "🚚 Free shipping on orders over 50€"
+      "default": "🚚 Free shipping on orders over ₹999"
     },
     {
       "type": "text",
       "id": "announcement_text_2",
       "label": "Announcement Text 2",
-      "default": "🎁 Special offers available"
+      "default": "🎁 Flat 60% Off on Rakhi Sale"
     },
     {
       "type": "text",
       "id": "announcement_text_3",
       "label": "Announcement Text 3",
-      "default": "⭐ New products added"
+      "default": "💥 Limited Time Offers"
     },
     {
       "type": "text",
       "id": "announcement_text_4",
       "label": "Announcement Text 4",
-      "default": "💫 Limited time deals"
+      "default": "🔥 Shop Now Before It Ends"
     },
     {
       "type": "text",
       "id": "announcement_text_5",
       "label": "Announcement Text 5",
-      "default": "🔥 Hot deals this week"
+      "default": "🎉 New Collection Launched"
     },
     {
       "type": "header",
@@ -256,34 +261,35 @@
       "type": "color",
       "id": "background_color",
       "label": "Background Color",
-      "default": "#f7eed7"
+      "default": "#fff6e5"
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "Text Color",
-      "default": "#5a2d0c"
+      "default": "#000000"
     },
     {
       "type": "header",
-      "content": "Button Settings"
+      "content": "CTA Button Settings"
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button Text",
-      "default": "Shop now!"
+      "default": "Shop Now"
     },
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button Link"
+      "label": "Button Link",
+      "default": "/collections/all"
     },
     {
       "type": "color",
       "id": "button_background",
       "label": "Button Background Color",
-      "default": "#c97a2b"
+      "default": "#000000"
     },
     {
       "type": "color",

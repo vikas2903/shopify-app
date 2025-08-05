@@ -1,143 +1,248 @@
+{% comment %} Shopify App Extension Compatible Featured Product Carousel with Splide Slider {% endcomment %}
+
+<!-- Splide CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 
 <style>
-   {{ block.settings.font | font_face }} 
 
-  :root {
-    --font-family: {{ block.settings.font.family }}, sans-serif;
-    --font-style: {{ block.settings.font.style }};
-    --font-weight: {{ block.settings.font.weight }};
-    --fontSizeheading: {{block.settings.font-size}}rem;
-    --fontSizeContent: {{block.settings.font-size1}}rem;
-    --btnbackground: {{block.settings.btn-color}};
-     
+.sp-tag{
+    background: linear-gradient(45deg, #a66d30, #ffe58e 50%, #e0b057);
+    border-radius: 2px;
+    line-height: 1;
+    font-size: 10px;
+    color: #000;
+    padding: 8px 19px 8px 7px;
+    text-transform: uppercase;
+    margin-left: 0;
+    margin-bottom: 9px;
+    clip-path: polygon(100% 0%, 91% 50%, 100% 100%, 0 100%, 0% 50%, 0 0);
+    margin-top: 3px;
+}
+
+  .featured-product-carousel {
+    background: {{block.settings.bg}};
+    padding-top: {{ block.settings.margin_top }}px;
+    padding-bottom: {{ block.settings.margin_bottom }}px;
+    border-radius: 0px;
+    border-bottom: 1px solid #f9e4bc36;
   }
-  
-   #block-{{ block.id }} .imageWithText-right {font-family:var(--font-family) !important; font-style:var(--font-style) !important; font-weight:var(--font-weight)!important;}
-  .custom-page-layout { width: 100%; max-width: 100%; } 
-  .imageWithText-container { max-width: 1170px; margin: auto; } 
-  .imageWithText-wrapper {0 3px 20px #0000001a;box-shadow: 0 3px 20px #0000001a;background: #fff;border-radius: 20px;margin: 0;display: flex;align-items: center;justify-content: center;gap: 0rem;} 
-  .imageWithText-left ,  imageWithText-right { flex:  0 0 50%; } 
-  .image-position-left .imageWithText-image img { display: block; width: 100%; height: 100%; border-top-left-radius: 20px; border-bottom-left-radius: 20px; }
-  .image-position-left .imageWithText-right { padding-right: 3rem; }
-  #block-{{ block.id }} .imageWithText-right h4 { font-size: var(--fontSizeheading); text-transform: uppercase; margin: 0; line-height: 1; padding-bottom: 1.4rem; font-family:var(--font-family) !important; font-style:var(--font-style) !important; font-weight:var(--font-weight)!important; }
-  #block-{{ block.id }} .imageWithText-right p { margin: 0; font-size: var(--fontSizeContent); padding-bottom: 1.6rem; font-family:var(--font-family) !important; font-style:var(--font-style) !important; font-weight:var(--font-weight)!important;} 
-  #block-{{ block.id }} .imageWithText-right a { display: inline-block; padding: 6px 12px; text-decoration: none; color: #fff; background: var(--btnbackground); border-radius: 6px; font-size: 1rem;  font-family:var(--font-family) !important; font-style:var(--font-style) !important; font-weight:var(--font-weight)!important;}
-  .custom-page-layout{margin: 40px auto;}
-  .image-position-right .imageWithText-wrapper { flex-direction: row-reverse;}
-  .imageWithText-right { padding-left: 3rem; }
-  .image-position-right .imageWithText-image img { display: block; width: 100%; height: 100%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
+  .featured-product-carousel__header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .featured-product-carousel__title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .featured-product-carousel__subtitle {
+    font-size: 1.1rem;
+    color: #666;
+  }
+  .featured-img-titlte img {
+    width: 100%;
+    display: block;
+  }
+  .splide__slide .product-card {
+    background: #fff;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    padding-bottom: 20px;
+  }
+  .product-card__image {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  .product-card__title, .product-card__price {
+    padding: 0 10px;
+    text-align: left;
+  }
+  .product-card__title {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 5px 0 5px;
+    color: #000;
+    line-height: 1.3;
+    text-transform: capitalize !important;
+}
+  .product-card__price {
+    color: #000;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .product-card__price .compare { text-decoration: line-through; color: #888; }
+  .product-card__price .sale { font-weight: bold; }
+  .ff-btn {
+    background: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin: 20px auto 0;
+    display: block;
+    width: fit-content;
+    text-decoration: none;
+  }
+  .page-widthh{padding:0 20px;}
+  .featured-product-carousel .product-card{
 
-    @media(max-width:767px){
-        .imageWithText-wrapper{flex-direction: column;}
-        .image-position-right .imageWithText-wrapper {flex-direction: column;}
-        .imageWithText-wrapper{gap: 2rem;  padding-bottom: 2rem;}
-        .imageWithText-right { padding: 0 2rem; } 
-        .image-position-left .imageWithText-image img { border-top-left-radius: 20px; border-bottom-left-radius: 0; border-top-right-radius: 20px; }
-        .image-position-left .imageWithText-right { padding-right: 3rem; padding: 0 2rem; }
-        .image-position-left .imageWithText-wrapper { padding-bottom: 2rem; gap: 0rem; }
-        .image-position-right .imageWithText-wrapper { flex-direction: column; gap: 2rem; padding-bottom: 2rem; }
-        .image-position-right .imageWithText-image img { border-top-right-radius: 20px; border-bottom-right-radius: 0; border-top-left-radius: 20px; }
+  }
+  @media(max-width:767px){
+    .product-card__title{
+      text-transform: capitalize !important;
+    font-size: 12px !important;
+    margin: 10px 0 5px;
+    color: #000;
+    padding: 0 !important;
     }
+      .page-widthh{padding:0 10px;}
+  }
 </style>
 
+<div class="featured-product-carousel">
+  <div class="featured-product-carousel__header">
+    {% if block.settings.section_title != blank %}
+      <div class="featured-product-carousel__title">{{ block.settings.section_title }}</div>
+    {% endif %}
+    {% if block.settings.section_subtitle != blank %}
+      <div class="featured-product-carousel__subtitle">{{ block.settings.section_subtitle }}</div>
+    {% endif %}
 
-<div class="custom-page-layout {{ block.settings.image_position }}" id=block-{{ block.id }}>
-  <div class="imageWithText-container">
-    <div class="imageWithText-wrapper">
-      <div class="imageWithText-left">
-        <div class="imageWithText-image"><img src="{{ block.settings.image | img_url:"720x" }}" alt="{{ block.settings.image.alt }}" width="" height="" ></div>
-      </div>
-      <div class="imageWithText-right">
-        <h4>{{ block.settings.heading }}</h4>
-        <p>{{ block.settings.content }}</p>
-        <a href="{{ block.settings.url }}" class="custom-button">{{ block.settings.btn }}</a>
+    <div class="featured-img-titlte">
+      {% if block.settings.featured_image_banner != blank %}
+        <picture>
+          <source media="(max-width: 767px)" srcset="{{ block.settings.featured_image_banner | img_url: 'master' }}" />
+          <img src="{{ block.settings.featured_image_banner | img_url: 'master' }}" alt="{{ block.settings.featured_image_banner.alt }}" />
+        </picture>
+
+        {% else %}
+          <picture>
+          <source media="(max-width: 767px)" srcset="https://cdn.shopify.com/s/files/1/0830/2719/8240/files/Style_Jaipur_4.png?v=1752664860" />
+          <img src="https://cdn.shopify.com/s/files/1/0830/2719/8240/files/Style_Jaipur_4.png?v=1752664860" alt="Featured Image" />
+        </picture>
+
+        
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="page-widthh">
+    <div id="splide-featured" class="splide splide-featured">
+      <div class="splide__track">
+        <ul class="splide__list">
+          {% assign featured_collection = collections[block.settings.featured_collection] %}
+          {% if featured_collection and featured_collection.products.size > 0 %}
+            {% for product in featured_collection.products %}
+              <li class="splide__slide">
+                <div class="product-card">
+                  <a href="{{ product.url }}">
+                    <img class="product-card__image" src="{{ product.featured_image | img_url: '400x400' }}" alt="{{ product.title }}">
+                  </a>
+                  {% if block.settings.product_label != blank %}
+                    <span class="sp-tag">{{ block.settings.product_label }}</span>
+                  {% endif %}
+                  <div class="product-card__title">{{ product.title | truncate: "100"  }}</div>
+                  <div class="product-card__price">
+                    {% if product.compare_at_price > product.price %}
+                      <span class="compare">{{ product.compare_at_price | money }}</span>
+                    {% endif %}
+                    <span class="sale">{{ product.price | money }}</span>
+                  </div>
+                </div>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li>No products found in this collection.</li>
+          {% endif %}
+        </ul>
+        <a class="ff-btn" href="{{ featured_collection.url }}">View All</a>
       </div>
     </div>
   </div>
-  
 </div>
 
-{% schema %}
-  {
-    "name": "DS-ImageWithText",
-    "target":"section",
-    "settings": [
-      {
-        "type": "font_picker",
-        "id":"font",
-        "label":"Font Family",
-        "default":"helvetica_n4"
-        
-      },
-      {
-        "type": "select",
-        "id": "image_position",
-        "label": "Image Position",
-        "options": [
-          {
-            "value": "image-position-left",
-            "label": "Image Postion Left"
-          },
-          {
-            "value": "image-position-right",
-            "label": "Image Position Right"
-          }
-        ],
-        "default": "image-position-left"
-      },
-      {
-      "type":"range",
-      "id":"font-size",
-      "label":"Heading Font Size ",
-      "min":1,
-      "max":10,
-      "step":0.1,
-      "default":2.6
-    },
-      {
-      "type":"range",
-      "id":"font-size1",
-      "label":"Content Font Size ",
-      "min":1,
-      "max":10,
-      "step":0.1,
+<!-- Splide JS -->
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new Splide('#splide-featured', {
+      type   : 'loop',
+      perPage: 4,
+      gap    : '1rem',
+      pagination: false,
+      breakpoints: {
+        1024: { perPage: 3 },
+        768: { perPage: 2 },
+        480: { perPage: 2 }
+      }
+    }).mount();
+  });
+</script>
 
-      "default":1.6
+{% schema %}
+{
+  "name": "Featured Product Carousel",
+  "target": "section",
+  "settings": [
+
+   {
+    "type": "color",
+    "id":"bg",
+    "label":"background color",
+    "default":"#f9e4bc36"
     },
-      {
-        "type":"image_picker",
-        "id":"image",
-        "label": "Image"
-      },
-      {
-        "type":"liquid",
-        "id":"heading",
-        "label":"Content",
-        "default":"HD Video Conferencing"
-      },
-      {
-        "type":"liquid",
-        "id":"content",
-        "label":"Content"
-      },
-      {
-        "type":"url",
-        "id":"url",
-        "label":"Url"
-      },
-      {
-        "type":"text",
-        "label":"Button Label",
-        "id":"btn",
-        "default":"Learn More"
-      },
-      {
-        "type": "color",
-        "id": "btn-color",
-        "label": "Background Color",
-        "default": "#000000"
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Featured Products"
     },
-      
-    ]
-  }
+    {
+      "type": "text",
+      "id": "section_subtitle",
+      "label": "Section Subtitle",
+      "default": "Check out our top picks."
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "image_picker",
+      "id": "featured_image_banner",
+      "label": "Featured Image Banner"
+    },
+    {
+      "type": "text",
+      "id": "product_label",
+      "label": "Product Label Badge",
+      "default": "Rakhi Special"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Top Margin",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Bottom Margin",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 30
+    }
+  ]
+}
 {% endschema %}
