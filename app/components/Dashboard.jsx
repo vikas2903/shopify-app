@@ -42,11 +42,11 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="dashboard-section-02 dashboard-item">
+        {/* <div className="dashboard-section-02 dashboard-item">
           <div className="dahboard-blocks">
  
             <div className="blcoks-item">
-              <div className="title-transpose">Total Available Blocks</div>
+              <div className="title-transpose">Blocks</div>
               <div className="block-info">13</div>
             </div>
 
@@ -61,8 +61,9 @@ function Dashboard() {
             </div>
 
           </div>
-        </div>
-
+        </div> */}
+<br></br>
+<br></br>
         {/* <div className="dashboard-section-5">
           <div className="dsh-announcement-alert">
             <p>We have added Progress bar ui , its available at explore section</p>
@@ -70,7 +71,7 @@ function Dashboard() {
         </div> */} 
 
         <div className="dashboard-section-03 dashboard-item dashboard-item-slider">
-          <h2 className="dashboard-heading">Ds-App Dashboard - Blocks</h2>
+          <h2 className="dashboard-heading">Premium Blocks</h2>
           <div className="dashboard-item-slider-grid">
             <Explorecard limit="5" /> 
             </div> 
@@ -84,7 +85,7 @@ function Dashboard() {
         <div className="dashboard-section-04">
           <div className="dsh-announcement">
             <div className="announcement-item">
-              <p><span>DS</span> <p className="bgg">Cart drawer progress bar has been added. Just enable it in the product page blocks.</p></p>
+              <p><span>DS</span> <p className="bgg">Updated Soon</p></p>
             </div>
 
             {/* <div className="announcement-item">

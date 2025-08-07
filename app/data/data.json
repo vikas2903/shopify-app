@@ -1,87 +1,59 @@
 [
     {
         "id": "001",
-        "title": "DS-Announcement Bar",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/Artboard_2.png?v=1748493225",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-announcement-bar.png?v=1752041723",
+        "title": "Smart Announcement Bar",
+        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/announcement-bar.png?v=1754566843",
+        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/announcement-bar.png?v=1754566843",
         "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
     },
     {
         "id": "002",
-        "title": "DS-Scrolling Text",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/scrolling_announcement_bar_2_1.webp?v=1748950314",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-scrolling-text.png?v=1752041723",
+        "title": "Subcategory List",
+        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/layerup-subcollections.png?v=1754566843",
+        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/layerup-subcollections.png?v=1754566843",
         "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
     },
     {
         "id": "003",
-        "title": "DS-Offer Slider",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/Artboard_4.png?v=1748950315",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-offer-slider.png?v=1752041723",
+        "title": "Multi variant section",
+        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/banner-with-products.png?v=1754566842",
+        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/banner-with-products.png?v=1754566842",
         "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
     },
     {
         "id": "004",
-        "title": "DS-Offer Coupon Card",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/offer-card.png?v=1752043340",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-offer-coupon-card.png?v=1752041722",
+        "title": "Trust Badges",
+        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/usp-icons.png?v=1754566842",
+        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/usp-icons.png?v=1754566842",
         "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
     },
     {
         "id": "005",
-        "title": "DS-Product Usp Icons",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/WhatsApp_Image_2025-05-29_at_09.56.44.jpg?v=1748493223",
-         "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-product-usp-icon.png?v=1752041722",
+        "title": "Offer Timer",
+        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/timer.png?v=1754566843",
+         "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/timer.png?v=1754566843",
         "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
     },
     {
         "id": "006",
-        "title": "DS-Image With Text",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/images-with-text.png?v=1752043130",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-cartdrawer-progressbar.png?v=1752041722",
+        "title": "Progress Bar",
+        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/cartprogressbar.png?v=1754566842",
+        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/cartprogressbar.png?v=1754566842",
         "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
     },
     {
         "id": "007",
-        "title": "DS-Recent View Products",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/recent-view.png",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-recent-view-products.png?v=1752041722",
+        "title": "Featured Product Carousel",
+        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/banner-with-image-01.png?v=1754566843",
+        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/banner-with-image-01.png?v=1754566843",
         "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
     },
-    {
+        {
         "id": "008",
-        "title": "DS-Whatsapp Floating Button",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/whatsapp-chat-button-min.webp?v=1748593241",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-floating-whatsapp-button.png?v=1752041722",
-        "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
-    },
-
-    {
-        "id": "09",
-        "title": "DS-Countdown Timer",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/countdown.png",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-countdown-timer.png?v=1752041722",
-        "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
-    },
-    {
-        "id": "10",
-        "title": "DS-Subcollection List",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/subcollection-list.png",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-subcollection-list.png?v=1752041722",
-        "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
-    },
-    {
-        "id": "11",
-        "title": "DS-Cart Drawer Progress Bar",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/cart-drawe-progressbar.png",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-recent-view-products.png?v=1752041722",
-        "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
-    },
-     {
-        "id": "12",
-        "title": "DS-Offer With Copy Code",
-        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/7a808ee1-ef78-4877-b343-db4c38b48fff.png?v=1750740399",
-        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/ds-offer-with-copycode.png?v=1752041722",
+        "title": "Coupon Codes & Offers",
+        "image": "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/layerup-offer.png?v=1754569956",
+        "url":"https://cdn.shopify.com/s/files/1/0796/7847/2226/files/layerup-offer.png?v=1754569956",
         "popupcontent": "<p><b>Browse our section library and find sections, add to any theme, edit from the theme editor.</b></p><p>Shopify themes usually comes with around 15 sections for you to design your store. If you don't like those sections or need something extra you are stuck with hard to learn page-builder apps, or expensive developers. Section Store is solving that issue with a section library full of plug-an-play customisable sections, that you can simply add to any theme on your store and customise in the theme editor. Think features, testimonials, faq, trust badges etc.</p><ul><li>Browse and find sections. Add to any theme. Edit from Shopifys theme editor.</li><li>Upgrade your existing theme with new theme sections. No need to start over</li><li>Keep or even improve page-speed. Some apps loads slow, replace with a section.</li><li>Try section first. Experiment with sections before committing</li><li>New sections added every week - All sections 2.0 ready (Add to any page).</li></ul>"
     }
+  
 ]

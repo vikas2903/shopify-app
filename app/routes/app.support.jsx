@@ -159,7 +159,7 @@ export default function SupportApp() {
 
   return (
     <>
-      <Page  fullWidth>
+      <Page  hasSubtitleMaxWidth>
         <TitleBar title="Setup Request" />
 
         {/* <Button
@@ -171,14 +171,15 @@ export default function SupportApp() {
           Back
         </Button>  */}
 
-        <Banner onDismiss={() => {}} style={{marginBottom: "10px"}}>
+        <Banner onDismiss={() => {}} style={{marginBottom: "40px"}}>
       <p> 
         App Dashboard – Your Storefront, Your Style{' '}
         <Link url="/app">Back</Link>
       </p>
     </Banner>
+
  
-        <Layout fullWidth>
+        <Layout fullWidth >
           <Layout.Section>
             <Card title="Support App" style={{ padding: "40px 10px" }}>
               {sessionWarning && (
