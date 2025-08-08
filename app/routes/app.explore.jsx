@@ -42,8 +42,8 @@ function AppWidgets() {
 
     return (
         <Page fullWidth>
-            <TitleBar title="Explore Section" />
-            <h1>Explore Section</h1>
+            <TitleBar title="Premium Blocks" /> 
+            {/* <h1>Explore Section</h1> */}
             <Layout fullWidth>
                 <section className="section">
                     <div className="container">

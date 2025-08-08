@@ -29,7 +29,7 @@ function Dashboard() {
 
               <div className="dashboard-btn">
                 <Link to="/app/explore" className="dashboard-btn-custom">
-                  Explore Blocks
+                  Premium Blocks
                 </Link>
               </div>
             </div>
@@ -71,7 +71,7 @@ function Dashboard() {
         </div> */} 
 
         <div className="dashboard-section-03 dashboard-item dashboard-item-slider">
-          <h2 className="dashboard-heading">Premium Blocks</h2>
+          <h2 className="dashboard-heading">PREMIUM BLOCKS</h2>
           <div className="dashboard-item-slider-grid">
             <Explorecard limit="5" /> 
             </div> 
@@ -96,11 +96,13 @@ function Dashboard() {
         </div> 
 
 
+
         
 
         
       
     </div>
+    
     </>
   );
 }

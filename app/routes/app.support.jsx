@@ -126,19 +126,15 @@ export default function SupportApp() {
 
   const options = [
     { label: "Select Blocks", value: " " },
-    { label: "Wishlist Page", value: "wishlist-page" },
-    { label: "DS-Announcement Bar", value: "ds-announcement-bar" },
-    { label: "DS-Scrolling Text", value: "ds-scrolling-text" },
-    { label: "DS-Offer Slider", value: "ds-offer-slider" },
-    { label: "DS-Offer Coupon Card", value: "ds-offer-coupon-card" },
-    { label: "DS-Product Usp Icons", value: "ds-product-usp-icons" },
-    { label: "DS-Image With Text", value: "ds-image-with-text" },
-    { label: "DS-Subcollection List", value: "ds-subcollection-list" },
-    { label: "DS-Cart Drawer Progress Bar", value: "ds-cart-drawer-progress-bar" },
-    { label: "DS-Offer With Copy Code", value: "ds-Offer-with-copy-code" },
-    { label: "DS-Recent View Products", value: "ds-recent-view-products" },
-    { label: "DS-Whatsapp Floating Button", value: "ds-whatsapp-floating-button" },
-    { label: "DS-Countdown Timer", value: "ds-countdown-timer" },
+    { label: "Smart Announcement Bar", value: "smart-announcement-bar" },
+    { label: "Subcategory List", value: "subcategory-list" },
+    { label: "Multi variant section", value: "multi-variant-section" },
+    { label: "Trust Badges", value: "trust-badges" },
+    { label: "Offer Timer", value: "offer-timer" },
+    { label: "Progress Bar", value: "progress-bar" },
+    { label: "Featured Product Carousel", value: "featured-product-carousel" },
+    { label: "Coupon Codes & Offers", value: "coupon-codes&Offers" },
+    { label: "Other", value: "other" },
   ];
 
   useEffect(() => {
