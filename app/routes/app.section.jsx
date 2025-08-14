@@ -5,6 +5,7 @@ import axios from 'axios';
 import { authenticate } from '../shopify.server.js'
 import {json} from '@remix-run/node'
 import { useLoaderData } from "@remix-run/react";
+import { TitleBar } from '@shopify/app-bridge-react';
  export const loader = async ({ request }) => {
   
      try {
@@ -15,10 +16,20 @@ import { useLoaderData } from "@remix-run/react";
          }
  
          const shopFull = session.shop;
-    
-         const accessToken = session.accessToken;
- 
-         console.log("Shop Name:", shopFull);
+         const extractShopName = shopFull.split(".")[0];
+         
+
+         
+         if(shopFull == 'd2c-apps.myshopify.com'){
+        var accessToken = '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';
+           console.log("Shop Name:", shopFull);
+         }else{
+          console.log("Not Test");
+            accessToken = session.accessToken;
+         }
+        
+        
+      
          console.log("Access Token:", accessToken);
  
          // Fetch themes from Shopify API with updated version
@@ -56,6 +67,7 @@ import { useLoaderData } from "@remix-run/react";
              shop: shopFull, 
              themeId,
              shopFull,
+             extractShopName,
              accessToken,
              success: true 
          });
@@ -72,7 +84,7 @@ const Section = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { shop } = useLoaderData();
+  const { shop, themeId, extractShopName, accessToken  } = useLoaderData();
        
   useEffect(() => {
 
@@ -102,7 +114,7 @@ const Section = () => {
 
   return (
     <Page fullWidth>
-        <h1>Sections</h1>
+       <TitleBar title='Premium Sections' />
       <div
         className=""
         style={{
@@ -114,7 +126,7 @@ const Section = () => {
         {/* Pass fetched data to CardItem */}
         {data && data.length > 0 ? (
           data.map((item) => (
-            <CardItem  shop={shop}  key={item.id} title={item.title} description={item.popupcontent} image={item.image} url={item.url}/>
+            <CardItem accessToken={accessToken} themeid={themeId}  shop={extractShopName}  keyy={item.id} key={item.id} title={item.title} description={item.popupcontent} image={item.image} url={item.url}/>
           ))
         ) : (
           <div>No items found</div>
