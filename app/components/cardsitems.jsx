@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const CardItem = ({ accessToken, keyy, shop, title, image, description, themeid, url }) => {
-  const [sectionid, setsectionid] = useState('');
+const CardItem = ({ shopFull, accessToken, keyy, shop, title, image, description, themeid, url }) => {
+const code001 = `<div class="custom-section"><h2>Sample Section</h2></div>`;
+ // Replace with your real section code
 
-  const code001 = `code`;
-
-  const handleInstall = async (sectionID) => {
-    setsectionid(sectionID); // ✅ update state correctly
-
+  const handleInstall = async () => {
+    const sectionID = keyy; // Assuming keyy is the sectionID passed as prop
     const fileType = 'sections';
-    const fileName = 'comparison-table'; // update this if needed
+    const fileName = 'comparison-table'; // you can dynamically generate from sectionID too
     const filePath = `${fileType}/${fileName}.liquid`;
 
-    // ✅ use directly passed sectionID
+    alert("shopFull" + shopFull);
+    alert("themeid" + themeid);
+    alert("accessToken" + accessToken)
+
     if (sectionID === '001') {
       try {
-        const response = await fetch(`https://${shop}/admin/api/2024-04/themes/${themeid}/assets.json`, {
+        const response = await fetch(`https://${shopFull}/admin/api/2024-04/themes/${themeid}/assets.json`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -23,7 +24,7 @@ const CardItem = ({ accessToken, keyy, shop, title, image, description, themeid,
           },
           body: JSON.stringify({
             asset: {
-              key: filePath,
+              key: 'sections/comparison-table.liquid',
               value: code001,
             },
           }),
@@ -35,14 +36,14 @@ const CardItem = ({ accessToken, keyy, shop, title, image, description, themeid,
           alert(`✅ ${filePath} uploaded successfully!`);
         } else {
           console.error('Upload Error:', data);
-          alert(`❌ Failed to upload: ${data.errors?.asset || JSON.stringify(data.errors)}`);
+          alert(`❌ Upload failed: ${JSON.stringify(data.errors || data)}`);
         }
       } catch (error) {
         console.error('Request Error:', error);
         alert('❌ An error occurred during upload.');
       }
     } else {
-      alert('⚠️ Invalid section ID: ' + sectionID);
+      alert(`⚠️ Section ID '${sectionID}' is not allowed.`);
     }
   };
 
@@ -50,7 +51,6 @@ const CardItem = ({ accessToken, keyy, shop, title, image, description, themeid,
     <div style={{
       borderRadius: '24px',
       boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-      padding: '0',
       width: 'calc(100% - 40px)',
       margin: '20px',
       fontFamily: 'inherit',
@@ -58,12 +58,7 @@ const CardItem = ({ accessToken, keyy, shop, title, image, description, themeid,
       flexDirection: 'column',
       alignItems: 'center'
     }}>
-      <div style={{
-        width: '100%',
-        borderRadius: '20px',
-        overflow: 'hidden',
-        paddingTop: '15px'
-      }}>
+      <div style={{ width: '100%', borderRadius: '20px', overflow: 'hidden', paddingTop: '15px' }}>
         <img
           src={image || 'https://cdn.shopify.com/s/files/1/0796/7847/2226/files/announcement-bar-removebg-preview.png?v=1754628891'}
           alt={title}
@@ -71,7 +66,7 @@ const CardItem = ({ accessToken, keyy, shop, title, image, description, themeid,
         />
       </div>
 
-      <div style={{ width: '100%', padding: '10px 15px 15px', boxSizing: 'border-box' }}>
+      <div style={{ width: '100%', padding: '10px 15px 15px' }}>
         <span style={{
           background: '#EAFBF2',
           color: '#3CB371',
@@ -81,27 +76,20 @@ const CardItem = ({ accessToken, keyy, shop, title, image, description, themeid,
           padding: '2px 12px',
           marginBottom: '8px',
           display: 'inline-block'
-        }}>
-          FREE
-        </span>
+        }}>FREE</span>
 
-        <div style={{ fontWeight: 600, fontSize: '1.18rem', margin: '10px 0 16px 0' }}>
-          {title}
-        </div>
+        <div style={{ fontWeight: 600, fontSize: '1.18rem', margin: '10px 0 16px 0' }}>{title}</div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button onClick={() => window.open(url, '_blank')} style={iconButtonStyle} aria-label="Preview">
-              <svg width="20" height="20" fill="none" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" /></svg>
+              <svg width="20" height="20" fill="none" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" />
+              </svg>
             </button>
           </div>
 
-          <button
-            onClick={() => handleInstall(keyy)}
-            style={installButtonStyle}
-          >
-            Install
-          </button>
+          <button onClick={handleInstall} style={installButtonStyle}>Install</button>
         </div>
       </div>
     </div>
