@@ -54,7 +54,7 @@ import { TitleBar } from '@shopify/app-bridge-react';
          }
  
          const data = await response.json();
-         console.log("Themes data:", data);
+        //  console.log("Themes data:", data);
  
          const mainTheme = data.themes && data.themes.find(theme => theme.role === "main");
          const themeId = mainTheme ? mainTheme.id : null;
