@@ -17,6 +17,7 @@
     gap: 1rem;
     padding: 1rem 0;
     scrollbar-width: none;
+  justify-content: center;
   }
 
   .logo-container::-webkit-scrollbar {
@@ -59,6 +60,7 @@
     .logo-container {
       gap: 0.75rem;
       padding: 0.75rem 0;
+      justify-content: start;
     }
   }
 </style>
@@ -73,6 +75,9 @@
       {% assign collection = collections[collection_handle] %}
 
       {% if block.settings[image_setting] != blank or collection != nil %}
+
+      {% if block.settings[image_setting]!= blank %}
+
         <div class="logo-item">
           <a href="{{ block.settings[url_setting] }}">
             <img 
@@ -81,6 +86,10 @@
             <span>{{ block.settings[image_setting].alt | default: collection.title }}</span>
           </a>
         </div>
+
+        {% endif %}
+
+        
       {% endif %}
     {% endfor %}
   </div>
