@@ -107,7 +107,12 @@ function Popup() {
                         )}
                     </div> */} 
                   <Layout>  
-                    <Layout.Section><div className='sticky-wrapper'>< Imageslider /> </div></Layout.Section>  
+                    <Layout.Section><div className='sticky-wrapper'>
+
+                        < Imageslider videourl={item.videourl} /> 
+
+
+                        </div></Layout.Section>  
                     <Layout.Section variant="oneThird">  < Installationguide /> </Layout.Section>
                  </Layout>   
                 </Page>
