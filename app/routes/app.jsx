@@ -132,6 +132,7 @@ export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
 export const loader = async ({ request }) => {
   // Authenticate Shopify admin
+  await authenticate.admin(request);
   const { session } = await authenticate.admin(request);
 
   const shop = session.shop;
@@ -139,36 +140,33 @@ export const loader = async ({ request }) => {
 
   console.log("🔑 Access token received for shop:", shop);
 
-  // Try to persist the token, but don't block initial load if DB is slow/unavailable
-  try {
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      console.log("✅ MongoDB connected");
-    }
-
-    let store = await Store.findOne({ shop });
-
-    if (store) {
-      store.accessToken = accessToken;
-      store.updatedAt = new Date();
-      console.log("🔄 Store updated in DB");
-    } else {
-      store = new Store({
-        shop,
-        accessToken,
-        updatedAt: new Date(),
-      });
-      console.log("🆕 Store created in DB");
-    }
-
-    await store.save();
-    console.log("✅ Access token saved to MongoDB for:", shop);
-  } catch (dbError) {
-    console.warn("⚠️ Skipping DB save on initial load:", dbError?.message || dbError);
+  // Connect MongoDB if not already connected
+  if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB connected");
   }
+
+  // Find or create store
+  let store = await Store.findOne({ shop });
+
+  if (store) {
+    store.accessToken = accessToken;
+    store.updatedAt = new Date();
+    console.log("🔄 Store updated in DB");
+  } else {
+    store = new Store({
+      shop,
+      accessToken,
+      updatedAt: new Date(),
+    });
+    console.log("🆕 Store created in DB");
+  }
+
+  await store.save();
+  console.log("✅ Access token saved to MongoDB for:", shop);
 
   // Return data for AppProvider
   return { apiKey: process.env.SHOPIFY_API_KEY || "" };
