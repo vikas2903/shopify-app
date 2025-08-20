@@ -4,31 +4,38 @@
 <style>
   :root {
     --drawerColor: #64112f;
+    --fontSizeDesktop: {{ block.settings.font_size_desktop | default: '14px' }};
+    --fontSizeMobile: {{ block.settings.font_size_mobile | default: '12px' }};
+    --textColor: {{ block.settings.text_color | default: '#ffffff' }};
+    --bgColor: {{ block.settings.bg_color | default: '#64112f' }};
   }
- 
-.progress-wrapper {
+
+  .progress-wrapper {
     margin-bottom: 2rem;
     border: 1px solid #eee;
     padding: 10px;
     border-radius: 6px;
-}
-  
+  }
+
   .progress-container-bg-color {
     background: #fff;
     height: 95px;
     padding: 3px 0;
   }
+
   .progress-container-wrap {
     margin-top: 10px;
     text-align: center;
     margin-bottom: 60px;
   }
+
   .progress-container {
     display: flex;
     justify-content: space-between;
     position: relative;
     margin: 0 50px;
   }
+
   .progress-container::before {
     content: "";
     background: #DCDCDC;
@@ -40,9 +47,7 @@
     width: 100%;
     z-index: 0;
   }
-  #progress {
-    display: block !important;
-}
+
   .progress {
     background: var(--drawerColor);
     position: absolute;
@@ -53,16 +58,19 @@
     width: 0%;
     transition: 0.4s ease;
   }
+
   .progress_offer_wrap {
-    background: var(--drawerColor);
+    background: var(--bgColor);
     text-align: center;
-    font-size: 13px;
+    font-size: var(--fontSizeDesktop);
   }
+
   .progress_offer_wrap p {
     margin: 5px 0;
-    color: #fff;
+    color: var(--textColor);
     padding: 2px 2px 4px 2px;
   }
+
   .circle {
     background: #fff;
     color: #999;
@@ -72,18 +80,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #64112f;
+    border: 2px solid var(--drawerColor);
     position: relative;
     transition: 0.4s ease;
   }
+
   .circle.active {
     background: var(--drawerColor);
     color: #fff;
   }
+
   .circle img {
     border-radius: 50%;
     filter: saturate(0.5);
   }
+
   .circle span {
     position: absolute;
     top: 100%;
@@ -94,6 +105,7 @@
     font-size: 10px;
     color: #000;
   }
+
   .circle.active::after {
     content: '';
     background: url('https://cdn.shopify.com/s/files/1/0361/8553/8692/files/active-right-sign.png?v=1732347738') no-repeat center/contain;
@@ -103,37 +115,39 @@
     height: 20px;
     width: 20px;
   }
+
   .progress-note p {
     padding: 8px 14px;
     text-align: center;
     margin: 0;
     font-size: 14px;
-    color: #64112f;
+    color: var(--drawerColor);
   }
 
   @media(max-width:767px){
     .progress-container {
-    margin: 0 21px !important;
-}
-.circle span {
-    position: absolute;
-    top: 100%;
-    margin-top: 10px;
-    width: 90px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    color: #000;
-    line-height: normal;
-}
-.progress-wrapper {
-    margin-bottom: 2rem;
-    border: 1px solid #eee;
-    padding: 0px;
-    border-radius: 6px;
-}
+      margin: 0 21px !important;
+    }
+    .circle span {
+      width: 90px;
+      font-size: 10px;
+    }
+    .progress-wrapper {
+      padding: 0;
+    }
+    .progress_offer_wrap {
+      font-size: var(--fontSizeMobile);
+    }
   }
 </style>
+
+<!-- 🔔 Store Owner Message (visible in editor only) -->
+{% if content_for_header contains 'shopify.designMode' %}
+  <div style="background: #fff6d8; padding: 10px; border: 1px dashed #ffb52c; margin-bottom: 20px; font-size: 13px;">
+    🔧 <strong>Note for Store Owner:</strong><br>
+    Please manually create discount codes that match the milestone offers you've mentioned above (like FREEGIFT1000, GIFT2000, etc.). This bar only shows the messaging and does not apply discounts automatically.
+  </div>
+{% endif %}
 
 <div class="progress-wrapper">
   <div class="progress-note"><p>{{ block.settings.cart-heading }}</p></div>
@@ -157,6 +171,7 @@
           <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px;" loading="lazy">
           <span>{{ block.settings.cp-text3 }}</span>
         </div>
+
       </div>
     </div>
   </div>
@@ -166,7 +181,7 @@
   const priceRanges = [
     parseFloat("{{ block.settings.cp-price-1 }}") || 0,
     parseFloat("{{ block.settings.cp-price-2 }}") || 0,
-    parseFloat("{{ block.settings.cp-price-3 }}") || 0,
+    parseFloat("{{ block.settings.cp-price-3 }}") || 0
   ].sort((a, b) => a - b);
 
   const priceTexts = [
@@ -194,11 +209,11 @@
       activeCount = 1;
     }
 
-    if (progressBar) progressBar.style.width = width;
-    if (offerTextElement) offerTextElement.textContent = priceTexts[activeCount - 1] || priceTexts[0];
+    progressBar.style.width = width;
+    offerTextElement.textContent = priceTexts[activeCount - 1] || priceTexts[0];
 
-    circles.forEach((c, i) => {
-      c.classList.toggle('active', i < activeCount);
+    circles.forEach((circle, index) => {
+      circle.classList.toggle('active', index < activeCount);
     });
   }
 
@@ -262,6 +277,30 @@
       "id": "cp-price-3",
       "label": "Price Range 3 (₹)",
       "default": "3000"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Progress Bar Background Color",
+      "default": "#64112f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Progress Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "font_size_desktop",
+      "label": "Font Size (Desktop)",
+      "default": "14px"
+    },
+    {
+      "type": "text",
+      "id": "font_size_mobile",
+      "label": "Font Size (Mobile)",
+      "default": "12px"
     }
   ]
 }

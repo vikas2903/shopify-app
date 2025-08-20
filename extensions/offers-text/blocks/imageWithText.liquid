@@ -4,8 +4,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 
 <style>
-
-.sp-tag{
+  .sp-tag {
     background: linear-gradient(45deg, #a66d30, #ffe58e 50%, #e0b057);
     border-radius: 2px;
     line-height: 1;
@@ -17,32 +16,38 @@
     margin-bottom: 9px;
     clip-path: polygon(100% 0%, 91% 50%, 100% 100%, 0 100%, 0% 50%, 0 0);
     margin-top: 3px;
-}
+  }
 
   .featured-product-carousel {
-    background: {{block.settings.bg}};
+    background: {{ block.settings.bg }};
     padding-top: {{ block.settings.margin_top }}px;
     padding-bottom: {{ block.settings.margin_bottom }}px;
     border-radius: 0px;
     border-bottom: 1px solid #f9e4bc36;
   }
+
   .featured-product-carousel__header {
     text-align: center;
     margin-bottom: 2rem;
   }
+
   .featured-product-carousel__title {
-    font-size: 2.2rem;
+    font-size: {{ block.settings.heading_font_size }}px;
+    color: {{ block.settings.heading_font_color }};
     font-weight: 700;
     margin-bottom: 0.5rem;
   }
+
   .featured-product-carousel__subtitle {
     font-size: 1.1rem;
     color: #666;
   }
+
   .featured-img-titlte img {
     width: 100%;
     display: block;
   }
+
   .splide__slide .product-card {
     background: #fff;
     border-radius: 16px;
@@ -51,17 +56,24 @@
     align-items: flex-start;
     height: 100%;
     padding-bottom: 20px;
+    {% if block.settings.enable_card_border %}
+      border: 1px solid {{ block.settings.card_border_color }};
+    {% endif %}
   }
+
   .product-card__image {
     width: 100%;
     aspect-ratio: 3/4;
     object-fit: cover;
     border-radius: 12px;
   }
-  .product-card__title, .product-card__price {
+
+  .product-card__title,
+  .product-card__price {
     padding: 0 10px;
     text-align: left;
   }
+
   .product-card__title {
     font-size: 14px;
     font-weight: 500;
@@ -69,17 +81,26 @@
     color: #000;
     line-height: 1.3;
     text-transform: capitalize !important;
-}
+  }
+
   .product-card__price {
     color: #000;
     font-size: 14px;
     font-weight: 500;
   }
-  .product-card__price .compare { text-decoration: line-through; color: #888; }
-  .product-card__price .sale { font-weight: bold; }
+
+  .product-card__price .compare {
+    text-decoration: line-through;
+    color: #888;
+  }
+
+  .product-card__price .sale {
+    font-weight: bold;
+  }
+
   .ff-btn {
-    background: #000;
-    color: #fff;
+    background: {{ block.settings.btn_bg }};
+    color: {{ block.settings.btn_text }};
     padding: 10px 20px;
     border-radius: 5px;
     text-transform: uppercase;
@@ -89,19 +110,23 @@
     width: fit-content;
     text-decoration: none;
   }
-  .page-widthh{padding:0 20px;}
-  .featured-product-carousel .product-card{
 
+  .page-widthh {
+    padding: 0 20px;
   }
-  @media(max-width:767px){
-    .product-card__title{
+
+  @media (max-width: 767px) {
+    .product-card__title {
       text-transform: capitalize !important;
-    font-size: 12px !important;
-    margin: 10px 0 5px;
-    color: #000;
-    padding: 0 !important;
+      font-size: 12px !important;
+      margin: 10px 0 5px;
+      color: #000;
+      padding: 0 !important;
     }
-      .page-widthh{padding:0 10px;}
+
+    .page-widthh {
+      padding: 0 10px;
+    }
   }
 </style>
 
@@ -120,14 +145,11 @@
           <source media="(max-width: 767px)" srcset="{{ block.settings.featured_image_banner | img_url: 'master' }}" />
           <img src="{{ block.settings.featured_image_banner | img_url: 'master' }}" alt="{{ block.settings.featured_image_banner.alt }}" />
         </picture>
-
-        {% else %}
-          <picture>
+      {% else %}
+        <picture>
           <source media="(max-width: 767px)" srcset="https://cdn.shopify.com/s/files/1/0830/2719/8240/files/Style_Jaipur_4.png?v=1752664860" />
           <img src="https://cdn.shopify.com/s/files/1/0830/2719/8240/files/Style_Jaipur_4.png?v=1752664860" alt="Featured Image" />
         </picture>
-
-        
       {% endif %}
     </div>
   </div>
@@ -147,7 +169,7 @@
                   {% if block.settings.product_label != blank %}
                     <span class="sp-tag">{{ block.settings.product_label }}</span>
                   {% endif %}
-                  <div class="product-card__title">{{ product.title | truncate: "100"  }}</div>
+                  <div class="product-card__title">{{ product.title | truncate: 100 }}</div>
                   <div class="product-card__price">
                     {% if product.compare_at_price > product.price %}
                       <span class="compare">{{ product.compare_at_price | money }}</span>
@@ -172,9 +194,9 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     new Splide('#splide-featured', {
-      type   : 'loop',
+      type: 'loop',
       perPage: 4,
-      gap    : '1rem',
+      gap: '1rem',
       pagination: false,
       breakpoints: {
         1024: { perPage: 3 },
@@ -190,12 +212,11 @@
   "name": "Featured Product Carousel",
   "target": "section",
   "settings": [
-
-   {
-    "type": "color",
-    "id":"bg",
-    "label":"background color",
-    "default":"#f9e4bc36"
+    {
+      "type": "color",
+      "id": "bg",
+      "label": "Background Color",
+      "default": "#f9e4bc36"
     },
     {
       "type": "text",
@@ -208,6 +229,45 @@
       "id": "section_subtitle",
       "label": "Section Subtitle",
       "default": "Check out our top picks."
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading Font Size (px)",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "heading_font_color",
+      "label": "Heading Font Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_text",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_card_border",
+      "label": "Enable Card Border",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#cccccc"
     },
     {
       "type": "collection",
