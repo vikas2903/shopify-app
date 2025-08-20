@@ -26,27 +26,12 @@ import Store from "../backend/modals/store.js"
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
-   const { session } = await authenticate.admin(request);
-     const shop = session.shop;
+  const { session } = await authenticate.admin(request);
+  const shop = session.shop;
 
-       if (mongoose.connection.readyState === 0) {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  }
-
-  const store = await Store.findOne({ shop });
-  const accessToken = store?.accessToken;
-
-
-  if (!accessToken) {
-    throw new Error("Access token not found for shop: " + shop);
-  }
-
-
-    console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", shop);
-    console.log("Shopify app loaded successfully ✅ ✅✅✅✅ shop", accessToken);
+  // Rely on the authenticated session for access, don't block the first load
+  // by requiring the token to be already saved in MongoDB.
+  console.log("Shopify app loaded successfully ✅ shop", shop);
 
 //   const response = await fetch(`https://${shop}/admin/api/2024-01/themes.json`, {
 //   method: "GET",
