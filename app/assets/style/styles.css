@@ -1509,3 +1509,13 @@ button {
     display: inline-block;
     line-height: 1;
 }
+a.fullvideo {
+    text-align: center;
+    display: block;
+    margin: 9px auto;
+    font-size: 1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: blue;
+    text-decoration: underline;
+}

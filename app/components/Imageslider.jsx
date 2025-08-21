@@ -91,7 +91,7 @@ const FullscreenVideo = ({videourl}) => {
       FullscreenVideo
         loop
         muted
-        // playsInline
+        playsInline
         style={{
           // position: "absolute",
           // top: "50%",
@@ -115,6 +115,7 @@ const FullscreenVideo = ({videourl}) => {
         Your browser does not support the video tag.
       </video>
 
+<a class="fullvideo" href={videourl ? videourl : "https://cdn.shopify.com/videos/c/o/v/85877022144b4987a4892e4878cedd6e.mp4"} target="_blank" > FullScreen Video</a> 
 
     </div>
   );

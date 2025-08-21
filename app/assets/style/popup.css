@@ -101,6 +101,7 @@ button.popup-close {
     width: 100%;
     height: 100%;
     background: #00000085;
+    z-index: 9;
 }
 .Polaris-Layout__Section:has(.sticky-wrapper) {
     position: sticky;
