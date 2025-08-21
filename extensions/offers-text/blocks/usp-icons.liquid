@@ -12,13 +12,14 @@
 
 
 .usp-wrapper {
-width: 100%;
+    width: 100%;
     display: flex;
     align-items: baseline;
     white-space: nowrap;
     scroll-behavior: smooth;
     overflow-x: scroll;
     justify-content: flex-start;
+    gap: .5rem;
 }
 
 .usp-wrapper::-webkit-scrollbar {
@@ -39,7 +40,7 @@ width: 100%;
 }
 
 span.content {
- font-size:11px;
+ font-size:{{block.settings.font-size}}px;
   text-align: center;
   font-family: inherit;
   text-transform: inherit;
@@ -146,12 +147,23 @@ span.content {
         {
         "type":"range",
         "id":"usp-width",
-        "label":"Font Size",
+        "label":"Image Size",
         "min":40,
         "max":120,
         "step":10,
         "unit":"px",
         "default":60
+        },
+
+      {
+        "type":"range",
+        "id":"font-size",
+        "label":"Image Title  Size",
+        "min":12,
+        "max":30,
+        "step":1,
+        "unit":"px",
+        "default":12
         },
         {
             "type": "image_picker",

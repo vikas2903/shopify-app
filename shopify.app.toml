@@ -3,7 +3,7 @@
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
 name = "LayerUp"
 handle = "ds-app-6"
-application_url = "https://files-lions-arising-become.trycloudflare.com"
+application_url = "https://comfort-cheers-less-commentary.trycloudflare.com"
 embedded = true
 
 [build]
@@ -22,7 +22,7 @@ api_version = "2024-01"
 scopes = "read_themes,write_themes,read_products"
 
 [auth]
-redirect_urls = ["https://files-lions-arising-become.trycloudflare.com/auth/callback", "https://files-lions-arising-become.trycloudflare.com/auth/shopify/callback", "https://files-lions-arising-become.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://comfort-cheers-less-commentary.trycloudflare.com/auth/callback", "https://comfort-cheers-less-commentary.trycloudflare.com/auth/shopify/callback", "https://comfort-cheers-less-commentary.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

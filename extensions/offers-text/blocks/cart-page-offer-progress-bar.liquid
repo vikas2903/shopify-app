@@ -3,7 +3,7 @@
 
 <style>
   :root {
-    --drawerColor: #64112f;
+    --drawerColor: {{ block.settings.bg_color | default: '#64112f' }};
     --fontSizeDesktop: {{ block.settings.font_size_desktop | default: '14px' }};
     --fontSizeMobile: {{ block.settings.font_size_mobile | default: '12px' }};
     --textColor: {{ block.settings.text_color | default: '#ffffff' }};
@@ -20,7 +20,7 @@
   .progress-container-bg-color {
     background: #fff;
     height: 95px;
-    padding: 3px 0;
+    padding: 3px 10px;
   }
 
   .progress-container-wrap {
@@ -129,8 +129,9 @@
       margin: 0 21px !important;
     }
     .circle span {
-      width: 90px;
-      font-size: 10px;
+        width: 86px;
+        font-size: 10px;
+        line-height: 1.3;
     }
     .progress-wrapper {
       padding: 0;
@@ -158,20 +159,9 @@
     <div class="progress-container-wrap">
       <div class="progress-container">
         <div class="progress" id="progress"></div>
-
-        <div class="circle">
-          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px;" loading="lazy">
-          <span>{{ block.settings.cp-text1 }}</span>
-        </div>
-        <div class="circle">
-          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px;" loading="lazy">
-          <span>{{ block.settings.cp-text2 }}</span>
-        </div>
-        <div class="circle">
-          <img src="https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527" style="width: 26px;" loading="lazy">
-          <span>{{ block.settings.cp-text3 }}</span>
-        </div>
-
+        <div class="circle"> <img src="{% if block.settings.image != blank %} {{ block.settings.image | img_url: 'original' }} {% else %} https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527 {% endif %}" style="width: 26px;" loading="lazy" > <span>{{ block.settings.cp-text1 }}</span> </div>
+        <div class="circle"> <img src="{% if block.settings.image != blank %} {{ block.settings.image | img_url: 'original' }} {% else %} https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527 {% endif %}" style="width: 26px;" loading="lazy" > <span>{{ block.settings.cp-text2 }}</span> </div>
+        <div class="circle"> <img src="{% if block.settings.image != blank %} {{ block.settings.image | img_url: 'original' }} {% else %} https://cdn.shopify.com/s/files/1/0361/8553/8692/files/gift_1.gif?v=1732354527 {% endif %}" style="width: 26px;" loading="lazy" > <span>{{ block.settings.cp-text3 }}</span> </div>
       </div>
     </div>
   </div>
@@ -236,6 +226,11 @@
   "name": "Cart Progress Bar",
   "target": "section",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Gift Image"
+    },
     {
       "type": "text",
       "id": "cart-heading",
