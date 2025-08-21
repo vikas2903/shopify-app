@@ -39,7 +39,7 @@
   width: 32px;
   height: 32px;
   margin: 0 2px;
-  padding: 3px;
+  padding:5px 3px 3px 3px;
 }
 
 .text-block-countdown {
@@ -63,9 +63,10 @@
        line-height: 1.1;
     padding-bottom: 3px;
 }
-
+.clock-down_text{font-size:{{block.settings.desktop_font_size}}px;}
 @media(max-width:767px) {
   .box-3 { height: 40px; }
+  .clock-down_text{font-size:{{block.settings.mobile_font_size}}px;}
 }
 </style>
 
@@ -157,6 +158,26 @@ document.addEventListener("DOMContentLoaded", function () {
       "id": "timer_title",
       "label": "Timer Title",
       "default": "Hurry Up! Ends In"
+    },
+    {
+      "type": "range",
+      "id": "desktop_font_size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop Font size",
+      "default": 18
+    },
+     {
+      "type": "range",
+      "id": "mobile_font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile Font size",
+      "default": 14
     },
     {
       "type": "text",
