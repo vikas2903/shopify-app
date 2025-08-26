@@ -1,7 +1,11 @@
 
 <style>
 :root{
-    --usp-width:{{block.settings.usp-width}}px;
+  --usp-width:{{block.settings.usp-width}}px;
+  --usp-radius: {{block.settings.usp-radius}}%;
+  --usp-circle-bg: {{block.settings.usp-circle-bg}};
+  --usp-circle-border: {{block.settings.usp-circle-border}};
+  --usp-circle-border-width: {{block.settings.usp-circle-border-width}}px;
 }
 .usp-container {
 
@@ -11,7 +15,7 @@
 }
 
 
-.usp-wrapper {
+.Ds-usp-wrapper {
     width: 100%;
     display: flex;
     align-items: baseline;
@@ -21,116 +25,110 @@
     justify-content: flex-start;
     gap: .5rem;
 }
-
-.usp-wrapper::-webkit-scrollbar {
+.Ds-usp-wrapper::-webkit-scrollbar {
   background-color: transparent;
 }
-
-.usp-wrapper::-webkit-scrollbar-thumb {
+.Ds-usp-wrapper::-webkit-scrollbar-thumb {
   background-color: #000;
   height: 1px;
 }
-
-.usp-items {
+.Ds-usp-items {
   flex: 0 0 25%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-
-span.content {
+span.Ds-content {
  font-size:{{block.settings.font-size}}px;
   text-align: center;
   font-family: inherit;
   text-transform: inherit;
   color:{{block.settings.text-color}};
 }
-
-.usp-wrapper img {
+.Ds-usp-wrapper img {
   width: 80%;
   height: auto;
   display: block;
 }
-
-
-.usp-items .img {
-  box-shadow: 2px 2px 2px 1px #d9d8d8;
-  border-radius: 50%;
+.Ds-usp-items .Ds-img {
+  box-shadow: 2px 2px 2px 1px rgba(0,0,0,0.08);
+  border-radius: var(--usp-radius);
   width: var(--usp-width);
   height: var(--usp-width);
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
-  background-color: #fff;
+  background-color: var(--usp-circle-bg);
+  border: var(--usp-circle-border-width) solid var(--usp-circle-border);
 }
 
-.usp-wrapper::-webkit-scrollbar {
+.Ds-usp-wrapper::-webkit-scrollbar {
   display: none;
 }
 
 @media(max-width < 767px) {
-  .usp-items .img {
+  .Ds-usp-items .Ds-img {
     width: 40px;
   }
 
-  .usp-items {
+  .Ds-usp-items {
     flex: 0 0 22%;
     gap: 5px;
   }
 
-  .usp-wrapper {
+  .Ds-usp-wrapper {
     gap: 6%;
   }
 }
 </style>
 
 
-  <div class="usp-container">
-        <div class="usp-wrapper">
+  <div class="Ds-usp-container">
+    <div class="Ds-usp-wrapper">
         {% if block.settings.usp_icon_1_image  != blank %}
-            <div class="usp-items">
-                <div class="img"><img src="{{block.settings.usp_icon_1_image | image_url }}" alt="{{block.settings.usp_icon_1_title}}"></div>
-                <span class="content">{{block.settings.usp_icon_1_title}}</span>
-            </div>
+      <div class="Ds-usp-items">
+        <div class="Ds-img"><img src="{{block.settings.usp_icon_1_image | image_url }}" alt="{{block.settings.usp_icon_1_title}}"></div>
+        <span class="Ds-content">{{block.settings.usp_icon_1_title}}</span>
+      </div>
         {% endif %}
 
-         {% if block.settings.usp_icon_2_image  != blank %}
-            <div class="usp-items">
-        <div class="img"><img src="{{block.settings.usp_icon_2_image | image_url }}" alt="{{block.settings.usp_icon_2_title}}"></div>
-                <span class="content">{{block.settings.usp_icon_2_title}}</span>
-            </div>
+     {% if block.settings.usp_icon_2_image  != blank %}
+      <div class="Ds-usp-items">
+    <div class="Ds-img"><img src="{{block.settings.usp_icon_2_image | image_url }}" alt="{{block.settings.usp_icon_2_title}}"></div>
+        <span class="Ds-content">{{block.settings.usp_icon_2_title}}</span>
+      </div>
         {% endif %}
 
-         {% if block.settings.usp_icon_3_image  != blank %}
-            <div class="usp-items">
-           <div class="img"><img src="{{block.settings.usp_icon_3_image | image_url }}" alt="{{block.settings.usp_icon_3_title}}"></div>
-                <span class="content">{{block.settings.usp_icon_3_title}}</span>
-            </div>
+     {% if block.settings.usp_icon_3_image  != blank %}
+      <div class="Ds-usp-items">
+       <div class="Ds-img"><img src="{{block.settings.usp_icon_3_image | image_url }}" alt="{{block.settings.usp_icon_3_title}}"></div>
+        <span class="Ds-content">{{block.settings.usp_icon_3_title}}</span>
+      </div>
         {% endif %}
 
-         {% if block.settings.usp_icon_4_image  != blank %}
-            <div class="usp-items">
-               <div class="img"><img src="{{block.settings.usp_icon_4_image | image_url }}" alt="{{block.settings.usp_icon_4_title}}"></div>
-                <span class="content">{{block.settings.usp_icon_4_title}}</span>
-            </div>
+      {% if block.settings.usp_icon_4_image  != blank %}
+        <div class="Ds-usp-items">
+          <div class="Ds-img"><img src="{{block.settings.usp_icon_4_image | image_url }}" alt="{{block.settings.usp_icon_4_title}}"></div>
+           <span class="Ds-content">{{block.settings.usp_icon_4_title}}</span>
+        </div>
         {% endif %}
 
-        {% if block.settings.usp_icon_5_image  != blank %}
-            <div class="usp-items">
-               <div class="img"><img src="{{block.settings.usp_icon_5_image | image_url }}" alt="{{block.settings.usp_icon_5_title}}"></div>
-                <span class="content">{{block.settings.usp_icon_5_title}}</span>
-            </div>
-            {% endif %}
+    {% if block.settings.usp_icon_5_image  != blank %}
+      <div class="Ds-usp-items">
+         <div class="Ds-img"><img src="{{block.settings.usp_icon_5_image | image_url }}" alt="{{block.settings.usp_icon_5_title}}"></div>
+        <span class="Ds-content">{{block.settings.usp_icon_5_title}}</span>
+      </div>
+      {% endif %}
 
-            {% if block.settings.usp_icon_6_image  != blank %}
-            <div class="usp-items">
-               <div class="img"><img src="{{block.settings.usp_icon_6_image | image_url }}" alt="{{block.settings.usp_icon_6_title}}"></div>
-                <span class="content">{{block.settings.usp_icon_6_title}}</span>
-            </div>
+      {% if block.settings.usp_icon_6_image  != blank %}
+      <div class="Ds-usp-items">
+         <div class="Ds-img"><img src="{{block.settings.usp_icon_6_image | image_url }}" alt="{{block.settings.usp_icon_6_title}}"></div>
+        <span class="Ds-content">{{block.settings.usp_icon_6_title}}</span>
+      </div>
 
-            {% endif %}
+      {% endif %}
 
         </div>
     </div>
@@ -154,6 +152,42 @@ span.content {
         "unit":"px",
         "default":60
         },
+
+    {
+      "type":"range",
+      "id":"usp-radius",
+      "label":"Circle Radius (%)",
+      "min":0,
+      "max":100,
+      "step":1,
+      "unit":"%",
+      "default":50
+    },
+
+    {
+      "type": "color",
+      "id": "usp-circle-bg",
+      "label": "Circle Background Color",
+      "default": "#ffffff"
+    },
+
+    {
+      "type": "color",
+      "id": "usp-circle-border",
+      "label": "Circle Border Color",
+      "default": "#e6e6e6"
+    },
+
+    {
+      "type":"range",
+      "id":"usp-circle-border-width",
+      "label":"Circle Border Width",
+      "min":0,
+      "max":8,
+      "step":1,
+      "unit":"px",
+      "default":0
+    },
 
       {
         "type":"range",
@@ -234,7 +268,7 @@ span.content {
         {
             "type": "color",
             "id": "bg",
-            "label": "Body text",
+            "label": "Background color",
             "default": "#ffffff"
             }
     ]
