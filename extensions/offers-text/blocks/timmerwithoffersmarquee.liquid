@@ -1,5 +1,5 @@
 <style>
-  .announcement-bar {
+  .Ds-announcement-bar {
     display: flex;
     align-items: center;
     background: {{ block.settings.background_color }};
@@ -11,7 +11,7 @@
     gap: 20px;
   }
 
-  .scrolling-text {
+  .Ds-scrolling-text {
     width: calc(80% - 40px);
     overflow: hidden;
     white-space: nowrap;
@@ -22,7 +22,7 @@
     letter-spacing: 1px;
   }
 
-  .scrolling-text-inner {
+  .Ds-scrolling-text-inner {
     display: inline-block;
     animation: scroll-left 15s linear infinite;
   }
@@ -32,7 +32,7 @@
     100% { transform: translateX(-50%); }
   }
 
-  .right-section {
+  .Ds-right-section {
     width: 20%;
     display: flex;
     align-items: center;
@@ -41,7 +41,7 @@
     min-width: 220px;
   }
 
-  .timer {
+  .Ds-timer {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -50,14 +50,14 @@
 flex-direction: row;
   }
 
-  .timer-value {
+  .Ds-timer-value {
     font-size: 20px;
     font-weight: bold;
     color: {{ block.settings.text_color }};
     letter-spacing: 2px;
   }
 
-  .timer-labels {
+  .Ds-timer-labels {
     display: flex;
     flex-direction: row;
     gap: 12px;
@@ -67,7 +67,7 @@ flex-direction: row;
     justify-content: space-between;
   }
 
-  .cta-btn {
+  .Ds-cta-btn {
     background: {{ block.settings.button_background }};
     color: {{ block.settings.button_text_color }};
     font-weight: bold;
@@ -84,53 +84,53 @@ flex-direction: row;
     letter-spacing: .2px;
   }
 
-  .cta-btn:hover {
+  .Ds-cta-btn:hover {
     opacity: 0.9;
   }
 
   @media(max-width: 1200px){
-    .right-section{ width: 40%; }
-    .scrolling-text { width: calc(60% - 20px); }
+    .Ds-right-section{ width: 40%; }
+    .Ds-scrolling-text { width: calc(60% - 20px); }
   }
   @media (max-width: 700px) {
-    .announcement-bar {
+    .Ds-announcement-bar {
       flex-direction: column;
       align-items: stretch;
       padding: 0;
       width: 100%;
       gap: 0px;
     }
-    .scrolling-text {
+    .Ds-scrolling-text {
       width: 100%;
       font-size: 14px;
       padding: 10px 0;
     }
-    .right-section {
+    .Ds-right-section {
       width: 100%;
       justify-content: center;
       min-width: unset;
       padding: 3px 0;
       border-top: 2px solid #ffffff;
     }
-    .cta-btn{ padding: 4px 10px; }
-    .timer span { line-height: 1.5; }
-    .right-section{ justify-content: center; }
+    .Ds-cta-btn{ padding: 4px 10px; }
+    .Ds-timer span { line-height: 1.5; }
+    .Ds-right-section{ justify-content: center; }
   }
 
 {% if block.settings.enable_timer == false and block.settings.enable_cta_button == false %}
-  .right-section {
+  .Ds-right-section {
     display: none;
   }
-  .scrolling-text{width:100%;}
+  .Ds-scrolling-text{width:100%;}
 {% endif %}
 
 
 </style>
 
-<div class="announcement-bar">
+<div class="Ds-announcement-bar">
   {% if block.settings.enable_marquee %}
-    <div class="scrolling-text">
-      <span class="scrolling-text-inner" id="scrollingText">
+    <div class="Ds-scrolling-text">
+      <span class="Ds-scrolling-text-inner" id="scrollingText">
         {{ block.settings.announcement_text_1 }} &nbsp; &nbsp;
         {{ block.settings.announcement_text_2 }} &nbsp; &nbsp;
         {{ block.settings.announcement_text_3 }} &nbsp; &nbsp;
@@ -140,24 +140,24 @@ flex-direction: row;
     </div>
   {% endif %}
 
-  <div class="right-section">
+  <div class="Ds-right-section">
     {% if block.settings.enable_timer %}
       <div>
-        <div class="timer" id="timer">
-          <span class="timer-value" id="hours">00</span>
+        <div class="Ds-timer" id="timer">
+          <span class="Ds-timer-value" id="hours">00</span>
           <span style="font-size: 20px; font-weight: 600; color: {{ block.settings.text_color }};">:</span>
-          <span class="timer-value" id="minutes">00</span>
+          <span class="Ds-timer-value" id="minutes">00</span>
           <span style="font-size: 20px; font-weight: 600; color: {{ block.settings.text_color }};">:</span>
-          <span class="timer-value" id="seconds">00</span>
+          <span class="Ds-timer-value" id="seconds">00</span>
         </div>
-        <div class="timer-labels">
+        <div class="Ds-timer-labels">
           <span>Hrs</span><span>Mins</span><span>Secs</span>
         </div>
       </div>
     {% endif %}
 
     {% if block.settings.enable_cta_button %}
-      <a href="{{ block.settings.button_link }}" class="cta-btn">{{ block.settings.button_text }}</a>
+      <a href="{{ block.settings.button_link }}" class="Ds-cta-btn">{{ block.settings.button_text }}</a>
     {% endif %}
   </div>
 </div>
