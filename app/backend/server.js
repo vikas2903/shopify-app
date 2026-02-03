@@ -1,15 +1,30 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import { existsSync } from "fs";
 import cors from "cors";
 import connectDatabase from "./database/connect.js";
 import Store from "./modals/store.js";
 import dashboardroute from "../backend/route.js/dashboardRoutes.js";
 import axios from "axios";
 
-
+// Load .env from project root or app/ so it's readable from any cwd
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const envPaths = [
+  path.join(process.cwd(), ".env"),
+  path.join(process.cwd(), "app", ".env"),
+  path.join(__dirname, "..", ".env"),
+  path.join(__dirname, "..", "..", ".env"),
+];
+for (const envPath of envPaths) {
+  if (existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+    break;
+  }
+}
 
 // const PORT = process.env.PORT || 3000;
-dotenv.config();
 connectDatabase();
  
 

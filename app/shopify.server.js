@@ -1,4 +1,22 @@
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import { existsSync } from "fs";
+
+// Load .env from project root or app/ so it's readable from any cwd
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const envPaths = [
+  path.join(process.cwd(), ".env"),
+  path.join(process.cwd(), "app", ".env"),
+  path.join(__dirname, ".env"),
+];
+for (const envPath of envPaths) {
+  if (existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+    break;
+  }
+}
 
 import "@shopify/shopify-app-remix/adapters/node";
 import {
@@ -17,23 +35,11 @@ import cors from "cors";
 
 // import crypto from "crypto";
 
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-
-dotenv.config();
-
 const app = express();
 
 app.use("/webhooks", express.raw({ type: "*/*" }));
 app.use(express.json());
-// Serve the uploads folder
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-
- 
 app.use((req, res, next) => {
   let data = "";
   req.setEncoding("utf8");
@@ -48,122 +54,15 @@ app.use(cors());
 app.use('/images', express.static(path.join(__dirname, './public')));
 
 
-// const sigHeaderName = "X-Shopify-Hmac-Sha256";
-// const sigHashAlg = "sha256";
-// const secret = process.env.SHOPIFY_API_SECRET;
-
-// Perform HMAC verification
-// function authenticateSignature(req, res, next) {
-//   if (req.method !== "POST") {
-//     return next("Request must be POST");
-//   }
-
-//   if (!req.rawBody) {
-//     return next("Request body empty");
-//   }
-
-//   const body = req.rawBody;
-//   const hmacHeader = req.get(sigHeaderName);
-
-//   // Create a hash based on the parsed body
-//   const hash = crypto
-//     .createHmac(sigHashAlg, secret)
-//     .update(body, "utf8", "hex")
-//     .digest("base64");
-
-//   // Compare the created hash with the value of the X-Shopify-Hmac-Sha256 Header
-//   if (hash !== hmacHeader) {
-//     return res.status(401).send({
-//       message: `Request body digest (${hash}) did not match ${sigHeaderName} (${hmacHeader})`,
-//     });
-//   }
-
-//   return next();
-// }
-
-// app.use("/webhooks", authenticateSignature);
-
-// export const MONTHLY_PLAN = "Monthly subscription";
-// export const ANNUAL_PLAN = "Annual subscription";
-
-// export const loader = async ({ request }) => {
-//   const { shop, accessToken, host } = await getShopSession(request);
-
-//   console.log("Shop vs:", shop);
-//   console.log("Token:", accessToken);
-//   console.log("Digisidekick....")
-
-//   return json({
-//     shop,
-//     host,
-//   });
-// };
-
-// function verifyHmac(rawBody, hmacHeader, secret) {
-//   const generatedHmac = crypto
-//     .createHmac("sha256", secret)
-//     .update(rawBody, "utf8")
-//     .digest("base64");
-
-//   try {
-//     return crypto.timingSafeEqual(
-//       Buffer.from(generatedHmac, "base64"),
-//       Buffer.from(hmacHeader, "base64"),
-//     );
-//   } catch {
-//     return false;
-//   }
-// }
-
-// app.post("/webhooks/customers/data_request", (req, res) => {
-//   const hmac = req.headers["x-shopify-hmac-sha256"];
-//   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-//     console.log("❌ Invalid HMAC - data_request");
-//     return res.status(401).send("Unauthorized");
-//   }
-
-//   const payload = JSON.parse(req.body.toString("utf8"));
-//   console.log("📦 Customer data request webhook:", payload);
-//   res.sendStatus(200);
-// });
-
-// 4️⃣ GDPR: Customer redact
-// app.post("/webhooks/customers/redact", (req, res) => {
-//   const hmac = req.headers["x-shopify-hmac-sha256"];
-//   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-//     console.log("❌ Invalid HMAC - customers/redact");
-//     return res.status(401).send("Unauthorized");
-//   }
-
-//   const payload = JSON.parse(req.body.toString("utf8"));
-//   console.log("🧹 Customer redact webhook:", payload);
-//   res.sendStatus(200);
-// });
-
-// 5️⃣ GDPR: Shop redact
-// app.post("/webhooks/shop/redact", (req, res) => {
-//   const hmac = req.headers["x-shopify-hmac-sha256"];
-//   if (!verifyHmac(req.body, hmac, process.env.SHOPIFY_API_SECRET)) {
-//     console.log("❌ Invalid HMAC - shop/redact");
-//     return res.status(401).send("Unauthorized");
-//   }
-
-//   const payload = JSON.parse(req.body.toString("utf8"));
-//   console.log("🏪 Shop redact webhook:", payload);
-//   res.sendStatus(200);
-// });
-
 const connectDB = async () => {
   try {
-    if (!process.env.MONGO_URI) {
-      throw new Error("MONGO_URI is not defined in environment variables");
-    }
-
-    await mongoose.connect(process.env.MONGO_URI);
+ 
+    await mongoose.connect(process.env.MONGO_URI || "mongodb+srv://vikasprasad2903:O3R7PnVQUr0DZO7g@cluster0.pyizi.mongodb.net/?appName=Cluster0");
     console.log("MongoDB Connected Successfully : shopify.server.js");
   } catch (error) {
-    console.error("MongoDB connection error:", error);
-    process.exit(1);
+    console.error("MongoDB connection error:", error.message);
+    console.warn("App will run without MongoDB. Fix MONGO_URI in .env to enable DB features.");
+    // Don't exit — allow app to run so you can fix credentials or work without DB
   }
 };
 
@@ -184,37 +83,24 @@ const shopify = shopifyApp({
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
 
-  // billing: {
-  //   [MONTHLY_PLAN]: {
-  //     amount: 10,
-  //     currencyCode: "USD",
-  //     interval: BillingInterval.Every30Days,
+  // webhooks: {
+  //   APP_UNINSTALLED: {
+  //     deliveryMethod: DeliveryMethod.Http,
+  //     callbackUrl: "/webhooks",
   //   },
-  //   [ANNUAL_PLAN]: {
-  //     amount: 100,
-  //     currencyCode: "USD",
-  //     interval: BillingInterval.Annual,
+  //   CUSTOMERS_DATA_REQUEST: {
+  //     deliveryMethod: DeliveryMethod.Http,
+  //     callbackUrl: "/webhooks/customers/data_request",
   //   },
-  // },
-
-  webhooks: {
-    APP_UNINSTALLED: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks",
-    },
-    CUSTOMERS_DATA_REQUEST: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/customers/data_request",
-    },
-    CUSTOMERS_REDACT: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/customers/redact",
-    },
-    SHOP_REDACT: {
-      deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/shop/redact",
-    },
-  },
+  //   CUSTOMERS_REDACT: {
+  //     deliveryMethod: DeliveryMethod.Http,
+  //     callbackUrl: "/webhooks/customers/redact",
+  //   },
+  //   SHOP_REDACT: {
+  //     deliveryMethod: DeliveryMethod.Http,
+  //     callbackUrl: "/webhooks/shop/redact",
+  //   },
+  // }, 
   auth: {
     path: "/auth",
     callbackPath: "/auth/callback",

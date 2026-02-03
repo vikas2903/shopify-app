@@ -1,4 +1,7 @@
 name = "Offers Text"
+
+uid = "4e991c28-d4dc-950e-2964-4b47a0401cbb039f58b1"
+
 type = "theme"
 
 [[extension.blocks]]

@@ -57,7 +57,7 @@ export const action = async ({ request }) => {
 
 
   // ✅ Then continue your email logic as before
-  let transporter = nodemailer.createTransport({
+  let transporter = nodemailer.nodemailer({
     host: "smtp-relay.brevo.com",
     port: 587,
     auth: {
