@@ -1,57 +1,26 @@
-// import crypto from 'crypto';
-// import { json } from '@remix-run/node';
+import {
+  verifyGdprWebhookHmac,
+  gdprWebhookOkResponse,
+  methodNotAllowedResponse,
+} from "../../utils/gdprWebhook";
 
-// export const action = async ({ request }) => {
-//   const secret = process.env.SHOPIFY_API_SECRET;
-//   const hmacHeader = request.headers.get("x-shopify-hmac-sha256");
-//   const rawBody = await request.text();
+/**
+ * Mandatory GDPR: customers/data_request — customer requested to view their data.
+ * This app does not store customer/order PII; we acknowledge receipt with 200.
+ */
+export async function loader() {
+  return gdprWebhookOkResponse();
+}
 
-//   const digest = crypto
-//     .createHmac("sha256", secret)
-//     .update(rawBody, "utf8")
-//     .digest("base64");
-
-//   const verified = crypto.timingSafeEqual(
-//     Buffer.from(hmacHeader, "base64"),
-//     Buffer.from(digest, "base64")
-//   );
-
-//   if (!verified) {
-//     return new Response("Unauthorized", { status: 401 });
-//   }
-
-//   const payload = JSON.parse(rawBody);
-//   console.log("✅ CUSTOMER DATA REQUEST WEBHOOK:", payload);
-
-//   return json({ success: true });
-// };
-
-
-
-import crypto from 'crypto';
-import { json } from '@remix-run/node';
-
-export const action = async ({ request }) => {
-  const secret = process.env.SHOPIFY_API_SECRET;
-  const hmac = request.headers.get('x-shopify-hmac-sha256');
+export async function action({ request }) {
+  if (request.method !== "POST") return methodNotAllowedResponse();
   const raw = await request.text();
-
-  const digest = crypto
-    .createHmac('sha256', secret)
-    .update(raw, 'utf8')
-    .digest('base64');
-
-  const verified = crypto.timingSafeEqual(
-    Buffer.from(hmac, 'base64'),
-    Buffer.from(digest, 'base64')
-  );
-
-  if (!verified) {
-    return new Response('HMAC invalid', { status: 401 });
-  }
-
-  const payload = JSON.parse(raw);
-  console.log('✅ CUSTOMER REDACT webhook received:', payload);
-
-  return json({ ok: true });
-};
+  const unauthorized = verifyGdprWebhookHmac(request, raw);
+  if (unauthorized) return unauthorized;
+  let payload = null;
+  try {
+    payload = raw ? JSON.parse(raw) : null;
+  } catch {}
+  console.log("[WEBHOOK customers/data_request]", payload);
+  return gdprWebhookOkResponse();
+}

@@ -64,8 +64,8 @@ export default function App() {
           <Link to="/app" rel="home">Dashboard</Link>
           <Link to="/app/explore">Blocks</Link>
           {/* <Link to="/app/sections">Sections</Link> */}
-          <Link to="/app/support">Support</Link>
-          {/* <Link to="/app/debug">Debug</Link> */}
+          {/* <Link to="/app/support">Support</Link> */}
+          <Link to="/app/help">Support</Link>
         </NavMenu>
         <Outlet />
       </ExploreContextProvider>

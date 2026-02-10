@@ -35,9 +35,9 @@ scopes = "read_themes,write_themes,read_products"
 
 [auth]
 redirect_urls = [
-  "https://layerup.onrender.com//auth/callback",
-  "https://layerup.onrender.com//auth/shopify/callback",
-  "https://layerup.onrender.com//api/auth/callback"
+  "https://layerup.onrender.com/auth/callback",
+  "https://layerup.onrender.com/auth/shopify/callback",
+  "https://layerup.onrender.com/api/auth/callback"
 ]
 
 [pos]
