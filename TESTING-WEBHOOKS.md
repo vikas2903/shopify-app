@@ -1,10 +1,49 @@
 # Testing GDPR Webhooks
 
-Three ways to verify your mandatory compliance webhooks work.
+Four ways to verify your mandatory compliance webhooks work.
 
 ---
 
-## 1. Local script (fastest)
+## 1. Trigger from Shopify Admin (shows in Partner Dashboard)
+
+Use this when you want **deliveries to appear in Partner Dashboard → Monitoring → Webhooks** (like `app/uninstalled`).
+
+**Requirements:** Your app must be **installed on a development store**. Use the same store (or create one) in Partners → Dev stores.
+
+### customers/data_request (Request to view customer data)
+
+1. Open your **dev store** (where LayerUp is installed): `https://admin.shopify.com/store/YOUR-STORE-HANDLE`
+2. Go to **Customers**.
+3. Click **any customer** (or create a test customer).
+4. Click **More actions** (⋮ or "..." menu) → **Request customer data**.
+5. Confirm if prompted.
+6. Within a short time, Shopify sends the webhook to your app.
+7. Check **Partner Dashboard → LayerUp → Monitoring → Webhooks**. You should see a delivery for topic **customers/data_request** (refresh or change date range to "Last 7 days" if needed).
+
+### customers/redact (Request to delete customer data)
+
+1. In the same dev store: **Customers** → click a customer.
+2. Click **More actions** → **Erase personal data** (or **Erase data**).
+3. Confirm. Shopify may send the webhook **right away** or after a delay (up to 10 days in some cases).
+4. Check **Monitoring → Webhooks** for **customers/redact**.
+
+### shop/redact (Request to delete shop data)
+
+This webhook is sent **only 48 hours after** a store uninstalls your app. You cannot trigger it instantly from the UI.
+
+**Option A – Wait 48 hours (shows in Dashboard):**
+
+1. In a **test/dev store**, go to **Settings → Apps and sales channels** (or **Apps**).
+2. Find **LayerUp** → **Uninstall** (or open the app and remove it).
+3. **Wait 48 hours.** Shopify will then send `shop/redact` to your app.
+4. Check **Monitoring → Webhooks** after 48 hours for **shop/redact**.
+
+**Option B – Test the endpoint only (no Dashboard row):**  
+Use the CLI or `npm run test:webhooks` so your app responds correctly; that does not create a delivery in Partner Dashboard Monitoring.
+
+---
+
+## 2. Local script (fastest for 401/200 check)
 
 Tests all three GDPR endpoints: invalid HMAC → **401**, valid HMAC → **200**.
 
@@ -32,7 +71,7 @@ Tests all three GDPR endpoints: invalid HMAC → **401**, valid HMAC → **200**
 
 ---
 
-## 2. Shopify CLI trigger (real delivery)
+## 3. Shopify CLI trigger (real delivery)
 
 Sends a sample payload from Shopify to your app. Use after the app is reachable (tunnel or deployed).
 
@@ -54,7 +93,7 @@ For **local** testing with a tunnel (e.g. from `shopify app dev`), use the tunne
 
 ---
 
-## 3. Manual curl (single request)
+## 4. Manual curl (single request)
 
 **Invalid HMAC (must get 401):**
 ```bash
