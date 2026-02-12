@@ -1,31 +1,20 @@
-import {
-  verifyGdprWebhookHmac,
-  gdprWebhookOkResponse,
-  methodNotAllowedResponse,
-} from "../utils/gdprWebhook.js";
+import { authenticate } from "../shopify.server";
 
 /**
  * Mandatory GDPR webhook: customers/redact
  * Store owner requested deletion of customer data. This app does not store customer PII.
  */
-export async function loader() {
-  return gdprWebhookOkResponse();
-}
+export const loader = async () => {
+  // Handle GET requests (Shopify webhook verification)
+  return new Response("OK", { status: 200 });
+};
 
-export async function action({ request }) {
-  if (request.method !== "POST") return methodNotAllowedResponse();
-  
-  const raw = await request.text();
-  const unauthorized = verifyGdprWebhookHmac(request, raw);
-  if (unauthorized) return unauthorized;
-  
-  const topic = request.headers.get("X-Shopify-Topic") || "";
-  const shop = request.headers.get("X-Shopify-Shop-Domain") || "";
-  let payload = null;
-  try {
-    payload = raw ? JSON.parse(raw) : null;
-  } catch {}
+export const action = async ({ request }) => {
+  const { shop, session, topic, payload } = await authenticate.webhook(request);
 
-  console.log("[WEBHOOK customers/redact]", { shop, topic, payload });
-  return gdprWebhookOkResponse();
-}
+  console.log(`[WEBHOOK customers/redact] Received ${topic} webhook for ${shop}`);
+  console.log(`[WEBHOOK customers/redact] Payload:`, payload);
+
+  // Return 200 OK - no database operations
+  return new Response();
+};

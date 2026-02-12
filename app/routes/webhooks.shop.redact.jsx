@@ -1,53 +1,20 @@
-import {
-  verifyGdprWebhookHmac,
-  gdprWebhookOkResponse,
-  methodNotAllowedResponse,
-}  from "../utils/gdprWebhook.js";
-import prisma from "../db.server";
-import Store from "../backend/modals/store.js";
+import { authenticate } from "../shopify.server";
 
 /**
  * Mandatory GDPR webhook: shop/redact
- * 48 hours after uninstall - delete all shop data.
+ * 48 hours after uninstall - acknowledge receipt (no data stored).
  */
-export async function loader() {
-  return gdprWebhookOkResponse();
-}
+export const loader = async () => {
+  // Handle GET requests (Shopify webhook verification)
+  return new Response("OK", { status: 200 });
+};
 
-export async function action({ request }) {
-  if (request.method !== "POST") return methodNotAllowedResponse();
-  
-  const raw = await request.text();
-  const unauthorized = verifyGdprWebhookHmac(request, raw);
-  if (unauthorized) return unauthorized;
-  
-  const topic = request.headers.get("X-Shopify-Topic") || "";
-  const shop = request.headers.get("X-Shopify-Shop-Domain") || "";
-  let payload = null;
-  try {
-    payload = raw ? JSON.parse(raw) : null;
-  } catch {}
+export const action = async ({ request }) => {
+  const { shop, session, topic, payload } = await authenticate.webhook(request);
 
-  console.log("[WEBHOOK shop/redact]", { shop, topic, payload });
+  console.log(`[WEBHOOK shop/redact] Received ${topic} webhook for ${shop}`);
+  console.log(`[WEBHOOK shop/redact] Payload:`, payload);
 
-  // Delete all shop data
-  const shopDomain = payload?.shop_domain || shop;
-  if (shopDomain) {
-    try {
-      const deletedSessions = await prisma.session.deleteMany({
-        where: { shop: shopDomain },
-      });
-      console.log("[WEBHOOK shop/redact] Prisma sessions deleted:", deletedSessions.count);
-    } catch (e) {
-      console.error("[WEBHOOK shop/redact] Prisma delete error:", e.message);
-    }
-    try {
-      const storeResult = await Store.deleteOne({ shop: shopDomain });
-      console.log("[WEBHOOK shop/redact] MongoDB store deleted:", storeResult.deletedCount);
-    } catch (e) {
-      console.error("[WEBHOOK shop/redact] MongoDB delete error:", e.message);
-    }
-  }
-
-  return gdprWebhookOkResponse();
-}
+  // Return 200 OK - no database operations
+  return new Response();
+};
