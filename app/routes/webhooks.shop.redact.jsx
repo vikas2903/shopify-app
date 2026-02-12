@@ -2,36 +2,36 @@ import {
   verifyGdprWebhookHmac,
   gdprWebhookOkResponse,
   methodNotAllowedResponse,
-} from "../utils/gdprWebhook";
+}  from "../utils/gdprWebhook.js";
 import prisma from "../db.server";
 import Store from "../backend/modals/store.js";
 
 /**
- * Mandatory GDPR webhook: shop/redact (48h after uninstall).
- * Deletes all app data for the shop: Prisma Session + MongoDB Store.
+ * Mandatory GDPR webhook: shop/redact
+ * 48 hours after uninstall - delete all shop data.
  */
 export async function loader() {
   return gdprWebhookOkResponse();
 }
 
 export async function action({ request }) {
-  if (request.method !== "POST") {
-    return methodNotAllowedResponse();
-  }
-
+  if (request.method !== "POST") return methodNotAllowedResponse();
+  
   const raw = await request.text();
   const unauthorized = verifyGdprWebhookHmac(request, raw);
   if (unauthorized) return unauthorized;
-
+  
+  const topic = request.headers.get("X-Shopify-Topic") || "";
+  const shop = request.headers.get("X-Shopify-Shop-Domain") || "";
   let payload = null;
   try {
     payload = raw ? JSON.parse(raw) : null;
-  } catch {
-    // Still accept; HMAC was valid
-  }
-  console.log("[WEBHOOK shop/redact]", payload);
+  } catch {}
 
-  const shopDomain = payload?.shop_domain;
+  console.log("[WEBHOOK shop/redact]", { shop, topic, payload });
+
+  // Delete all shop data
+  const shopDomain = payload?.shop_domain || shop;
   if (shopDomain) {
     try {
       const deletedSessions = await prisma.session.deleteMany({

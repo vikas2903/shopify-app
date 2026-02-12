@@ -14,12 +14,19 @@ const BASE_URL = process.env.WEBHOOK_TEST_URL || "http://localhost:3000";
 const SECRET = process.env.SHOPIFY_API_SECRET;
 
 const ENDPOINTS = [
+  "/webhooks", // Single endpoint (Shopify uses this - X-Shopify-Topic header differentiates)
   "/webhooks/customers/data_request",
   "/webhooks/customers/redact",
   "/webhooks/shop/redact",
 ];
 
 const SAMPLE_PAYLOADS = {
+  "/webhooks": {
+    shop_id: 954889,
+    shop_domain: "test.myshopify.com",
+    customer: { id: 191167, email: "john@example.com", phone: "555-625-1199" },
+    orders_to_redact: [299938, 280263],
+  },
   "/webhooks/customers/data_request": {
     shop_id: 954889,
     shop_domain: "test.myshopify.com",
@@ -44,7 +51,11 @@ function computeHmac(body, secret) {
 }
 
 async function testEndpoint(path, useValidHmac) {
-  const body = JSON.stringify(SAMPLE_PAYLOADS[path] || {});
+  const topic = path === "/webhooks"
+    ? "customers/redact"
+    : path.split("/").slice(-2).join("/");
+  const payloadKey = path === "/webhooks" ? "/webhooks" : path;
+  const body = JSON.stringify(SAMPLE_PAYLOADS[payloadKey] || {});
   const hmac = useValidHmac && SECRET ? computeHmac(body, SECRET) : "invalid-hmac-value";
 
   const res = await fetch(BASE_URL + path, {
@@ -52,7 +63,7 @@ async function testEndpoint(path, useValidHmac) {
     headers: {
       "Content-Type": "application/json",
       "X-Shopify-Hmac-Sha256": hmac,
-      "X-Shopify-Topic": path.split("/").slice(-2).join("/"),
+      "X-Shopify-Topic": topic,
       "X-Shopify-Shop-Domain": "test.myshopify.com",
     },
     body,

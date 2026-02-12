@@ -10,7 +10,7 @@ const HMAC_HEADER = "x-shopify-hmac-sha256";
  * @returns {Promise<Response|null>} 401 Response if invalid, null if valid
  */
 export function verifyGdprWebhookHmac(request, rawBody) {
-  const secret = process.env.SHOPIFY_API_SECRET;
+  const secret = process.env.SHOPIFY_WEBHOOK_SECRET || process.env.SHOPIFY_API_SECRET;
   const hmac = request.headers.get(HMAC_HEADER) || request.headers.get("X-Shopify-Hmac-Sha256") || "";
 
   if (!secret) {
