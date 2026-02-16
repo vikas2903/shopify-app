@@ -63,6 +63,7 @@ export default function App() {
         <NavMenu>
           <Link to="/app" rel="home">Dashboard</Link>
           <Link to="/app/explore">Blocks</Link>
+          <Link to="/app/sections-new">Sections</Link>
           <Link to="/app/help">Support</Link>
         </NavMenu>
         <Outlet />
