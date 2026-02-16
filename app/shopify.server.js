@@ -110,8 +110,15 @@ const shopify = shopifyApp({
       const scopes = session.scope;
 
       console.log("🔐 Auth completed for shop:", shop);
-      console.log("📋 Granted scopes:", scopes);
+      console.log("📋 Granted scopes (raw):", scopes);
+      console.log("📋 Granted scopes (type):", typeof scopes);
+      console.log("📋 Scopes as string:", typeof scopes === 'string' ? scopes : String(scopes));
+      console.log("📋 Scopes as array:", Array.isArray(scopes) ? scopes : (typeof scopes === 'string' ? scopes.split(',').map(s => s.trim()) : []));
+      console.log("📋 Has read_themes:", (scopes || '').includes('read_themes'));
+      console.log("📋 Has write_themes:", (scopes || '').includes('write_themes'));
+      console.log("📋 Has read_products:", (scopes || '').includes('read_products'));
       console.log("🔑 Access token present:", !!accessToken);
+      console.log("🆔 Session ID:", session.id);
 
       // await connectDatabase();
 

@@ -65,6 +65,7 @@ export default function App() {
           <Link to="/app/explore">Blocks</Link>
           <Link to="/app/sections-new">Sections</Link>
           <Link to="/app/help">Support</Link>
+          <Link to="/app/debug-scopes">Debug Scopes</Link>
         </NavMenu>
         <Outlet />
       </ExploreContextProvider>

@@ -20,12 +20,21 @@ export const loader = async ({ request }) => {
     const shopFull = session.shop;
     const shopShort = shopFull.split('.')[0];
     const accessToken = session.accessToken;
-    const currentScopes = session.scope || '';
+    
+    // Handle scope as string (comma-separated) or array
+    const scopeValue = session.scope || '';
+    const currentScopes = typeof scopeValue === 'string' ? scopeValue : (Array.isArray(scopeValue) ? scopeValue.join(',') : '');
+    const scopeArray = currentScopes.split(',').map(s => s.trim()).filter(s => s);
 
     console.log('🔍 Sections Page Debug:');
     console.log('Shop Name:', shopFull);
     console.log('Access Token:', accessToken ? 'Present' : 'Missing');
-    console.log('Current Scopes:', currentScopes);
+    console.log('Session Scope (raw):', session.scope);
+    console.log('Session Scope (type):', typeof session.scope);
+    console.log('Current Scopes (string):', currentScopes);
+    console.log('Current Scopes (array):', scopeArray);
+    console.log('Session ID:', session.id);
+    console.log('Session Full:', JSON.stringify(session, null, 2));
 
     if (!shopFull) {
       throw new Error('Shop domain not found in session');
@@ -35,18 +44,24 @@ export const loader = async ({ request }) => {
       throw new Error('Access token not found in session');
     }
 
-    // Check if we have theme scopes
-    if (!currentScopes.includes('read_themes')) {
+    // Check if we have theme scopes (handle both string and array formats)
+    const hasReadThemes = currentScopes.includes('read_themes') || scopeArray.includes('read_themes');
+    
+    if (!hasReadThemes) {
       const errorMessage = `Missing required scope 'read_themes'. 
       
 Your app needs theme permissions to upload sections. 
 
 Current scopes: ${currentScopes || 'None'}
+Scope array: [${scopeArray.join(', ')}]
+Session ID: ${session.id}
+
+⚠️ IMPORTANT: Even though you reinstalled, the session might still have old scopes.
 
 To fix this:
-1. Deploy your app: shopify app deploy
-2. Uninstall and reinstall the app from your Shopify admin
-3. This will grant the new scopes: read_themes, write_themes, read_products`;
+1. Go to: /app/clear-session (or click the button below)
+2. This will clear the old session and force re-authorization
+3. After re-authorization, you'll have: read_themes, write_themes, read_products`;
       
       throw new Error(errorMessage);
     }
@@ -132,11 +147,11 @@ const SectionsPage = () => {
                     <Button
                       primary
                       onClick={() => {
-                        // Redirect to reinstall
-                        window.location.href = '/auth';
+                        // Redirect to clear session page
+                        window.location.href = '/app/clear-session';
                       }}
                     >
-                      Re-authorize App
+                      Clear Session & Re-authorize
                     </Button>
                   </div>
                 )}
