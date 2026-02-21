@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useFetcher } from "@remix-run/react";
 import { authenticate } from "../shopify.server.js";
 import { Page, Grid, MediaCard, Banner, Toast, Tabs } from '@shopify/polaris';
@@ -8,68 +8,9 @@ import fetch from "node-fetch";
 import sectionontent from '../data/sectionsmapContent.js'
 import ThemeManager from '../components/ThemeManager.jsx';
 
-// Loader function to fetch theme and shop information
+// Redirect to the new Sections page (supports exemption: write_themes only + manual theme ID)
 export const loader = async ({ request }) => {
-    try {
-        const { session } = await authenticate.admin(request);
-
-        if (!session.shop) {
-            throw new Error('Shop domain not found in session');
-        }
-
-        const shopFull = session.shop;
-        const shopShort = shopFull.split(".")[0];
-        const accessToken = session.accessToken;
-
-        console.log("Shop Name:", shopFull);
-        console.log("Access Token:", accessToken);
-
-        // Fetch themes from Shopify API with updated version
-        const response = await fetch(`https://${shopFull}/admin/api/2023-10/themes.json`, {
-            method: "GET",
-            headers: {
-                "X-Shopify-Access-Token": accessToken,
-                "Content-Type": "application/json",
-            },
-        });
-
-        if (!response.ok) {
-            console.error(`Theme API Error: ${response.status} ${response.statusText}`);
-            const errorText = await response.text();
-            console.error("Error details:", errorText);
-            
-            if (response.status === 403) {
-                throw new Error(`Access forbidden. Please ensure your app has the required scopes: read_themes, write_themes`);
-            }
-            
-            throw new Error(`Failed to fetch themes: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        console.log("Themes data:", data);
-
-        const mainTheme = data.themes && data.themes.find(theme => theme.role === "main");
-        const themeId = mainTheme ? mainTheme.id : null;
-
-        if (!themeId) {
-            throw new Error("No published theme found for this shop");
-        }
-
-        return json({ 
-            shop: shopShort, 
-            themeId,
-            shopFull,
-            accessToken,
-            success: true 
-        });
-
-    } catch (error) {
-        console.error("Loader error:", error);
-        return json({ 
-            error: error.message,
-            success: false 
-        }, { status: 500 });
-    }
+    return redirect("/app/sections-new");
 };
 
 // Action function to handle theme operations

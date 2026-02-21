@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "7e14cea35d331d8a859a3d97b6b76175"
-name = "LayerUp"
+name = "Store Custmization"
 handle = "ds-app-6"
 application_url = "https://layerup.onrender.com/"
 embedded = true
