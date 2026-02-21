@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import {
   AppProvider as PolarisAppProvider,
+  Banner,
   Button,
   Card,
   FormLayout,
@@ -39,6 +40,9 @@ export default function Auth() {
   return (
     <PolarisAppProvider i18n={loaderData.polarisTranslations}>
       <Page>
+        <Banner tone="info">
+          If you see this inside Shopify Admin, your session may have expired. Close this tab and open the app again from <strong>Apps → your app</strong> in the left sidebar. Or enter your shop domain below (e.g. your-store.myshopify.com).
+        </Banner>
         <Card>
           <Form method="post">
             <FormLayout>

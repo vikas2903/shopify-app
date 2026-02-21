@@ -1,247 +1,355 @@
-import React, { useState } from 'react';
-import { json, redirect } from "@remix-run/node";
+import React, { useState, useEffect } from "react";
+import {
+  Page,
+  Layout,
+  Banner,
+  Button,
+  TextField,
+  BlockStack,
+  Card,
+} from "@shopify/polaris";
+import { TitleBar } from "@shopify/app-bridge-react";
+import { authenticate } from "../shopify.server";
+import { json } from "@remix-run/node";
 import { useLoaderData, useFetcher } from "@remix-run/react";
-import { authenticate } from "../shopify.server.js";
-import { Page, Grid, MediaCard, Banner, Toast, Tabs } from '@shopify/polaris';
-import { TitleBar } from '@shopify/app-bridge-react';
 import fetch from "node-fetch";
-import sectionontent from '../data/sectionsmapContent.js'
-import ThemeManager from '../components/ThemeManager.jsx';
+import mongoose from "mongoose";
+import SectionUsage from "../backend/modals/sectionUsage.js";
+import SectionUploadNotification from "../components/SectionUploadNotification";
+import {
+  shopableVideoSection,
+  SHOPABLE_VIDEO_KEY,
+} from "../data/shopableVideoSection.js";
 
-// Redirect to the new Sections page (supports exemption: write_themes only + manual theme ID)
 export const loader = async ({ request }) => {
-    return redirect("/app/sections-new");
-};
+  try {
+    const { session } = await authenticate.admin(request);
 
-// Action function to handle theme operations
-export const action = async ({ request }) => {
-    try {
-        const { session } = await authenticate.admin(request);
-        const formData = await request.formData();
-        const action = formData.get('action');
-        const sectionId = formData.get('sectionId');
-        const themeId = formData.get('themeId');
+    if (!session) {
+      throw new Error("No session found. Please authenticate first.");
+    }
 
-        const shopFull = session.shop;
-        const accessToken = session.accessToken;
+    const shopFull = session.shop;
+    const shopShort = shopFull.split(".")[0];
+    const accessToken = session.accessToken;
 
-        console.log(`Action: ${action}, Section: ${sectionId}, Theme: ${themeId}`);
+    const scopeValue = session.scope || "";
+    const currentScopes =
+      typeof scopeValue === "string"
+        ? scopeValue
+        : Array.isArray(scopeValue)
+          ? scopeValue.join(",")
+          : "";
+    const scopeArray = currentScopes
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s);
 
-        switch (action) {
-            case 'add_section':
-                // Here you would add the section to the theme
-                // This is a placeholder - implement based on your needs
-                return json({ 
-                    success: true, 
-                    message: `Section ${sectionId} added successfully` 
-                });
+    if (!shopFull) {
+      throw new Error("Shop domain not found in session");
+    }
+    if (!accessToken) {
+      throw new Error("Access token not found in session");
+    }
 
-            case 'get_theme_assets':
-                // Fetch theme assets
-                const assetsResponse = await fetch(
-                    `https://${shopFull}/admin/api/2023-10/themes/${themeId}/assets.json`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "X-Shopify-Access-Token": accessToken,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
+    const hasReadThemes =
+      currentScopes.includes("read_themes") ||
+      scopeArray.includes("read_themes");
+    const hasWriteThemes =
+      currentScopes.includes("write_themes") ||
+      scopeArray.includes("write_themes");
 
-                if (!assetsResponse.ok) {
-                    throw new Error(`Failed to fetch theme assets: ${assetsResponse.statusText}`);
-                }
+    if (!hasWriteThemes) {
+      throw new Error(
+        `Missing scope 'write_themes'. Your app needs theme write permission. Current scopes: ${currentScopes || "None"}. Clear session and re-authorize.`
+      );
+    }
 
-                const assetsData = await assetsResponse.json();
-                return json({ 
-                    success: true, 
-                    assets: assetsData.assets 
-                });
+    let themeId = null;
+    let needsManualThemeId = false;
 
-            default:
-                return json({ 
-                    success: false, 
-                    message: "Invalid action" 
-                }, { status: 400 });
+    if (hasReadThemes) {
+      const apiUrl = `https://${shopFull}/admin/api/2024-07/themes.json`;
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Access-Token": accessToken,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.themes && Array.isArray(data.themes)) {
+          const mainTheme = data.themes.find((t) => t.role === "main");
+          themeId = mainTheme?.id || null;
         }
-
-    } catch (error) {
-        console.error("Action error:", error);
-        return json({ 
-            success: false, 
-            error: error.message 
-        }, { status: 500 });
-    }
-};
-
-const sections = [
-    {
-        "title": "Announcement Bar",
-        "src": "https://plus.unsplash.com/premium_photo-1683133927528-8075b14131a0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dWl8ZW58MHx8MHx8fDA%3D",
-        "description": "Add a customizable announcement bar to your store header.",
-        "sectionid": "announcement-bar"
-    },
-    {
-        "title": "Offer Carousel",
-        "src": "https://images.unsplash.com/photo-1720962158813-29b66b8e23e1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHVpfGVufDB8fDB8fHww",
-        "description": "Display promotional offers in an attractive carousel format.",
-        "sectionid": "offer-carousel",
-    },
-    {
-        "title": "Recently Viewed Products",
-        "src": "https://plus.unsplash.com/premium_photo-1661326248013-3107a4b2bd91?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8dWl8ZW58MHx8MHx8fDA%3D",
-        "description": "Show customers products they've recently viewed.",
-        "sectionid": "recently-viewed"
-    },
-    {
-        "title": "Wishlist Widget",
-        "src": "https://plus.unsplash.com/premium_photo-1722155330821-2557249cdb52?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHVpfGVufDB8fDB8fHww",
-        "description": "Allow customers to save products to their wishlist.",
-        "sectionid": "wishlist-widget"
-    }
-];
-
-function Sections() {
-    const loaderData = useLoaderData();
-    const fetcher = useFetcher();
-    const [selectedSection, setSelectedSection] = useState("");
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState("");
-    const [selectedTab, setSelectedTab] = useState(0);
-
-    // Handle errors from loader
-    if (!loaderData.success) {
-        return (
-            <Page fullWidth>
-                <TitleBar title="Sections" />
-                <Banner status="critical" title="Error Loading Sections">
-                    <p>{loaderData.error || "Failed to load sections. Please try again."}</p>
-                </Banner>
-            </Page>
-        );
+      }
+      if (!themeId) needsManualThemeId = true;
+    } else {
+      needsManualThemeId = true;
     }
 
-    const { shop, themeId } = loaderData;
-
-    const handleAddSection = (sectionId) => {
-        setSelectedSection(sectionId);
-        
-        const formData = new FormData();
-        formData.append('action', 'add_section');
-        formData.append('sectionId', sectionId);
-        formData.append('themeId', themeId);
-        
-        fetcher.submit(formData, { method: 'post' });
-        
-        setToastMessage(`Adding ${sectionId} to your theme...`);
-        setShowToast(true);
-    };
-
-    const handleGetAssets = () => {
-        const formData = new FormData();
-        formData.append('action', 'get_theme_assets');
-        formData.append('themeId', themeId);
-        
-        fetcher.submit(formData, { method: 'post' });
-    };
-
-    // Show success/error messages
-    if (fetcher.data) {
-        if (fetcher.data.success) {
-            setToastMessage(fetcher.data.message || "Operation completed successfully!");
-        } else {
-            setToastMessage(fetcher.data.error || "Operation failed. Please try again.");
-        }
-        setShowToast(true);
+    // Database: track which store has used the section
+    let sectionAlreadyUsed = false;
+    let sectionUsedAt = null;
+    if (mongoose.connection.readyState === 0) {
+      await mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+    }
+    const usage = await SectionUsage.findOne({
+      shop: shopFull,
+      sectionKey: SHOPABLE_VIDEO_KEY,
+    });
+    if (usage) {
+      sectionAlreadyUsed = true;
+      sectionUsedAt = usage.usedAt;
     }
 
-    const tabs = [
-        {
-            id: 'sections',
-            content: 'App Sections',
-            accessibilityLabel: 'App Sections',
-            panelID: 'sections-panel',
-        },
-        {
-            id: 'theme-manager',
-            content: 'Theme Manager',
-            accessibilityLabel: 'Theme Manager',
-            panelID: 'theme-manager-panel',
-        },
-    ];
-
-    const tabPanels = [
-        {
-            id: 'sections-panel',
-            tabID: 'sections',
-            content: (
-                <>
-                    {themeId && (
-                        <Banner status="info" title="Theme Connected">
-                            <p>Connected to theme ID: {themeId}</p>
-                            <button onClick={handleGetAssets}>View Theme Assets</button>
-                        </Banner>
-                    )}
-
-                    <Grid>
-                        {sections.map((item, index) => (
-                            <Grid.Cell key={index} columnSpan={{ xs: 6, sm: 4, md: 4, lg: 4, xl: 4 }}>
-                                <MediaCard
-                                    portrait
-                                    title={item.title}
-                                    primaryAction={{
-                                        content: 'ADD SECTION', 
-                                        onAction: () => handleAddSection(item.sectionid),
-                                        loading: fetcher.state === 'submitting' && selectedSection === item.sectionid
-                                    }}
-                                    description={item.description}>
-                                    <img
-                                        alt={item.title}
-                                        width="100%"
-                                        height="100%"
-                                        style={{ objectFit: 'cover', objectPosition: 'center' }}
-                                        src={item.src}
-                                    />
-                                </MediaCard>
-                            </Grid.Cell>
-                        ))}
-                    </Grid>
-                </>
-            ),
-        },
-        {
-            id: 'theme-manager-panel',
-            tabID: 'theme-manager',
-            content: (
-                <ThemeManager themeId={themeId} shop={shop} />
-            ),
-        },
-    ];
-
-    return (
-        <>
-            <Page fullWidth>
-                <TitleBar title="Sections & Theme Manager" />
-                
-                <Tabs
-                    tabs={tabs}
-                    selected={selectedTab}
-                    onSelect={setSelectedTab}
-                >
-                    {tabPanels[selectedTab].content}
-                </Tabs>
-
-                {showToast && (
-                    <Toast
-                        content={toastMessage}
-                        onDismiss={() => setShowToast(false)}
-                        duration={4000}
-                    />
-                )}
-            </Page>
-        </>
+    return json({
+      shop: shopShort,
+      shopFull,
+      themeId,
+      accessToken,
+      success: true,
+      hasWriteThemes,
+      hasReadThemes,
+      needsManualThemeId,
+      sectionAlreadyUsed,
+      sectionUsedAt: sectionUsedAt ? sectionUsedAt.toISOString() : null,
+    });
+  } catch (error) {
+    console.error("Loader Error:", error);
+    return json(
+      {
+        success: false,
+        error: error.message,
+        needsReinstall:
+          error.message.includes("Missing required scope") ||
+          error.message.includes("403"),
+      },
+      { status: 500 }
     );
-}
+  }
+};
 
-export default Sections;
+export const action = async ({ request }) => {
+  if (request.method !== "POST") {
+    return json({ success: false, error: "Method not allowed" }, { status: 405 });
+  }
+  try {
+    const { session } = await authenticate.admin(request);
+    const formData = await request.formData();
+    const themeId = formData.get("themeId");
+    const actionType = formData.get("action");
+
+    if (actionType !== "uploadSection" || !themeId) {
+      return json(
+        { success: false, error: "Missing themeId or action" },
+        { status: 400 }
+      );
+    }
+
+    const shopFull = session.shop;
+    const accessToken = session.accessToken;
+    const filePath = `sections/${shopableVideoSection.sectionName}.liquid`;
+
+    const putUrl = `https://${shopFull}/admin/api/2024-07/themes/${themeId}/assets.json`;
+    const response = await fetch(putUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": accessToken,
+      },
+      body: JSON.stringify({
+        asset: {
+          key: filePath,
+          value: shopableVideoSection.liquidCode,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(
+        errData.errors
+          ? JSON.stringify(errData.errors)
+          : `Upload failed: ${response.status} ${response.statusText}`
+      );
+    }
+
+    if (mongoose.connection.readyState === 0) {
+      await mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+    }
+    await SectionUsage.findOneAndUpdate(
+      { shop: shopFull, sectionKey: SHOPABLE_VIDEO_KEY },
+      { themeId: String(themeId), usedAt: new Date() },
+      { upsert: true }
+    );
+
+    return json({ success: true });
+  } catch (error) {
+    console.error("Upload action error:", error);
+    return json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
+};
+
+const SectionsPage = () => {
+  const loaderData = useLoaderData();
+  const fetcher = useFetcher();
+  const [manualThemeId, setManualThemeId] = useState("");
+  const [notificationOpen, setNotificationOpen] = useState(false);
+
+  const themeId =
+    loaderData.themeId ||
+    (manualThemeId.trim() ? String(manualThemeId).trim() : null);
+
+  useEffect(() => {
+    if (fetcher.data?.success) {
+      setNotificationOpen(true);
+    }
+  }, [fetcher.data]);
+
+  if (!loaderData.success) {
+    return (
+      <Page fullWidth>
+        <TitleBar title="Sections" />
+        <Layout>
+          <Layout.Section>
+            <Banner status="critical" title="Error Loading Sections">
+              <div style={{ whiteSpace: "pre-line" }}>
+                <p>{loaderData.error || "Failed to load sections."}</p>
+                {loaderData.needsReinstall && (
+                  <Button
+                    primary
+                    onClick={() => (window.location.href = "/app/clear-session")}
+                  >
+                    Clear Session & Re-authorize
+                  </Button>
+                )}
+              </div>
+            </Banner>
+          </Layout.Section>
+        </Layout>
+      </Page>
+    );
+  }
+
+  const {
+    shopFull,
+    hasWriteThemes,
+    hasReadThemes,
+    needsManualThemeId,
+    sectionAlreadyUsed,
+    sectionUsedAt,
+  } = loaderData;
+
+  const handleUpload = () => {
+    if (!themeId) return;
+    const form = new FormData();
+    form.append("action", "uploadSection");
+    form.append("themeId", themeId);
+    fetcher.submit(form, { method: "post" });
+  };
+
+  return (
+    <Page fullWidth>
+      <TitleBar title="Sections" />
+
+      <Layout>
+        <Layout.Section>
+          <Banner
+            status={hasWriteThemes ? "success" : "warning"}
+            title={hasWriteThemes ? "Asset API upload enabled" : "Theme write scope missing"}
+          >
+            <p>
+              {hasWriteThemes
+                ? hasReadThemes && themeId
+                  ? `Live theme selected (ID: ${themeId}). Upload the Shopable Video section below.`
+                  : needsManualThemeId
+                    ? "You have write_themes but not read_themes. Enter your live theme ID below. Find it in Shopify Admin: Online Store → Themes → … → Edit code (theme ID in the URL)."
+                    : "Enter your theme ID below if it wasn’t detected."
+                : "Clear session and re-authorize to get write_themes."}
+            </p>
+          </Banner>
+
+          {needsManualThemeId && (
+            <div style={{ marginTop: 16, maxWidth: 400 }}>
+              <BlockStack gap="300">
+                <TextField
+                  label="Theme ID (required to upload)"
+                  value={manualThemeId}
+                  onChange={setManualThemeId}
+                  placeholder="e.g. 123456789012"
+                  helpText="Online Store → Themes → … → Edit code. Theme ID is in the URL."
+                  autoComplete="off"
+                />
+              </BlockStack>
+            </div>
+          )}
+
+          {themeId && (
+            <div style={{ padding: "20px 0" }}>
+              <Card>
+                <div style={{ padding: "16px" }}>
+                  <div style={{ marginBottom: "16px", borderRadius: 8, overflow: "hidden" }}>
+                    <img
+                      src={shopableVideoSection.image}
+                      alt={shopableVideoSection.title}
+                      style={{ width: "100%", height: 200, objectFit: "cover" }}
+                    />
+                  </div>
+                  <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
+                    {shopableVideoSection.title}
+                  </h3>
+                  <p style={{ color: "#6B7280", fontSize: 14, lineHeight: 1.5 }}>
+                    {shopableVideoSection.description}
+                  </p>
+                  {sectionAlreadyUsed && (
+                    <Banner status="info" style={{ marginTop: 12 }}>
+                      Section already used
+                      {sectionUsedAt && (
+                        <span style={{ marginLeft: 8, opacity: 0.9 }}>
+                          (uploaded {new Date(sectionUsedAt).toLocaleDateString()})
+                        </span>
+                      )}
+                    </Banner>
+                  )}
+                  <div style={{ marginTop: 16 }}>
+                    <Button
+                      primary
+                      onClick={handleUpload}
+                      loading={fetcher.state === "submitting"}
+                      disabled={fetcher.state === "submitting"}
+                    >
+                      {fetcher.state === "submitting"
+                        ? "Uploading…"
+                        : "Upload Section"}
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
+        </Layout.Section>
+      </Layout>
+
+      <SectionUploadNotification
+        open={notificationOpen}
+        onClose={() => setNotificationOpen(false)}
+        section={shopableVideoSection}
+        shopFull={shopFull}
+        themeId={themeId}
+      />
+    </Page>
+  );
+};
+
+export default SectionsPage;

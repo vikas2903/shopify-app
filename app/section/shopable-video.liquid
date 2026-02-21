@@ -1,0 +1,489 @@
+{%- style -%}
+  /* Section padding (mobile) */
+  .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+  }
+
+  /* Section padding (desktop) */
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<section class="stlv section-{{ section.id }}"
+  data-stlv-id="stlv-{{ section.id }}">
+  <h2 class="stlv__heading">{{ section.settings.heading }}</h2>
+
+  <div class="stlv__stage">
+    <button class="stlv__arrow stlv__arrow--left" type="button" aria-label="Previous">
+      <span>‹</span>
+    </button>
+
+    <div class="stlv__stack" aria-roledescription="carousel">
+      {% for block in section.blocks %}
+        {% assign idx = forloop.index0 %}
+
+        <article
+          class="stlv__card{% if forloop.first %} is-active{% endif %}"
+          data-index="{{ idx }}"
+          {{ block.shopify_attributes }}
+        >
+          {% comment %} VIDEO (center card plays, others paused + blurred by CSS) {% endcomment %}
+          <div class="stlv__media">
+            {% if block.settings.video_url != blank %}
+              <video
+                class="stlv__video"
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                poster="{% if block.settings.poster != blank %}{{ block.settings.poster | image_url: width: 1200 }}{% endif %}"
+              >
+                <source src="{{ block.settings.video_url }}" type="video/mp4">
+              </video>
+            {% else %}
+              {% comment %} fallback to image if no video url {% endcomment %}
+              {% if block.settings.poster != blank %}
+                <img
+                  class="stlv__img"
+                  src="{{ block.settings.poster | image_url: width: 1600 }}"
+                  alt="{{ block.settings.title | escape }}"
+                  loading="lazy"
+                >
+              {% endif %}
+            {% endif %}
+          </div>
+
+          {% comment %} Overlay only on active {% endcomment %}
+          <div class="stlv__overlay">
+            <div class="stlv__name">{{ block.settings.title }}</div>
+            <a class="stlv__btn" href="{{ block.settings.link }}">View</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <button class="stlv__arrow stlv__arrow--right" type="button" aria-label="Next">
+      <span>›</span>
+    </button>
+  </div>
+</section>
+
+<style>
+  .stlv{
+     padding-left: 40px;
+  padding-right: 40px;
+    text-align: center;
+  }
+  .stlv__heading{
+    font-size: 24px;
+    line-height: 1.2;
+    margin: 0 0 20px;
+  }
+
+  .stlv__stage{
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 52px; /* space for arrows */
+  }
+
+  /* stacked area */
+  .stlv__stack{
+    position: relative;
+    height: 520px;
+    display: block;
+  }
+
+  /* each card is absolutely positioned */
+  .stlv__card{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 330px;
+    height: 500px;
+    {% comment %} border-radius: 18px; {% endcomment %}
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .55s ease, opacity .55s ease, filter .55s ease;
+    background: #f2f2f2;
+  }
+
+  /* media fill */
+  .stlv__media, .stlv__video, .stlv__img{
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* overlay (only active) */
+  .stlv__overlay{
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 18px 18px 16px;
+    background: linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,0));
+    color: #fff;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .25s ease, transform .25s ease;
+    text-align: left;
+  }
+  .stlv__name{
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .stlv__btn{
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 14px;
+    border-radius: 2px;
+    font-size: 14px;
+  }
+
+  /* --- POSITIONS (same look as screenshot: center big, 2 behind left/right, 2 far edges) --- */
+  .stlv__card.is-active{
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 50;
+    transform: translate(-50%, -50%) scale(1);
+    filter: none;
+  }
+  .stlv__card.is-left-1{
+    opacity: .55;
+    z-index: 30;
+    transform: translate(calc(-50% - 220px), -50%) scale(.92);
+    filter: blur(2px) saturate(.85) brightness(.95);
+  }
+  .stlv__card.is-right-1{
+    opacity: .55;
+    z-index: 30;
+    transform: translate(calc(-50% + 220px), -50%) scale(.92);
+    filter: blur(2px) saturate(.85) brightness(.95);
+  }
+  .stlv__card.is-left-2{
+    opacity: .35;
+    z-index: 10;
+    transform: translate(calc(-50% - 420px), -50%) scale(.88);
+    filter: blur(4px) saturate(.75) brightness(.92);
+  }
+  .stlv__card.is-right-2{
+    opacity: .35;
+    z-index: 10;
+    transform: translate(calc(-50% + 420px), -50%) scale(.88);
+    filter: blur(4px) saturate(.75) brightness(.92);
+  }
+
+  .stlv__card.is-active .stlv__overlay{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* arrows */
+  .stlv__arrow{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,.45);
+    color: #fff;
+    cursor: pointer;
+    z-index: 80;
+    display: grid;
+    place-items: center;
+  }
+  .stlv__arrow span{
+    font-size: 28px;
+    line-height: 1;
+    transform: translateY(-1px);
+  }
+  .stlv__arrow--left{ left: 0; }
+  .stlv__arrow--right{ right: 0; }
+
+  /* mobile tuning */
+  @media (max-width: 768px){
+    .stlv__stage{ padding: 0 44px; }
+    .stlv__stack{ height: 460px; }
+    .stlv__card{ width: 280px; height: 420px; }
+
+    .stlv__card.is-left-1{ transform: translate(calc(-50% - 150px), -50%) scale(.92); }
+    .stlv__card.is-right-1{ transform: translate(calc(-50% + 150px), -50%) scale(.92); }
+    .stlv__card.is-left-2{ transform: translate(calc(-50% - 290px), -50%) scale(.88); }
+    .stlv__card.is-right-2{ transform: translate(calc(-50% + 290px), -50%) scale(.88); }
+  }
+
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .stlv {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .stlv__stack {
+    height: 480px;
+  }
+
+  .stlv__card {
+    width: 300px;
+    height: 460px;
+  }
+
+  /* Hide far cards */
+  .stlv__card.is-left-2,
+  .stlv__card.is-right-2 {
+    display: none;
+  }
+
+  .stlv__card.is-left-1 {
+    transform: translate(calc(-50% - 180px), -50%) scale(0.92);
+  }
+
+  .stlv__card.is-right-1 {
+    transform: translate(calc(-50% + 180px), -50%) scale(0.92);
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .stlv {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .stlv__heading {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .stlv__stage {
+    padding: 0;
+  }
+
+  .stlv__stack {
+    height: 520px;
+    overflow: hidden;
+  }
+
+  
+
+  .stlv__card:not(.is-active) {
+    display: none;
+  }
+
+  /* Center active card cleanly */
+  .stlv__card.is-active {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Overlay text */
+  .stlv__name {
+    font-size: 14px;
+  }
+
+  .stlv__btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  /* Arrows inside */
+  .stlv__arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .stlv__arrow--left {
+    left: 10px;
+  }
+
+  .stlv__arrow--right {
+    right: 10px;
+  }
+}
+/* ===========================
+   MOBILE: INCREASE VIDEO HEIGHT
+=========================== */
+@media (max-width: 767px) {
+  .stlv__stack {
+    height: 530px; 
+  }
+
+  .stlv__card {
+    height: 530px; 
+    max-width: 340px; 
+  }
+
+  .stlv__media,
+  .stlv__video,
+  .stlv__img {
+    height: 100%;
+  }
+}
+
+</style>
+
+<script>
+(function(){
+  const root = document.querySelector('[data-stlv-id="stlv-{{ section.id }}"]');
+  if(!root) return;
+
+  const cards = Array.from(root.querySelectorAll('.stlv__card'));
+  const btnPrev = root.querySelector('.stlv__arrow--left');
+  const btnNext = root.querySelector('.stlv__arrow--right');
+
+  let index = 0;
+  const autoplay = {{ section.settings.autoplay | json }};
+  const delay = Number({{ section.settings.autoplay_delay | json }}) || 3500;
+  let timer = null;
+
+  function pauseAllVideos(){
+    cards.forEach(c => {
+      const v = c.querySelector('video');
+      if(v){
+        v.pause();
+        v.currentTime = v.currentTime; // keeps frame, avoids black flash
+      }
+    });
+  }
+
+  function playActiveVideo(){
+    const active = cards[index];
+    const v = active ? active.querySelector('video') : null;
+    if(v){
+      // play safely (autoplay policies)
+      const p = v.play();
+      if(p && typeof p.catch === 'function'){ p.catch(()=>{}); }
+    }
+  }
+
+  function clearPositions(){
+    cards.forEach(c=>{
+      c.classList.remove('is-active','is-left-1','is-right-1','is-left-2','is-right-2');
+    });
+  }
+
+  function update(){
+    clearPositions();
+
+    const total = cards.length;
+    const left1  = (index - 1 + total) % total;
+    const right1 = (index + 1) % total;
+    const left2  = (index - 2 + total) % total;
+    const right2 = (index + 2) % total;
+
+    cards[index].classList.add('is-active');
+    if(cards[left1])  cards[left1].classList.add('is-left-1');
+    if(cards[right1]) cards[right1].classList.add('is-right-1');
+    if(cards[left2])  cards[left2].classList.add('is-left-2');
+    if(cards[right2]) cards[right2].classList.add('is-right-2');
+
+    // Video behavior: only center plays
+    pauseAllVideos();
+    playActiveVideo();
+  }
+
+  function next(){
+    index = (index + 1) % cards.length;
+    update();
+    restartAutoplay();
+  }
+  function prev(){
+    index = (index - 1 + cards.length) % cards.length;
+    update();
+    restartAutoplay();
+  }
+
+  function restartAutoplay(){
+    if(!autoplay) return;
+    if(timer) clearInterval(timer);
+    timer = setInterval(next, delay);
+  }
+
+  btnNext && btnNext.addEventListener('click', next);
+  btnPrev && btnPrev.addEventListener('click', prev);
+
+  // initial render
+  update();
+  restartAutoplay();
+
+  // pause autoplay on hover (desktop)
+  root.addEventListener('mouseenter', () => { if(timer) clearInterval(timer); });
+  root.addEventListener('mouseleave', () => { restartAutoplay(); });
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Shop The Look",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop The Look" },
+    { "type": "checkbox", "id": "autoplay", "label": "Autoplay slides", "default": true },
+    { "type": "range", "id": "autoplay_delay", "label": "Autoplay delay (ms)", "min": 2000, "max": 8000, "step": 500, "default": 3500 },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Look",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Lavender Chinon Kurta Palazzo Suit" },
+        { "type": "url", "id": "link", "label": "Link" },
+
+        { "type": "image_picker", "id": "poster", "label": "Poster image (for loading / fallback)" },
+
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL (MP4)",
+          "info": "Upload mp4 in Shopify Files and paste the URL here."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Shop The Look",
+      "blocks": [
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" }
+      ]
+    }
+  ]
+}
+{% endschema %}

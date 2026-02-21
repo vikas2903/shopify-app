@@ -7,7 +7,7 @@ application_url = "https://layerup.onrender.com/"
 embedded = true
 
 [build]
-automatically_update_urls_on_dev = true 
+automatically_update_urls_on_dev = true  
 
 [webhooks]
 api_version = "2024-07"
