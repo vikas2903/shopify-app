@@ -16,11 +16,13 @@ const SectionUploadNotification = ({ open, onClose, section, shopFull, themeId }
     onClose();
   };
 
+  const sectionPath = section?.sectionName ? `sections/${section.sectionName}.liquid` : 'sections/';
+
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title="✅ Section Uploaded Successfully!"
+      title="Section uploaded"
       primaryAction={{
         content: 'Open Customize',
         onAction: handleOpenCustomize,
@@ -35,7 +37,10 @@ const SectionUploadNotification = ({ open, onClose, section, shopFull, themeId }
       <Modal.Section>
         <BlockStack gap="400">
           <Text as="p" variant="bodyMd">
-            The section <strong>"{section.title}"</strong> has been uploaded to your theme.
+            <strong>"{section.title}"</strong> has been uploaded to your store theme.
+          </Text>
+          <Text as="p" variant="bodyMd" tone="subdued">
+            File location in theme: <strong>{sectionPath}</strong>
           </Text>
           
           <div style={{ 
@@ -45,7 +50,7 @@ const SectionUploadNotification = ({ open, onClose, section, shopFull, themeId }
             border: '1px solid #E0E0E0'
           }}>
             <Text as="p" variant="bodyMd" fontWeight="semibold" style={{ marginBottom: '8px' }}>
-              Next Steps:
+              Next steps:
             </Text>
             <ol style={{ margin: 0, paddingLeft: '20px', color: '#6B7280' }}>
               <li style={{ marginBottom: '8px' }}>
@@ -65,7 +70,7 @@ const SectionUploadNotification = ({ open, onClose, section, shopFull, themeId }
 
           {customizeUrl && (
             <Text as="p" variant="bodySm" tone="subdued">
-              Or manually navigate to: <br />
+              Or go to: <br />
               <code style={{ fontSize: '12px', wordBreak: 'break-all' }}>
                 {customizeUrl}
               </code>
