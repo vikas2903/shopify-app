@@ -1,7 +1,7 @@
 {
   "name": "ds-app",
   "private": true,
-  "scripts": {
+"scripts": {
     "build": "remix vite:build",
     "dev": "shopify app dev",
     "config:link": "shopify app config link",
@@ -37,7 +37,6 @@
     "@shopify/polaris": "^12.0.0",
     "@shopify/shopify-app-remix": "^3.7.0",
     "@shopify/shopify-app-session-storage-prisma": "^6.0.0",
-    "apollo-server": "^0.3.3",
     "axios": "^1.10.0",
     "body-parser": "^2.2.0",
     "chart.js": "^4.5.0",
