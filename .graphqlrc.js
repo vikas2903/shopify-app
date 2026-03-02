@@ -1,6 +1,7 @@
 import fs from "fs";
 import { LATEST_API_VERSION } from "@shopify/shopify-api";
 import { shopifyApiProject, ApiType } from "@shopify/api-codegen-preset";
+
 function getConfig() {
   const config = {
     projects: {
@@ -34,5 +35,6 @@ function getConfig() {
   }
   return config;
 }
+
 const config = getConfig();
 export default config;

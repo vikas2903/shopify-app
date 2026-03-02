@@ -13,6 +13,7 @@ import {
   Card,
   BlockStack,
   Text,
+  TextField,
   Select,
   Button,
   Banner,
@@ -60,18 +61,38 @@ export const loader = async ({ request }) => {
     const scopeStr = Array.isArray(scopeRaw) ? (scopeRaw || []).join(",") : (scopeRaw || "");
     const hasReadThemes = scopeStr.includes("read_themes");
 
-    console.log("[sectionsblock] Shop:", shopFull, "| scope type:", typeof scopeRaw, "| Has read_themes:", hasReadThemes);
+    // parse the request URL once to avoid redeclaration and for use in both
+    // the no-scope and has-scope branches
+    let previewId = null;
+    try {
+      const parsed = new URL(request.url);
+      previewId = parsed.searchParams.get("preview_theme_id");
+    } catch (e) {
+      // swallow; request.url should be valid, but be defensive
+      console.warn("[sectionsblock] Failed to parse request URL for preview_theme_id", e);
+    }
+
+    console.log("[sectionsblock] Shop:", shopFull, "| scope type:", typeof scopeRaw, "| Has read_themes:", hasReadThemes, "| previewId:", previewId);
 
     if (!shopFull || !accessToken) {
       throw new Error("Missing shop or access token.");
     }
+
     if (!hasReadThemes) {
-      throw new Error(
-        "App needs read_themes scope. Reinstall the app from Shopify Admin (Apps → your app → … → Reinstall) or clear session and log in again to grant theme access."
-      );
+      console.warn("[sectionsblock] No read_themes scope; skipping theme fetch.");
+      const initialThemes = previewId
+        ? [{ id: previewId, name: `Preview theme (${previewId})`, role: "PREVIEW" }]
+        : [];
+      return json({
+        themes: initialThemes,
+        shop: shopFull,
+        sections: SECTIONS_LIST,
+        error: null,
+        hasReadThemes: false,
+      });
     }
 
-    // Fetch themes from Shopify Admin API
+    // Fetch themes from Shopify Admin API (only when read_themes is available)
     const apiUrl = `https://${shopFull}/admin/api/2024-01/themes.json`;
     console.log("[sectionsblock] Fetching themes:", apiUrl);
     const response = await fetch(apiUrl, {
@@ -89,11 +110,29 @@ export const loader = async ({ request }) => {
     }
 
     const data = await response.json();
-    const themes = (data.themes || []).map((t) => ({
+    console.log("[sectionsblock] Themes API response received. Theme count:", (data.themes || []).length);
+
+    // Map the API result into our shape. The Admin API returns published, unpublished
+    // and development (preview) themes whenever the access token has the
+    // `read_themes` permission. If the token lacks the scope we never hit this
+    // branch and themes will be empty.
+    let themes = (data.themes || []).map((t) => ({
       id: String(t.id),
       name: t.name,
       role: (t.role || "").toUpperCase(),
     }));
+
+    // if we previously parsed a previewId, add it now if it wasn’t returned
+    // by the API.  (It may already be present when the token has read_themes.)
+    if (previewId && !themes.find((t) => t.id === previewId)) {
+      themes.unshift({
+        id: previewId,
+        name: `Preview theme (${previewId})`,
+        role: "PREVIEW",
+      });
+      console.log("[sectionsblock] Added preview_theme_id to themes:", previewId);
+    }
+
     console.log("[sectionsblock] Themes loaded:", themes.length);
 
     return json({
@@ -101,15 +140,18 @@ export const loader = async ({ request }) => {
       shop: shopFull,
       sections: SECTIONS_LIST,
       error: null,
+      hasReadThemes: true,
     });
   } catch (err) {
     console.error("[sectionsblock] Loader error:", err);
+    console.error("[sectionsblock] Loader error (returning fallback):", err);
     return json(
       {
         themes: [],
         shop: null,
         sections: SECTIONS_LIST,
         error: { message: err.message || "Loader failed" },
+        hasReadThemes: false,
       },
       { status: 500 }
     );
@@ -141,7 +183,7 @@ export const action = async ({ request }) => {
     }
 
     const formData = await request.formData();
-    const themeId = 181499592738;
+    const themeId = formData.get("themeId");
     const sectionName = formData.get("sectionName");
     if (!themeId || !sectionName) {
       console.log("[sectionsblock] Action: missing themeId or sectionName");
@@ -180,10 +222,30 @@ export const action = async ({ request }) => {
     const putData = await putResponse.json();
     if (!putResponse.ok) {
       console.error("[sectionsblock] Theme API PUT error:", putResponse.status, putData);
-      return json(
-        { success: false, error: putData.errors ? JSON.stringify(putData.errors) : "Upload failed" },
-        { status: putResponse.status }
-      );
+
+      // Shopify sometimes returns a generic 403 with the message
+      // "[API] API Access has been disabled" when the shop is frozen or the
+      // API credentials are no longer valid.  This is not something the
+      // app code can fix; instruct the user accordingly.
+      let errorMessage = "Upload failed";
+      if (putData && putData.errors) {
+        // errors may be an object or string
+        if (typeof putData.errors === "string") {
+          errorMessage = putData.errors;
+        } else if (Array.isArray(putData.errors)) {
+          errorMessage = putData.errors.join(", ");
+        } else {
+          errorMessage = JSON.stringify(putData.errors);
+        }
+      }
+
+      if (/API Access has been disabled/.test(errorMessage)) {
+        errorMessage =
+          "Shop API access is disabled – the store may be frozen or expired. " +
+          "Check the shop’s status in the Shopify admin and reinstall the app if necessary.";
+      }
+
+      return json({ success: false, error: errorMessage }, { status: putResponse.status });
     }
 
     console.log("[sectionsblock] Upload success for", assetKey);
@@ -198,18 +260,30 @@ export const action = async ({ request }) => {
 };
 
 export default function SectionsBlockPage() {
-  const { themes, shop, sections, error: loadError } = useLoaderData();
+  const { themes, shop, sections, error: loadError, hasReadThemes } = useLoaderData();
   const fetcher = useFetcher();
-  const [selectedThemeId, setSelectedThemeId] = useState(themes?.length ? themes[0].id : "");
+  const [manualThemeId, setManualThemeId] = useState("");
+  const [selectedThemeId, setSelectedThemeId] = useState(() => (themes?.length ? themes[0].id : ""));
 
-  const themeOptions = (themes || []).map((t) => ({
-    label: `${t.name}${t.role === "MAIN" ? " 🟢" : ""}`,
-    value: t.id,
-  }));
+  const themeOptions = (themes || []).map((t) => {
+    // highlight the currently published theme, and give a note for any
+    // preview/development entries
+    let label = t.name;
+    if (t.role === "MAIN") label += " 🟢";
+    else if (t.role === "PREVIEW" || t.role === "DEVELOPMENT") label += " (preview)";
+    else if (t.role === "UNPUBLISHED") label += " (unpublished)";
+    return { label, value: t.id };
+  });
 
   const handleThemeChange = useCallback((value) => {
     setSelectedThemeId(value);
     console.log("[sectionsblock] Theme selected:", value);
+  }, []);
+
+  const handleManualThemeChange = useCallback((value) => {
+    setManualThemeId(value);
+    setSelectedThemeId(value);
+    console.log("[sectionsblock] Manual theme id set:", value);
   }, []);
 
   const handleUpload = useCallback(
@@ -263,6 +337,25 @@ export default function SectionsBlockPage() {
                   value={selectedThemeId}
                   onChange={handleThemeChange}
                 />
+
+                {!hasReadThemes && (
+                  <>
+                    <Banner tone="warning">
+                      App does not have `read_themes` permission. Without that scope the
+                      Admin API can’t list any themes (including unpublished or preview
+                      themes), so you’ll need to supply the ID manually.  A preview
+                      theme ID often shows up in storefront URLs as
+                      <code>?preview_theme_id=&lt;id&gt;</code>.
+                    </Banner>
+                    <TextField
+                      label="Theme ID"
+                      value={manualThemeId}
+                      onChange={handleManualThemeChange}
+                      autoComplete="off"
+                    />
+                  </>
+                )}
+
                 {selectedThemeId && (
                   <Text as="p" variant="bodySm" tone="subdued">
                     Section files will be uploaded to this theme. You have write_themes permission.

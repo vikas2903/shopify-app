@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@apollo/server": "^4.12.0",
-    "@prisma/client": "^6.2.1",
+    "@prisma/client": "^6.19.2",
     "@remix-run/dev": "^2.16.1",
     "@remix-run/fs-routes": "^2.16.1",
     "@remix-run/node": "^2.16.1",
@@ -37,7 +37,7 @@
     "@shopify/polaris": "^12.0.0",
     "@shopify/shopify-app-remix": "^3.7.0",
     "@shopify/shopify-app-session-storage-prisma": "^6.0.0",
-    "apollo-server": "^3.13.0",
+    "apollo-server": "^0.3.3",
     "axios": "^1.10.0",
     "body-parser": "^2.2.0",
     "chart.js": "^4.5.0",
@@ -53,7 +53,6 @@
     "mongoose": "^8.22.0",
     "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.5",
-    "prisma": "^6.10.1",
     "qs": "^6.14.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.3.0",
@@ -77,6 +76,7 @@
     "eslint-config-prettier": "^10.0.1",
     "postcss": "^8.5.4",
     "prettier": "^3.2.4",
+    "prisma": "^6.19.2",
     "typescript": "^5.2.2",
     "vite": "^6.2.2"
   },
