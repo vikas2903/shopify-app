@@ -1,108 +1,68 @@
-import { useEffect } from "react";
-import { useFetcher } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import { Page } from "@shopify/polaris";
-import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
+import { Page, Layout, Card, Button, Text, BlockStack, InlineStack, Banner } from "@shopify/polaris";
+import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
-import '../assets/style/styles.css';
-import "../assets/style/card.css";
-import "../assets/style/dashboard.css";
-import Dashboard from "../components/Dashboard.jsx";
+import { sectionsData } from "../data/sectionsData";
 
 export const loader = async ({ request }) => {
-  const { session } = await authenticate.admin(request);
-  const shop = session.shop;
-  // Only return shop info, all DB logic is handled elsewhere
-  return json({ shop });
-};
-
-export const action = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
-  const color = ["Red", "Orange", "Yellow", "Green"][
-    Math.floor(Math.random() * 4)
-  ];
-  const response = await admin.graphql(
-    `#graphql
-      mutation populateProduct($product: ProductCreateInput!) {
-        productCreate(product: $product) {
-          product {
-            id
-            title
-            handle
-            status
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  price
-                  barcode
-                  createdAt
-                }
-              }
-            }
-          }
-        }
-      }`,
-    {
-      variables: {
-        product: {
-          title: `${color} Snowboard`,
-        },
-      },
-    },
-  );
-  const responseJson = await response.json();
-  const product = responseJson.data.productCreate.product;
-  const variantId = product.variants.edges[0].node.id;
-  const variantResponse = await admin.graphql(
-    `#graphql
-    mutation shopifyRemixTemplateUpdateVariant($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
-      productVariantsBulkUpdate(productId: $productId, variants: $variants) {
-        productVariants {
-          id
-          price
-          barcode
-          createdAt
-        }
-      }
-    }`,
-    {
-      variables: {
-        productId: product.id,
-        variants: [{ id: variantId, price: "100.00" }],
-      },
-    },
-  );
-  const variantResponseJson = await variantResponse.json();
-
-  return {
-    product: responseJson.data.productCreate.product,
-    variant: variantResponseJson.data.productVariantsBulkUpdate.productVariants,
-  };
+  await authenticate.admin(request);
+  return json({});
 };
 
 export default function Index() {
-  const fetcher = useFetcher();
-  const shopify = useAppBridge();
-  const isLoading =
-    ["loading", "submitting"].includes(fetcher.state) &&
-    fetcher.formMethod === "POST";
-  const productId = fetcher.data?.product?.id.replace(
-    "gid://shopify/Product/",
-    "",
-  );
-
-  useEffect(() => {
-    if (productId) {
-      shopify.toast.show("Product created");
-    }
-  }, [productId, shopify]);
-  const generateProduct = () => fetcher.submit({}, { method: "POST" });
-
   return (
-    <Page fullWidth>
-      <TitleBar title="Dashboard" />
-      <Dashboard />
+    <Page>
+      <TitleBar title="DS-App Home" />
+      <Layout>
+        <Layout.Section>
+          <Banner title="Store Customizer Blocks" status="info">
+            <p>Choose one of the available block cards below to understand how it works and where to use it in your store.</p>
+          </Banner>
+        </Layout.Section>
+
+        <Layout.Section>
+          <Card sectioned subdued>
+            <BlockStack gap="100">
+              <Text variant="headingLg" as="h1">Featured App Blocks</Text>
+              <Text as="p" style={{ color: "#475467" }}>
+                These are the main storefront blocks offered by Store Customizer. Each card explains how the block helps your store.
+              </Text>
+            </BlockStack>
+          </Card>
+        </Layout.Section>
+
+        <Layout.Section>
+          <div style={{ display: "grid", gap: "18px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+            {sectionsData.map((block) => (
+              <Card key={block.id} sectioned subdued style={{ borderRadius: 20, minHeight: 220 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ width: 46, height: 46, borderRadius: 14, background: "#eef2ff", display: "grid", placeItems: "center", fontSize: 22 }}>
+                    {block.icon || "✨"}
+                  </div>
+                  <div>
+                    <Text variant="headingMd" as="h2">{block.title}</Text>
+                    <Text as="p" style={{ color: "#6b7280", marginTop: 4 }}>{block.tagline}</Text>
+                  </div>
+                </div>
+                <Text as="p" style={{ marginTop: 14, color: "#475467", minHeight: 70 }}>{block.description}</Text>
+                <Button url="/app/guide" outline style={{ marginTop: 14 }}>
+                  How to use
+                </Button>
+              </Card>
+            ))}
+          </div>
+        </Layout.Section>
+
+        <Layout.Section>
+          <Card sectioned subdued>
+            <Text variant="headingLg" as="h2">Need help?</Text>
+            <Text as="p" style={{ marginTop: 8 }}>Email our support team for setup guidance and any questions about block usage.</Text>
+            <Text as="p" style={{ marginTop: 12, fontWeight: 600 }}>vikasprasad@digisidekick.com</Text>
+            <Text as="p" style={{ marginTop: 4, fontWeight: 600 }}>support@digisidekick.com</Text>
+          </Card>
+        </Layout.Section>
+      </Layout>
     </Page>
   );
 }
+

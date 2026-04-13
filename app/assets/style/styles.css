@@ -509,16 +509,6 @@ h1 {
     display: inline-block;
 }
 
-h1::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 0;
-    width: 40%;
-    height: 4px;
-    background: linear-gradient(90deg, #3498db, transparent);
-    border-radius: 2px;
-}
 
 .stats-container {
     display: grid;
