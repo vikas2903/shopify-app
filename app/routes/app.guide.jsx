@@ -1,8 +1,40 @@
 import { json } from "@remix-run/node";
-import { Page, Layout, Card, Text, InlineStack, Button, List } from "@shopify/polaris";
+import { Page, Layout, Card, Text, InlineStack, Button, BlockStack, Badge } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
-import { sectionsData } from "../data/sectionsData";
+
+const guideBlocks = [
+  {
+    id: "announcement-bar",
+    title: "Announcement Bar",
+    image: "/Annoucement_bar.png",
+  },
+  {
+    id: "categorised-search",
+    title: "Categorised Search",
+    image: "/Categorised_search.png",
+  },
+  {
+    id: "products-tabber",
+    title: "Products Tabber",
+    image: "/products-tabber.png",
+  },
+  {
+    id: "shop-buy-category",
+    title: "Shop by Category",
+    image: "/shop-buy-category.png",
+  },
+  {
+    id: "shopable-video",
+    title: "Shopable Video",
+    image: "/shopable-video.png",
+  },
+  {
+    id: "usp-icons",
+    title: "USP Icons",
+    image: "/usp-icons.png",
+  },
+];
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
@@ -11,63 +43,140 @@ export const loader = async ({ request }) => {
 
 export default function Guide() {
   return (
-    <Page>
+    <Page fullWidth>
       <TitleBar title="How To Use" />
+      <style>{`
+        .guide-block-grid {
+          display: grid;
+          gap: 20px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        @media (max-width: 1024px) {
+          .guide-block-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 640px) {
+          .guide-block-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
       <Layout>
         <Layout.Section>
-          <Card sectioned subdued>
-            <Text variant="headingLg" as="h1">How to use these blocks</Text>
-            <Text as="p" style={{ marginTop: 10, color: "#475467" }}>
-              Open the Shopify theme editor, add block sections from the App block menu, and choose Store Customizer blocks.
-            </Text>
+          <Card>
+            <div style={{ padding: 24, background: "#f3f7ff", borderRadius: 16 }}>
+              <BlockStack gap="300">
+                <InlineStack gap="200" wrap>
+                  <Badge tone="info">Simple guide</Badge>
+                  <Badge tone="success">Manual customization flow</Badge>
+                </InlineStack>
+                <Text variant="headingXl" as="h1">
+                  How to use the UI blocks
+                </Text>
+                <Text as="p" style={{ color: "#475467" }}>
+                  Open Shopify customization, choose the block you want, insert it into your theme, then update the block settings and save.
+                </Text>
+              </BlockStack>
+            </div>
           </Card>
         </Layout.Section>
 
         <Layout.Section>
-          <div style={{ display: "grid", gap: "16px", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+          <div style={{ display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
             {[
-              { icon: "🖥️", title: "Open Customization", text: "Go to Online Store → Themes → Customize in Shopify admin." },
-              { icon: "➕", title: "Add Blocks", text: "Click Add blocks or App blocks in the left sidebar." },
-              { icon: "📦", title: "Choose App Blocks", text: "Open App blocks and choose among theme blocks from Store Customizer." },
-              { icon: "✅", title: "Add to Theme", text: "Insert the chosen block and save the theme changes." },
+              {
+                step: "1",
+                title: "Open customization",
+                text: "Go to Online Store, open Themes, then click Customize.",
+              },
+              {
+                step: "2",
+                title: "Choose section or block",
+                text: "In the left sidebar, click Add section or App blocks and choose the UI block you want to use.",
+              },
+              {
+                step: "3",
+                title: "Update settings",
+                text: "Add your content like product handles, videos, text, or styling options inside the block settings.",
+              },
+              {
+                step: "4",
+                title: "Save changes",
+                text: "When the block looks right, save the theme changes and publish if needed.",
+              },
             ].map((item) => (
-              <Card key={item.title} sectioned subdued style={{ padding: 20, borderRadius: 18, minHeight: 180 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 42, height: 42, borderRadius: 14, background: "#eef2ff", display: "grid", placeItems: "center", fontSize: 24 }}>
-                    {item.icon}
-                  </div>
-                  <Text variant="headingMd" as="h3">{item.title}</Text>
+              <Card key={item.step}>
+                <div style={{ padding: 20 }}>
+                  <BlockStack gap="200">
+                    <div style={{ width: 42, height: 42, borderRadius: 999, background: "#111827", color: "#fff", display: "grid", placeItems: "center", fontWeight: 700 }}>
+                      {item.step}
+                    </div>
+                    <Text variant="headingMd" as="h3">
+                      {item.title}
+                    </Text>
+                    <Text as="p" style={{ color: "#475467" }}>
+                      {item.text}
+                    </Text>
+                  </BlockStack>
                 </div>
-                <Text as="p" style={{ marginTop: 12, color: "#475467" }}>{item.text}</Text>
               </Card>
             ))}
           </div>
         </Layout.Section>
 
         <Layout.Section>
-          <Card title="Block Guide" sectioned>
-            <div style={{ display: "grid", gap: "16px" }}>
-              {sectionsData.map((block) => (
-                <Card key={block.id} sectioned subdued style={{ borderRadius: 18, padding: 18 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                    <div style={{ width: 42, height: 42, borderRadius: 14, background: "#eef2ff", display: "grid", placeItems: "center", fontSize: 24 }}>
-                      {block.icon || "✨"}
+          <Card>
+            <div style={{ padding: 20 }}>
+              <BlockStack gap="300">
+                <Text as="h2" variant="headingLg">
+                  Available UI blocks
+                </Text>
+                <Text as="p" style={{ color: "#475467" }}>
+                  These are the 6 UI blocks available in your dashboard. Open customization and choose whichever block you want to use.
+                </Text>
+
+                <div className="guide-block-grid">
+                  {guideBlocks.map((block) => (
+                    <div
+                      key={block.id}
+                      style={{
+                        background: "#fff",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 18,
+                        overflow: "hidden",
+                      }}
+                    >
+                      <img
+                        src={block.image}
+                        alt={block.title}
+                        style={{
+                          width: "100%",
+                          height: 220,
+                          objectFit: "cover",
+                          display: "block",
+                        }}
+                      />
+                      <div style={{ padding: 16 }}>
+                        <Text variant="headingMd" as="h3">
+                          {block.title}
+                        </Text>
+                      </div>
                     </div>
-                    <Text variant="headingMd" as="h2">{block.title}</Text>
-                  </div>
-                  <Text as="p" style={{ marginTop: 10, color: "#475467" }}>{block.description}</Text>
-                  <Text as="p" style={{ marginTop: 12, fontWeight: 600 }}>How to use this block</Text>
-                  <Text as="p">{block.usage}</Text>
-                </Card>
-              ))}
+                  ))}
+                </div>
+              </BlockStack>
             </div>
           </Card>
         </Layout.Section>
 
         <Layout.Section>
           <InlineStack gap="300">
-            <Button url="/app" variant="secondary">Back to Home</Button>
-            <Button url="/app/contact">Contact Support</Button>
+            <Button url="/app" variant="primary">
+              Back to dashboard
+            </Button>
           </InlineStack>
         </Layout.Section>
       </Layout>

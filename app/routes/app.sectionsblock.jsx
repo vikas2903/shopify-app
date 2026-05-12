@@ -1,8 +1,9 @@
 /**
  * Sections Block Page
- * - Theme ID selector at top
- * - Grid of section cards (Shopable Video from app/section/shopable-video.liquid)
- * - Upload button uploads section file to selected theme via Theme API
+ * - Theme selector
+ * - Dashboard-style block library
+ * - Upload button uploads section file to selected theme
+ * - On success, opens Shopify theme editor automatically
  */
 
 import { json } from "@remix-run/node";
@@ -19,9 +20,12 @@ import {
   Banner,
   Box,
   InlineGrid,
+  InlineStack,
+  Badge,
+  Divider,
 } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { authenticate } from "../shopify.server";
 import { readFileSync, existsSync } from "fs";
 import path from "path";
@@ -30,59 +34,49 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Section definitions: map sectionKey to local file path under app/section
 const SECTIONS_LIST = [
   {
     id: "shopable-video",
     sectionName: "shopable-video",
     title: "Shopable Video",
-    description: "Add a shopable video carousel section to your store.",
+    description:
+      "Install a product-linked shopable video section with 5 cards in one row on desktop and a mobile-friendly 2-column layout.",
     image:
       "https://cdn.shopify.com/s/files/1/0796/7847/2226/files/announcement-bar-removebg-preview.png?v=1754628891",
+    highlights: ["5-up desktop", "2-column mobile", "Product-handle driven"],
   },
 ];
 
-/**
- * Loader: fetch themes and shop for the session
- */
 export const loader = async ({ request }) => {
   try {
-    console.log("[sectionsblock] Loader started");
     const { session } = await authenticate.admin(request);
     if (!session) {
-      console.log("[sectionsblock] No session");
       throw new Error("No session. Please authenticate first.");
     }
 
     const shopFull = session.shop;
     const accessToken = session.accessToken;
-    // Scope can be string "read_themes,write_themes" or array ["read_themes", "write_themes"]
     const scopeRaw = session.scope;
     const scopeStr = Array.isArray(scopeRaw) ? (scopeRaw || []).join(",") : (scopeRaw || "");
     const hasReadThemes = scopeStr.includes("read_themes");
 
-    // parse the request URL once to avoid redeclaration and for use in both
-    // the no-scope and has-scope branches
     let previewId = null;
     try {
       const parsed = new URL(request.url);
       previewId = parsed.searchParams.get("preview_theme_id");
     } catch (e) {
-      // swallow; request.url should be valid, but be defensive
       console.warn("[sectionsblock] Failed to parse request URL for preview_theme_id", e);
     }
-
-    console.log("[sectionsblock] Shop:", shopFull, "| scope type:", typeof scopeRaw, "| Has read_themes:", hasReadThemes, "| previewId:", previewId);
 
     if (!shopFull || !accessToken) {
       throw new Error("Missing shop or access token.");
     }
 
     if (!hasReadThemes) {
-      console.warn("[sectionsblock] No read_themes scope; skipping theme fetch.");
       const initialThemes = previewId
         ? [{ id: previewId, name: `Preview theme (${previewId})`, role: "PREVIEW" }]
         : [];
+
       return json({
         themes: initialThemes,
         shop: shopFull,
@@ -92,10 +86,7 @@ export const loader = async ({ request }) => {
       });
     }
 
-    // Fetch themes from Shopify Admin API (only when read_themes is available)
-    const apiUrl = `https://${shopFull}/admin/api/2024-01/themes.json`;
-    console.log("[sectionsblock] Fetching themes:", apiUrl);
-    const response = await fetch(apiUrl, {
+    const response = await fetch(`https://${shopFull}/admin/api/2024-01/themes.json`, {
       method: "GET",
       headers: {
         "X-Shopify-Access-Token": accessToken,
@@ -110,30 +101,19 @@ export const loader = async ({ request }) => {
     }
 
     const data = await response.json();
-    console.log("[sectionsblock] Themes API response received. Theme count:", (data.themes || []).length);
-
-    // Map the API result into our shape. The Admin API returns published, unpublished
-    // and development (preview) themes whenever the access token has the
-    // `read_themes` permission. If the token lacks the scope we never hit this
-    // branch and themes will be empty.
     let themes = (data.themes || []).map((t) => ({
       id: String(t.id),
       name: t.name,
       role: (t.role || "").toUpperCase(),
     }));
 
-    // if we previously parsed a previewId, add it now if it wasn’t returned
-    // by the API.  (It may already be present when the token has read_themes.)
     if (previewId && !themes.find((t) => t.id === previewId)) {
       themes.unshift({
         id: previewId,
         name: `Preview theme (${previewId})`,
         role: "PREVIEW",
       });
-      console.log("[sectionsblock] Added preview_theme_id to themes:", previewId);
     }
-
-    console.log("[sectionsblock] Themes loaded:", themes.length);
 
     return json({
       themes,
@@ -144,7 +124,6 @@ export const loader = async ({ request }) => {
     });
   } catch (err) {
     console.error("[sectionsblock] Loader error:", err);
-    console.error("[sectionsblock] Loader error (returning fallback):", err);
     return json(
       {
         themes: [],
@@ -158,98 +137,82 @@ export const loader = async ({ request }) => {
   }
 };
 
-/**
- * Action: upload section file to theme (write_themes)
- * Body: themeId, sectionName (e.g. "shopable-video")
- */
 export const action = async ({ request }) => {
   if (request.method !== "POST") {
     return json({ success: false, error: "Method not allowed" }, { status: 405 });
   }
 
   try {
-    console.log("[sectionsblock] Action: upload section");
     const { session } = await authenticate.admin(request);
     if (!session) {
-      console.log("[sectionsblock] Action: no session");
       return json({ success: false, error: "Not authenticated" }, { status: 401 });
     }
 
     const scopeRaw = session.scope;
     const scopeStr = Array.isArray(scopeRaw) ? (scopeRaw || []).join(",") : (scopeRaw || "");
     if (!scopeStr.includes("write_themes")) {
-      console.log("[sectionsblock] Action: missing write_themes. scope:", scopeStr);
-      return json({ success: false, error: "App needs write_themes scope. Reinstall the app or clear session and log in again." }, { status: 403 });
+      return json(
+        {
+          success: false,
+          error: "App needs write_themes scope. Reinstall the app or clear session and log in again.",
+        },
+        { status: 403 }
+      );
     }
 
     const formData = await request.formData();
     const themeId = formData.get("themeId");
     const sectionName = formData.get("sectionName");
+
     if (!themeId || !sectionName) {
-      console.log("[sectionsblock] Action: missing themeId or sectionName");
       return json({ success: false, error: "Missing themeId or sectionName" }, { status: 400 });
     }
 
-    // Resolve path to section file: app/section/<sectionName>.liquid
     const sectionPath = path.join(__dirname, "..", "section", `${sectionName}.liquid`);
-    console.log("[sectionsblock] Section file path:", sectionPath);
-
     if (!existsSync(sectionPath)) {
-      console.error("[sectionsblock] File not found:", sectionPath);
-      return json({ success: false, error: `Section file not found: ${sectionName}.liquid` }, { status: 404 });
+      return json(
+        { success: false, error: `Section file not found: ${sectionName}.liquid` },
+        { status: 404 }
+      );
     }
 
     const liquidContent = readFileSync(sectionPath, "utf8");
-    console.log("[sectionsblock] Read file, length:", liquidContent.length);
-
     const shopFull = session.shop;
     const accessToken = session.accessToken;
     const assetKey = `sections/${sectionName}.liquid`;
-    const putUrl = `https://${shopFull}/admin/api/2024-01/themes/${themeId}/assets.json`;
-    console.log("[sectionsblock] PUT asset:", putUrl, "key:", assetKey);
 
-    const putResponse = await fetch(putUrl, {
-      method: "PUT",
-      headers: {
-        "X-Shopify-Access-Token": accessToken,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        asset: { key: assetKey, value: liquidContent },
-      }),
-    });
+    const putResponse = await fetch(
+      `https://${shopFull}/admin/api/2024-01/themes/${themeId}/assets.json`,
+      {
+        method: "PUT",
+        headers: {
+          "X-Shopify-Access-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          asset: { key: assetKey, value: liquidContent },
+        }),
+      }
+    );
 
     const putData = await putResponse.json();
     if (!putResponse.ok) {
-      console.error("[sectionsblock] Theme API PUT error:", putResponse.status, putData);
-
-      // Shopify sometimes returns a generic 403 with the message
-      // "[API] API Access has been disabled" when the shop is frozen or the
-      // API credentials are no longer valid.  This is not something the
-      // app code can fix; instruct the user accordingly.
       let errorMessage = "Upload failed";
       if (putData && putData.errors) {
-        // errors may be an object or string
-        if (typeof putData.errors === "string") {
-          errorMessage = putData.errors;
-        } else if (Array.isArray(putData.errors)) {
-          errorMessage = putData.errors.join(", ");
-        } else {
-          errorMessage = JSON.stringify(putData.errors);
-        }
+        if (typeof putData.errors === "string") errorMessage = putData.errors;
+        else if (Array.isArray(putData.errors)) errorMessage = putData.errors.join(", ");
+        else errorMessage = JSON.stringify(putData.errors);
       }
 
       if (/API Access has been disabled/.test(errorMessage)) {
         errorMessage =
-          "Shop API access is disabled – the store may be frozen or expired. " +
-          "Check the shop’s status in the Shopify admin and reinstall the app if necessary.";
+          "Shop API access is disabled - the store may be frozen or expired. Check the store status and reinstall the app if needed.";
       }
 
       return json({ success: false, error: errorMessage }, { status: putResponse.status });
     }
 
-    console.log("[sectionsblock] Upload success for", assetKey);
-    return json({ success: true, assetKey });
+    return json({ success: true, assetKey, sectionName });
   } catch (err) {
     console.error("[sectionsblock] Action error:", err);
     return json(
@@ -264,45 +227,55 @@ export default function SectionsBlockPage() {
   const fetcher = useFetcher();
   const [manualThemeId, setManualThemeId] = useState("");
   const [selectedThemeId, setSelectedThemeId] = useState(() => (themes?.length ? themes[0].id : ""));
+  const [pendingSectionName, setPendingSectionName] = useState("");
+  const [openedAssetKey, setOpenedAssetKey] = useState("");
 
   const themeOptions = (themes || []).map((t) => {
-    // highlight the currently published theme, and give a note for any
-    // preview/development entries
     let label = t.name;
-    if (t.role === "MAIN") label += " 🟢";
+    if (t.role === "MAIN") label += " (live)";
     else if (t.role === "PREVIEW" || t.role === "DEVELOPMENT") label += " (preview)";
-    else if (t.role === "UNPUBLISHED") label += " (unpublished)";
+    else if (t.role === "UNPUBLISHED") label += " (draft)";
     return { label, value: t.id };
   });
 
   const handleThemeChange = useCallback((value) => {
     setSelectedThemeId(value);
-    console.log("[sectionsblock] Theme selected:", value);
   }, []);
 
   const handleManualThemeChange = useCallback((value) => {
     setManualThemeId(value);
     setSelectedThemeId(value);
-    console.log("[sectionsblock] Manual theme id set:", value);
   }, []);
+
+  const openThemeEditor = useCallback(() => {
+    if (!selectedThemeId || !shop) return;
+    window.open(
+      `https://${shop}/admin/themes/${selectedThemeId}/editor?context=sections&template=index`,
+      "_blank"
+    );
+  }, [selectedThemeId, shop]);
 
   const handleUpload = useCallback(
     (sectionName) => {
-      if (!selectedThemeId) {
-        console.log("[sectionsblock] Upload skipped: no theme selected");
-        return;
-      }
+      if (!selectedThemeId) return;
+      setPendingSectionName(sectionName);
       const formData = new FormData();
       formData.append("themeId", selectedThemeId);
       formData.append("sectionName", sectionName);
       fetcher.submit(formData, { method: "POST" });
-      console.log("[sectionsblock] Upload submitted:", sectionName, "theme:", selectedThemeId);
     },
     [selectedThemeId, fetcher]
   );
 
   const uploadResult = fetcher.data;
   const isUploading = fetcher.state === "submitting" || fetcher.state === "loading";
+
+  useEffect(() => {
+    if (!uploadResult?.success || !uploadResult?.assetKey) return;
+    if (openedAssetKey === uploadResult.assetKey) return;
+    setOpenedAssetKey(uploadResult.assetKey);
+    openThemeEditor();
+  }, [uploadResult, openedAssetKey, openThemeEditor]);
 
   if (loadError) {
     return (
@@ -319,21 +292,63 @@ export default function SectionsBlockPage() {
     <Page title="Sections" fullWidth>
       <TitleBar title="Sections" />
       <BlockStack gap="400">
-        {/* Theme selector at top */}
         <Layout>
           <Layout.Section>
+            <Box background="bg-fill-brand-secondary" borderRadius="300" padding="600">
+              <InlineGrid columns={{ xs: 1, md: 2 }} gap="500">
+                <BlockStack gap="300">
+                  <InlineStack gap="200" wrap>
+                    <Badge tone="info">App dashboard</Badge>
+                    <Badge tone="success">One-click install flow</Badge>
+                  </InlineStack>
+                  <Text as="h1" variant="heading2xl">
+                    Install blocks and jump straight into customization
+                  </Text>
+                  <Text as="p" variant="bodyLg" tone="subdued">
+                    Choose a theme, click a block card, and the app will upload the section file and open Shopify customization so you can place it right away.
+                  </Text>
+                  <InlineStack gap="300" wrap>
+                    <Box background="bg-surface" borderRadius="200" padding="300">
+                      <BlockStack gap="100">
+                        <Text as="p" variant="bodySm" tone="subdued">Blocks ready</Text>
+                        <Text as="p" variant="headingLg">{sections.length}</Text>
+                      </BlockStack>
+                    </Box>
+                    <Box background="bg-surface" borderRadius="200" padding="300">
+                      <BlockStack gap="100">
+                        <Text as="p" variant="bodySm" tone="subdued">Theme status</Text>
+                        <Text as="p" variant="headingLg">{selectedThemeId ? "Connected" : "Select theme"}</Text>
+                      </BlockStack>
+                    </Box>
+                  </InlineStack>
+                </BlockStack>
+
+                <Box background="bg-surface" borderRadius="300" padding="400">
+                  <BlockStack gap="300">
+                    <Text as="h2" variant="headingMd">
+                      Quick steps
+                    </Text>
+                    <Text as="p" variant="bodyMd">1. Pick the Shopify theme you want to edit.</Text>
+                    <Text as="p" variant="bodyMd">2. Click `Add to theme and customize`.</Text>
+                    <Text as="p" variant="bodyMd">3. In the theme editor, use `Add section` and configure the uploaded block.</Text>
+                  </BlockStack>
+                </Box>
+              </InlineGrid>
+            </Box>
+          </Layout.Section>
+
+          <Layout.Section variant="oneThird">
             <Card>
               <BlockStack gap="300">
                 <Text as="h2" variant="headingMd">
-                  Select theme
+                  Theme setup
+                </Text>
+                <Text as="p" variant="bodySm" tone="subdued">
+                  This is the theme where the app will upload your section files.
                 </Text>
                 <Select
                   label="Theme"
-                  labelInline
-                  options={[
-                    { label: "Select a theme", value: "" },
-                    ...themeOptions,
-                  ]}
+                  options={[{ label: "Select a theme", value: "" }, ...themeOptions]}
                   value={selectedThemeId}
                   onChange={handleThemeChange}
                 />
@@ -341,11 +356,7 @@ export default function SectionsBlockPage() {
                 {!hasReadThemes && (
                   <>
                     <Banner tone="warning">
-                      App does not have `read_themes` permission. Without that scope the
-                      Admin API can’t list any themes (including unpublished or preview
-                      themes), so you’ll need to supply the ID manually.  A preview
-                      theme ID often shows up in storefront URLs as
-                      <code>?preview_theme_id=&lt;id&gt;</code>.
+                      The app cannot list themes without `read_themes`. Paste a theme ID manually if needed.
                     </Banner>
                     <TextField
                       label="Theme ID"
@@ -356,74 +367,101 @@ export default function SectionsBlockPage() {
                   </>
                 )}
 
-                {selectedThemeId && (
-                  <Text as="p" variant="bodySm" tone="subdued">
-                    Section files will be uploaded to this theme. You have write_themes permission.
-                  </Text>
+                <InlineStack gap="200" wrap>
+                  <Badge tone={selectedThemeId ? "success" : "attention"}>
+                    {selectedThemeId ? "Theme selected" : "Theme required"}
+                  </Badge>
+                  <Button onClick={openThemeEditor} disabled={!selectedThemeId || !shop}>
+                    Open customizer
+                  </Button>
+                </InlineStack>
+              </BlockStack>
+            </Card>
+          </Layout.Section>
+
+          <Layout.Section>
+            <Card>
+              <BlockStack gap="300">
+                <Text as="h2" variant="headingMd">
+                  Block library
+                </Text>
+                <Text as="p" variant="bodySm" tone="subdued">
+                  Install a block into your selected theme and jump into the Shopify editor from the same screen.
+                </Text>
+                <Divider />
+
+                {uploadResult?.success && (
+                  <Banner tone="success">
+                    {uploadResult.sectionName || pendingSectionName} uploaded successfully. The theme editor has been opened for customization.
+                  </Banner>
                 )}
+                {uploadResult && !uploadResult.success && (
+                  <Banner tone="critical">
+                    Upload failed: {uploadResult.error}
+                  </Banner>
+                )}
+
+                <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
+                  {(sections || []).map((section) => (
+                    <Box
+                      key={section.id}
+                      background="bg-surface-secondary"
+                      borderRadius="300"
+                      padding="300"
+                    >
+                      <BlockStack gap="300">
+                        <Box background="bg-surface" borderRadius="200" overflowX="hidden">
+                          <img
+                            src={section.image}
+                            alt={section.title}
+                            style={{
+                              width: "100%",
+                              height: 220,
+                              objectFit: "cover",
+                              display: "block",
+                            }}
+                          />
+                        </Box>
+
+                        <InlineStack align="space-between" blockAlign="start" gap="200">
+                          <BlockStack gap="100">
+                            <Text as="h3" variant="headingLg">
+                              {section.title}
+                            </Text>
+                            <Text as="p" variant="bodyMd" tone="subdued">
+                              {section.description}
+                            </Text>
+                          </BlockStack>
+                          <Badge tone="info">Section</Badge>
+                        </InlineStack>
+
+                        <InlineStack gap="200" wrap>
+                          {(section.highlights || []).map((item) => (
+                            <Badge key={item}>{item}</Badge>
+                          ))}
+                        </InlineStack>
+
+                        <InlineStack gap="300" wrap>
+                          <Button
+                            variant="primary"
+                            onClick={() => handleUpload(section.sectionName)}
+                            loading={isUploading && pendingSectionName === section.sectionName}
+                            disabled={!selectedThemeId || isUploading}
+                          >
+                            Add to theme and customize
+                          </Button>
+                          <Button onClick={openThemeEditor} disabled={!selectedThemeId || !shop}>
+                            Open customizer
+                          </Button>
+                        </InlineStack>
+                      </BlockStack>
+                    </Box>
+                  ))}
+                </InlineGrid>
               </BlockStack>
             </Card>
           </Layout.Section>
         </Layout>
-
-        {/* Upload result banner */}
-        {uploadResult?.success && (
-          <Banner tone="success" onDismiss={() => {}}>
-            Section uploaded to theme. File: {uploadResult.assetKey}. Add it in Theme Editor → Add section.
-          </Banner>
-        )}
-        {uploadResult && !uploadResult.success && (
-          <Banner tone="critical" onDismiss={() => {}}>
-            Upload failed: {uploadResult.error}
-          </Banner>
-        )}
-
-        {/* Grid of section cards */}
-        <Text as="h2" variant="headingMd">
-          Section blocks
-        </Text>
-        <InlineGrid columns={{ xs: 1, sm: 2, md: 3 }} gap="400">
-          {(sections || []).map((section) => (
-            <Card key={section.id}>
-              <BlockStack gap="300">
-                <Box
-                  background="bg-surface-secondary"
-                  borderRadius="200"
-                  minHeight="120px"
-                  padding="300"
-                >
-                  <img
-                    src={section.image}
-                    alt={section.title}
-                    style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8 }}
-                  />
-                </Box>
-                <Text as="h3" variant="headingSm">
-                  {section.title}
-                </Text>
-                <Text as="p" variant="bodySm" tone="subdued">
-                  {section.description}
-                </Text>
-                <Button
-                  variant="primary"
-                  onClick={() => handleUpload(section.sectionName)}
-                  loading={isUploading}
-                  disabled={!selectedThemeId || isUploading}
-                >
-                  Upload to theme
-                </Button>
-                {selectedThemeId && shop && (
-                  <Button
-                    url={`https://${shop}/admin/themes/${selectedThemeId}/editor?context=sections&template=index`}
-                    target="_blank"
-                  >
-                    Open theme editor
-                  </Button>
-                )}
-              </BlockStack>
-            </Card>
-          ))}
-        </InlineGrid>
       </BlockStack>
     </Page>
   );
