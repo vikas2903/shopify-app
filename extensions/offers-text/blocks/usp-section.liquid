@@ -1,0 +1,471 @@
+<link
+href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap"
+rel="stylesheet"
+>
+<style>
+.d2c-usp-section {
+width: 100%;
+max-width: 100%;
+position: relative;
+overflow: hidden;
+}
+.d2c-usp-section::before {
+content: '';
+position: absolute;
+width: 600px;
+height: 600px;
+border-radius: 50%;
+border: 1px solid rgba(212, 0, 107, 0.08);
+top: -200px;
+left: -200px;
+pointer-events: none;
+}
+.d2c-usp-section::after {
+content: '';
+position: absolute;
+width: 400px;
+height: 400px;
+border-radius: 50%;
+border: 1px solid rgba(212, 0, 107, 0.06);
+bottom: -150px;
+right: -100px;
+pointer-events: none;
+}
+.d2c-usp-header {
+text-align: center;
+margin-bottom: 30px;
+position: relative;
+}
+.d2c-usp-eyebrow {
+font-family: 'Jost', sans-serif;
+font-size: 0.72rem;
+font-weight: 500;
+letter-spacing: 4px;
+text-transform: uppercase;
+color: var(--d2c-usp-accent, #d4006b);
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+margin-bottom: 14px;
+}
+.d2c-usp-eyebrow::before,
+.d2c-usp-eyebrow::after {
+content: '';
+width: 40px;
+height: 1px;
+background: linear-gradient(to right, transparent, var(--d2c-usp-accent, #d4006b));
+}
+.d2c-usp-eyebrow::after {
+background: linear-gradient(to left, transparent, var(--d2c-usp-accent, #d4006b));
+}
+.d2c-usp-header h2 {
+font-family: 'Cormorant Garamond', serif;
+font-size: clamp(2rem, 4vw, 3rem);
+font-weight: 500;
+color: #1a0a10;
+line-height: 1.2;
+font-style: italic;
+margin: 0;
+}
+.d2c-usp-header h2 span {
+color: var(--d2c-usp-accent, #d4006b);
+font-style: normal;
+}
+.d2c-usp-grid {
+display: grid;
+grid-template-columns: repeat(6, 1fr);
+gap: 0;
+position: relative;
+}
+.d2c-usp-card {
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+cursor: default;
+transition: transform 0.4s cubic-bezier(.25,.8,.25,1);
+text-align: center;
+padding: 0 12px 20px;
+}
+.d2c-usp-card:hover {
+transform: translateY(-8px);
+}
+.d2c-usp-card:not(:last-child)::after {
+content: '';
+position: absolute;
+right: 0;
+top: 30%;
+bottom: 30%;
+width: 1px;
+background: linear-gradient(to bottom, transparent, rgba(212,0,107,0.2), transparent);
+}
+.d2c-usp-icon-wrap {
+width: 88px;
+height: 88px;
+position: relative;
+margin-bottom: 24px;
+flex-shrink: 0;
+}
+.d2c-usp-ring {
+position: absolute;
+inset: 0;
+border-radius: 50%;
+border: 1.5px dashed rgba(212,0,107,0.25);
+animation: d2c-spin 18s linear infinite;
+}
+@keyframes d2c-spin {
+to { transform: rotate(360deg); }
+}
+.d2c-usp-inner {
+position: absolute;
+inset: 10px;
+border-radius: 50%;
+background: #fff;
+box-shadow:
+0 0 0 1px rgba(212,0,107,0.12),
+0 8px 28px rgba(212,0,107,0.1);
+display: flex;
+align-items: center;
+justify-content: center;
+transition: background 0.35s, box-shadow 0.35s;
+color: var(--d2c-usp-accent, #d4006b);
+}
+.d2c-usp-card:hover .d2c-usp-inner {
+background: linear-gradient(135deg, #fff0f6, #ffe4f0);
+box-shadow:
+0 0 0 1.5px rgba(212,0,107,0.35),
+0 12px 36px rgba(212,0,107,0.18);
+}
+.d2c-usp-dot {
+position: absolute;
+width: 7px;
+height: 7px;
+border-radius: 50%;
+background: var(--d2c-usp-accent, #d4006b);
+opacity: 0;
+transition: opacity 0.3s;
+}
+.d2c-usp-dot-t {
+top: 3px;
+left: 50%;
+transform: translateX(-50%);
+}
+.d2c-usp-dot-b {
+bottom: 3px;
+left: 50%;
+transform: translateX(-50%);
+}
+.d2c-usp-card:hover .d2c-usp-dot {
+opacity: 1;
+}
+.d2c-usp-inner svg {
+width: 28px;
+height: 28px;
+color: var(--d2c-usp-accent, #d4006b);
+transition: transform 0.35s;
+}
+.d2c-usp-inner svg,
+.d2c-usp-inner svg * {
+stroke: currentColor;
+}
+.d2c-usp-card:hover .d2c-usp-inner svg {
+transform: scale(1.12);
+}
+.d2c-usp-card h3 {
+font-family: 'Cormorant Garamond', serif;
+font-size: 1.15rem;
+font-weight: 600;
+color: #1a0a10;
+margin-bottom: 8px;
+line-height: 1.3;
+margin-top: 0;
+position: relative;
+display: inline-block;
+}
+.d2c-usp-card h3::after {
+content: '';
+position: absolute;
+bottom: -4px;
+left: 50%;
+transform: translateX(-50%) scaleX(0);
+width: 70%;
+height: 1px;
+background: var(--d2c-usp-accent, #d4006b);
+transition: transform 0.35s;
+transform-origin: center;
+}
+.d2c-usp-card p {
+font-size: 0.8rem;
+color: #a07080;
+line-height: 1.65;
+font-weight: 300;
+max-width: 170px;
+}
+@media(max-width: 1024px) {
+.d2c-usp-grid {
+grid-template-columns: repeat(3, 1fr);
+gap: 2px;
+}
+.d2c-usp-card:nth-child(3)::after,
+.d2c-usp-card:nth-child(6)::after {
+display: none;
+}
+}
+@media(max-width: 640px) {
+.d2c-usp-section {
+padding: 0;
+}
+.d2c-usp-grid {
+grid-template-columns: repeat(2, 1fr);
+}
+.d2c-usp-card:nth-child(2)::after,
+.d2c-usp-card:nth-child(4)::after,
+.d2c-usp-card:nth-child(6)::after {
+display: none;
+}
+.d2c-usp-card {
+min-width: 100px;
+flex: 1 1 32%;
+}
+.d2c-usp-grid {
+display: flex;
+flex-wrap:wrap;
+margin-bottom: 20px;
+}
+.d2c-usp-icon-wrap {
+margin-bottom: 10px;
+}
+.d2c-usp-card h3 {
+font-size: 14px;
+}
+}
+</style>
+<section class="d2c-usp-section" style="--d2c-usp-accent: {{ block.settings.icon_color }};">
+<div class="d2c-usp-header">
+{% if block.settings.eyebrow_text != blank %}
+<p class="d2c-usp-eyebrow">{{ block.settings.eyebrow_text }}</p>
+{% endif %}
+<h2>
+{{ block.settings.heading_text }} <span>{{ block.settings.heading_highlight }}</span>
+</h2>
+</div>
+<div class="d2c-usp-grid">
+<div class="d2c-usp-card">
+<div class="d2c-usp-icon-wrap">
+<div class="d2c-usp-ring"></div>
+<div class="d2c-usp-dot d2c-usp-dot-t"></div>
+<div class="d2c-usp-dot d2c-usp-dot-b"></div>
+<div class="d2c-usp-inner">
+{% if block.settings.feature_icon_1 != blank %}
+{{ block.settings.feature_icon_1 }}
+{% else %}
+<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'>
+<polyline points='1 4 1 10 7 10'/>
+<path d='M3.51 15a9 9 0 1 0 .49-4.5'/>
+<polyline points='12 8 12 12 14 14'/>
+</svg>
+{% endif %}
+</div>
+</div>
+<h3>{{ block.settings.feature_title_1 }}</h3>
+</div>
+<div class="d2c-usp-card">
+<div class="d2c-usp-icon-wrap">
+<div class="d2c-usp-ring"></div>
+<div class="d2c-usp-dot d2c-usp-dot-t"></div>
+<div class="d2c-usp-dot d2c-usp-dot-b"></div>
+<div class="d2c-usp-inner">
+{% if block.settings.feature_icon_2 != blank %}
+{{ block.settings.feature_icon_2 }}
+{% else %}
+<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'>
+<path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+<circle cx='12' cy='11' r='3'/>
+</svg>
+{% endif %}
+</div>
+</div>
+<h3>{{ block.settings.feature_title_2 }}</h3>
+</div>
+<div class="d2c-usp-card">
+<div class="d2c-usp-icon-wrap">
+<div class="d2c-usp-ring"></div>
+<div class="d2c-usp-dot d2c-usp-dot-t"></div>
+<div class="d2c-usp-dot d2c-usp-dot-b"></div>
+<div class="d2c-usp-inner">
+{% if block.settings.feature_icon_3 != blank %}
+{{ block.settings.feature_icon_3 }}
+{% else %}
+<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'>
+<rect x='1' y='4' width='22' height='16' rx='2' ry='2'/>
+<line x1='1' y1='10' x2='23' y2='10'/>
+<path d='M7 15h.01M11 15h2'/>
+</svg>
+{% endif %}
+</div>
+</div>
+<h3>{{ block.settings.feature_title_3 }}</h3>
+</div>
+<div class="d2c-usp-card">
+<div class="d2c-usp-icon-wrap">
+<div class="d2c-usp-ring"></div>
+<div class="d2c-usp-dot d2c-usp-dot-t"></div>
+<div class="d2c-usp-dot d2c-usp-dot-b"></div>
+<div class="d2c-usp-inner">
+{% if block.settings.feature_icon_4 != blank %}
+{{ block.settings.feature_icon_4 }}
+{% else %}
+<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'>
+<rect x='1' y='3' width='15' height='13' rx='1'/>
+<path d='M16 8h4l3 5v3h-7V8z'/>
+<circle cx='5.5' cy='18.5' r='2.5'/>
+<circle cx='18.5' cy='18.5' r='2.5'/>
+<line x1='10' y1='6' x2='4' y2='6'/>
+<line x1='8' y1='9' x2='2' y2='9'/>
+</svg>
+{% endif %}
+</div>
+</div>
+<h3>{{ block.settings.feature_title_4 }}</h3>
+</div>
+<div class="d2c-usp-card">
+<div class="d2c-usp-icon-wrap">
+<div class="d2c-usp-ring"></div>
+<div class="d2c-usp-dot d2c-usp-dot-t"></div>
+<div class="d2c-usp-dot d2c-usp-dot-b"></div>
+<div class="d2c-usp-inner">
+{% if block.settings.feature_icon_5 != blank %}
+{{ block.settings.feature_icon_5 }}
+{% else %}
+<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'>
+<path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/>
+<polyline points='9 12 11 14 15 10'/>
+</svg>
+{% endif %}
+</div>
+</div>
+<h3>{{ block.settings.feature_title_5 }}</h3>
+</div>
+<div class="d2c-usp-card">
+<div class="d2c-usp-icon-wrap">
+<div class="d2c-usp-ring"></div>
+<div class="d2c-usp-dot d2c-usp-dot-t"></div>
+<div class="d2c-usp-dot d2c-usp-dot-b"></div>
+<div class="d2c-usp-inner">
+{% if block.settings.feature_icon_6 != blank %}
+{{ block.settings.feature_icon_6 }}
+{% else %}
+<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'>
+<polyline points='1 4 1 10 7 10'/>
+<path d='M3.51 15a9 9 0 1 0 .49-4.5'/>
+<polyline points='12 8 12 12 14 14'/>
+</svg>
+{% endif %}
+</div>
+</div>
+<h3>{{ block.settings.feature_title_6 }}</h3>
+</div>  </div>
+</section>
+{% schema %}
+{
+"name": "USP Section",
+"target": "section",
+"settings": [
+{
+"type": "text",
+"id": "eyebrow_text",
+"label": "Eyebrow text",
+"default": "Why Choose Us"
+},
+{
+"type": "text",
+"id": "heading_text",
+"label": "Heading text",
+"default": "Crafted for the"
+},
+{
+"type": "text",
+"id": "heading_highlight",
+"label": "Heading highlight",
+"default": "Modern"
+},
+{
+"type": "color",
+"id": "icon_color",
+"label": "Icon color",
+"default": "#d4006b"
+},
+{
+"type": "text",
+"id": "feature_title_1",
+"label": "Feature 1 title",
+"default": "Easy Exchange"
+},
+{
+"type": "html",
+"id": "feature_icon_1",
+"label": "Feature 1 SVG icon",
+"default": "<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='1 4 1 10 7 10'/><path d='M3.51 15a9 9 0 1 0 .49-4.5'/><polyline points='12 8 12 12 14 14'/></svg>"
+},
+{
+"type": "text",
+"id": "feature_title_2",
+"label": "Feature 2 title",
+"default": "Indian at Heart"
+},
+{
+"type": "html",
+"id": "feature_icon_2",
+"label": "Feature 2 SVG icon",
+"default": "<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/><circle cx='12' cy='11' r='3'/></svg>"
+},
+{
+"type": "text",
+"id": "feature_title_3",
+"label": "Feature 3 title",
+"default": "Cash On Delivery"
+},
+{
+"type": "html",
+"id": "feature_icon_3",
+"label": "Feature 3 SVG icon",
+"default": "<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='4' width='22' height='16' rx='2' ry='2'/><line x1='1' y1='10' x2='23' y2='10'/><path d='M7 15h.01M11 15h2'/></svg>"
+},
+{
+"type": "text",
+"id": "feature_title_4",
+"label": "Feature 4 title",
+"default": "Express Shipping"
+},
+{
+"type": "html",
+"id": "feature_icon_4",
+"label": "Feature 4 SVG icon",
+"default": "<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='3' width='15' height='13' rx='1'/><path d='M16 8h4l3 5v3h-7V8z'/><circle cx='5.5' cy='18.5' r='2.5'/><circle cx='18.5' cy='18.5' r='2.5'/><line x1='10' y1='6' x2='4' y2='6'/><line x1='8' y1='9' x2='2' y2='9'/></svg>"
+},
+{
+"type": "text",
+"id": "feature_title_5",
+"label": "Feature 5 title",
+"default": "Secure Payments"
+},
+{
+"type": "html",
+"id": "feature_icon_5",
+"label": "Feature 5 SVG icon",
+"default": "<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/><polyline points='9 12 11 14 15 10'/></svg>"    },
+{
+"type": "text",
+"id": "feature_title_6",
+"label": "Feature 6 title",
+"default": "Easy Exchange"
+},
+{
+"type": "textarea",
+"id": "feature_icon_6",
+"label": "Feature 6 SVG icon",
+"default": "<svg viewBox='0 0 24 24' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='1 4 1 10 7 10'/><path d='M3.51 15a9 9 0 1 0 .49-4.5'/><polyline points='12 8 12 12 14 14'/></svg>"    }
+]
+}
+{% endschema %}

@@ -15,3 +15,15 @@ name = "WhatsApp"
 target = "section"
 handle = "whatsapp"
 settings = "blocks/whatsapp-widget.liquid"
+
+[[extension.blocks]]
+name = "Subcategory Circle"
+target = "section"
+handle = "subcategory-circle"
+settings = "blocks/subcategory-circle.liquid"
+
+[[extension.blocks]]
+name = "Shopable video"
+target = "section"
+handle = "shopable-video"
+settings = "blocks/shopablevideo.liquid"

@@ -1,22 +1,85 @@
 import { json } from "@remix-run/node";
-import { Page, Layout, Card, Button, Text, BlockStack, InlineStack, Banner } from "@shopify/polaris";
+import { useState } from "react";
+import { useLoaderData } from "@remix-run/react";
+import { Page, Layout, Card, Button, Text, BlockStack, InlineStack, Banner, Select } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
 import { sectionsData } from "../data/sectionsData";
 
+const chooseBestTheme = (themes) => {
+  if (!Array.isArray(themes) || themes.length === 0) return null;
+  const mainTheme = themes.find((theme) => theme.role === "MAIN");
+  return mainTheme || themes[0];
+};
+
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
-  return json({});
+  const { session } = await authenticate.admin(request);
+  const shop = session?.shop;
+  const accessToken = session?.accessToken;
+
+  const themes = [];
+  let selectedThemeId = "";
+
+  if (shop && accessToken) {
+    try {
+      const response = await fetch(`https://${shop}/admin/api/2024-01/themes.json`, {
+        method: "GET",
+        headers: {
+          "X-Shopify-Access-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const mappedThemes = (data.themes || []).map((theme) => ({
+          id: String(theme.id),
+          name: theme.name,
+          role: (theme.role || "").toUpperCase(),
+        }));
+
+        const bestTheme = chooseBestTheme(mappedThemes);
+        selectedThemeId = bestTheme?.id || "";
+
+        return json({
+          themes: mappedThemes,
+          selectedThemeId,
+          shop,
+        });
+      }
+    } catch (error) {
+      console.error("[app._index] Theme fetch failed:", error);
+    }
+  }
+
+  return json({ themes, selectedThemeId, shop });
 };
 
 export default function Index() {
+  const { themes, selectedThemeId: initialThemeId, shop } = useLoaderData();
+  const [selectedThemeId, setSelectedThemeId] = useState(initialThemeId);
+
+  const themeOptions = [
+    { label: "Select a theme", value: "" },
+    ...(themes || []).map((theme) => ({
+      label: theme.role === "MAIN" ? `${theme.name} 🟢` : theme.name,
+      value: theme.id,
+    })),
+  ];
+
+  const openCustomizer = (themeId) => {
+    if (!shop || !themeId) return;
+    const url = `https://${shop}/admin/themes/${themeId}/editor?context=sections&template=index`;
+    window.open(url, "_blank");
+  };
+
   return (
     <Page>
-      <TitleBar title="DS-App Home" />
+      <TitleBar title="Section Store - Ui Blocks" />
       <Layout>
         <Layout.Section>
           <Banner title="Store Customizer Blocks" status="info">
-            <p>Choose one of the available block cards below to understand how it works and where to use it in your store.</p>
+            <p>Choose one of the available block cards below. Each card will open the Shopify theme editor for your current theme.</p>
           </Banner>
         </Layout.Section>
 
@@ -32,9 +95,28 @@ export default function Index() {
         </Layout.Section>
 
         <Layout.Section>
+          <Card sectioned subdued>
+            <BlockStack gap="200">
+              <Text as="h2" variant="headingMd">Active theme</Text>
+              <Select
+                label="Select theme"
+                options={themeOptions}
+                value={selectedThemeId}
+                onChange={setSelectedThemeId}
+              />
+              {!selectedThemeId && (
+                <Banner status="warning">
+                  No theme selected. Please choose a theme from the dropdown to open the correct Shopify customizer.
+                </Banner>
+              )}
+            </BlockStack>
+          </Card>
+        </Layout.Section>
+
+        <Layout.Section>
           <div style={{ display: "grid", gap: "18px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
             {sectionsData.map((block) => (
-              <Card key={block.id} sectioned subdued style={{ borderRadius: 20, minHeight: 220 }}>
+              <Card key={block.id} sectioned subdued style={{ borderRadius: 20, minHeight: 240 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{ width: 46, height: 46, borderRadius: 14, background: "#eef2ff", display: "grid", placeItems: "center", fontSize: 22 }}>
                     {block.icon || "✨"}
@@ -45,9 +127,18 @@ export default function Index() {
                   </div>
                 </div>
                 <Text as="p" style={{ marginTop: 14, color: "#475467", minHeight: 70 }}>{block.description}</Text>
-                <Button url="/app/guide" outline style={{ marginTop: 14 }}>
-                  How to use
-                </Button>
+                <InlineStack align="fill" spacing="tight" style={{ marginTop: 20 }}>
+                  <Button url="/app/guide" outline>
+                    How to use
+                  </Button>
+                  <Button
+                    primary
+                    disabled={!selectedThemeId}
+                    onClick={() => openCustomizer(selectedThemeId)}
+                  >
+                    Open in theme editor
+                  </Button>
+                </InlineStack>
               </Card>
             ))}
           </div>

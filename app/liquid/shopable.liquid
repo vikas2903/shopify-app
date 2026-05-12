@@ -25,6 +25,7 @@
     <div class="stlv__stack" aria-roledescription="carousel">
       {% for block in section.blocks %}
         {% assign idx = forloop.index0 %}
+        {% assign selected_product = all_products[block.settings.product_handle] %}
 
         <article
           class="stlv__card{% if forloop.first %} is-active{% endif %}"
@@ -40,17 +41,17 @@
                 loop
                 playsinline
                 preload="metadata"
-                poster="{% if block.settings.poster != blank %}{{ block.settings.poster | image_url: width: 1200 }}{% endif %}"
+                poster="{% if selected_product != blank and selected_product.featured_image != blank %}{{ selected_product.featured_image | image_url: width: 1200 }}{% endif %}"
               >
                 <source src="{{ block.settings.video_url }}" type="video/mp4">
               </video>
             {% else %}
               {% comment %} fallback to image if no video url {% endcomment %}
-              {% if block.settings.poster != blank %}
+              {% if selected_product != blank and selected_product.featured_image != blank %}
                 <img
                   class="stlv__img"
-                  src="{{ block.settings.poster | image_url: width: 1600 }}"
-                  alt="{{ block.settings.title | escape }}"
+                  src="{{ selected_product.featured_image | image_url: width: 1600 }}"
+                  alt="{{ selected_product.title | escape }}"
                   loading="lazy"
                 >
               {% endif %}
@@ -59,8 +60,16 @@
 
           {% comment %} Overlay only on active {% endcomment %}
           <div class="stlv__overlay">
-            <div class="stlv__name">{{ block.settings.title }}</div>
-            <a class="stlv__btn" href="{{ block.settings.link }}">View</a>
+            {% if selected_product != blank %}
+              <div class="stlv__name">{{ selected_product.title }}</div>
+              <div class="stlv__price">
+                {% if selected_product.compare_at_price > selected_product.price %}
+                  <span class="stlv__price-compare">{{ selected_product.compare_at_price | money }}</span>
+                {% endif %}
+                <span class="stlv__price-current">{{ selected_product.price | money }}</span>
+              </div>
+              <a class="stlv__btn" href="{{ selected_product.url }}">View</a>
+            {% endif %}
           </div>
         </article>
       {% endfor %}
@@ -136,7 +145,21 @@
   }
   .stlv__name{
     font-size: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+  }
+  .stlv__price{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .stlv__price-compare{
+    opacity: .7;
+    text-decoration: line-through;
+  }
+  .stlv__price-current{
+    font-weight: 700;
   }
   .stlv__btn{
     display: block;
@@ -291,6 +314,10 @@
   /* Overlay text */
   .stlv__name {
     font-size: 14px;
+  }
+
+  .stlv__price {
+    font-size: 13px;
   }
 
   .stlv__btn {
@@ -458,11 +485,12 @@
       "type": "look",
       "name": "Look",
       "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "Lavender Chinon Kurta Palazzo Suit" },
-        { "type": "url", "id": "link", "label": "Link" },
-
-        { "type": "image_picker", "id": "poster", "label": "Poster image (for loading / fallback)" },
-
+        {
+          "type": "text",
+          "id": "product_handle",
+          "label": "Product handle",
+          "info": "Enter the Shopify product handle for this card. Example: red-dress or summer-kurta."
+        },
         {
           "type": "text",
           "id": "video_url",
@@ -472,7 +500,7 @@
       ]
     }
   ],
-  "max_blocks": 10,
+  "max_blocks": 5,
   "presets": [
     {
       "name": "Shop The Look",

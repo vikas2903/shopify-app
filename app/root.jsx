@@ -6,41 +6,9 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import Sidebar from "./components/Sidebar";
-// import Header from "./components/Header";
-import Analytics from "./routes/app.analytics";
-import Root from "./zoha.jsx";
-import { useEffect } from "react";
 import "./assets/style/styles.css";
 
 export default function App() {
-
-  useEffect(() => {
-    // Zoho config script
-    const configScript = document.createElement("script");
-    configScript.type = "text/javascript";
-    configScript.innerHTML = `
-      window.$zoho = window.$zoho || {};
-      $zoho.salesiq = $zoho.salesiq || {
-        ready: function () {
-          console.log("Zoho SalesIQ loaded");
-        }
-      };
-    `;
-    document.body.appendChild(configScript);
-
-    // Zoho widget loader script
-    const zohoScript = document.createElement("script");
-    zohoScript.src = "https://salesiq.zohopublic.in/widget?wc=siq1b81f21d9c29bf6604592eb7dbc4b3b9569d0f1d8957d977477a7e6f458cb73c";
-    zohoScript.defer = true;
-    document.body.appendChild(zohoScript);
-
-    return () => {
-      
-      document.body.removeChild(configScript);
-      document.body.removeChild(zohoScript);
-    };
-  }, []);
   return (
     <html HL="VIKAS">
       <head>

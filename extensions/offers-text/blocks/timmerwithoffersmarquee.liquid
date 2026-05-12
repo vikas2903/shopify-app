@@ -1,306 +1,322 @@
 <style>
-  .Ds-announcement-bar {
+ .shopify-app-block{width:100%;}
+  .d2c-announcement-{{ block.id }} {
+    width: 100%;
+    background: {{ block.settings.background_color }};
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+  }
+ 
+
+  .d2c-announcement-inner-{{ block.id }} {
     display: flex;
     align-items: center;
-    background: {{ block.settings.background_color }};
-    padding: 6px 15px;
-    width: 100%;
-    border-radius: 4px;
-    box-sizing: border-box;
-    overflow: hidden;
+    justify-content: space-between;
     gap: 20px;
+    padding: 10px 15px;
+    width: 100%;
   }
 
-  .Ds-scrolling-text {
-    width: calc(80% - 40px);
+  .d2c-marquee-wrapper-{{ block.id }} {
+    flex: 1;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
-    font-size: 16px;
-    font-weight: bold;
+  }
+ 
+  .d2c-marquee-track-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: d2c-marquee-scroll-{{ block.id }} {{ block.settings.scroll_speed }}s linear infinite;
+  }
+
+  .d2c-marquee-item-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 40px;
+    font-size: 14px;
+    font-weight: 500;
     color: {{ block.settings.text_color }};
-    letter-spacing: 1px;
+    line-height: 1;
   }
 
-  .Ds-scrolling-text-inner {
-    display: inline-block;
-    animation: scroll-left 15s linear infinite;
+  @keyframes d2c-marquee-scroll-{{ block.id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
   }
 
-  @keyframes scroll-left {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  .Ds-right-section {
-    width: 20%;
+  .d2c-right-{{ block.id }} {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 16px;
-    min-width: 220px;
+    gap: 14px;
+    flex-shrink: 0;
   }
 
-  .Ds-timer {
+  .d2c-timer-{{ block.id }} {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .d2c-timer-item-{{ block.id }} {
+    display: flex;
+    align-items: center;
     gap: 4px;
-    font-family: 'Segoe UI', Arial, sans-serif;
-flex-direction: row;
   }
 
-  .Ds-timer-value {
-    font-size: 20px;
-    font-weight: bold;
+  .d2c-timer-value-{{ block.id }} {
+    font-size: 18px;
+    font-weight: 700;
     color: {{ block.settings.text_color }};
-    letter-spacing: 2px;
+    line-height: 1;
   }
 
-  .Ds-timer-labels {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
+  .d2c-timer-label-{{ block.id }} {
     font-size: 11px;
     color: {{ block.settings.text_color }};
-    margin-top: -3px;
-    justify-content: space-between;
+    opacity: 0.8;
+    line-height: 1;
   }
 
-  .Ds-cta-btn {
+  .d2c-separator-{{ block.id }} {
+    font-size: 16px;
+    color: {{ block.settings.text_color }};
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .d2c-btn-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: {{ block.settings.button_background }};
     color: {{ block.settings.button_text_color }};
-    font-weight: bold;
-    border: none;
+    padding: 9px 14px;
     border-radius: 4px;
-    padding: 10px 14px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.2s;
-    white-space: nowrap;
     text-decoration: none;
-    font-family: inherit;
-    text-transform: uppercase;
-    letter-spacing: .2px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    transition: all 0.25s ease;
+    white-space: nowrap;
   }
 
-  .Ds-cta-btn:hover {
-    opacity: 0.9;
+  .d2c-btn-{{ block.id }}:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
   }
 
-  @media(max-width: 1200px){
-    .Ds-right-section{ width: 40%; }
-    .Ds-scrolling-text { width: calc(60% - 20px); }
-  }
-  @media (max-width: 700px) {
-    .Ds-announcement-bar {
+  @media screen and (max-width: 768px) {
+
+    .d2c-announcement-inner-{{ block.id }} {
       flex-direction: column;
-      align-items: stretch;
-      padding: 0;
-      width: 100%;
-      gap: 0px;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
     }
-    .Ds-scrolling-text {
+
+    .d2c-marquee-wrapper-{{ block.id }} {
       width: 100%;
-      font-size: 14px;
-      padding: 10px 0;
     }
-    .Ds-right-section {
+
+    .d2c-marquee-item-{{ block.id }} {
+      font-size: 12px;
+      margin-right: 25px;
+    }
+
+    .d2c-right-{{ block.id }} {
       width: 100%;
       justify-content: center;
-      min-width: unset;
-      padding: 3px 0;
-      border-top: 2px solid #ffffff;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-    .Ds-cta-btn{ padding: 4px 10px; }
-    .Ds-timer span { line-height: 1.5; }
-    .Ds-right-section{ justify-content: center; }
+
+    .d2c-timer-value-{{ block.id }} {
+      font-size: 15px;
+    }
+
+    .d2c-timer-label-{{ block.id }} {
+      font-size: 9px;
+    }
+
+    .d2c-btn-{{ block.id }} {
+      font-size: 12px;
+      padding: 8px 12px;
+    }
   }
-
-{% if block.settings.enable_timer == false and block.settings.enable_cta_button == false %}
-  .Ds-right-section {
-    display: none;
-  }
-  .Ds-scrolling-text{width:100%;}
-{% endif %}
-
-
 </style>
 
-<div class="Ds-announcement-bar">
-  {% if block.settings.enable_marquee %}
-    <div class="Ds-scrolling-text">
-      <span class="Ds-scrolling-text-inner" id="scrollingText">
-        {{ block.settings.announcement_text_1 }} &nbsp; &nbsp;
-        {{ block.settings.announcement_text_2 }} &nbsp; &nbsp;
-        {{ block.settings.announcement_text_3 }} &nbsp; &nbsp;
-        {{ block.settings.announcement_text_4 }} &nbsp; &nbsp;
-        {{ block.settings.announcement_text_5 }} &nbsp; &nbsp;
-      </span>
-    </div>
-  {% endif %}
+<div class="d2c-announcement-{{ block.id }}">
+  <div class="d2c-announcement-inner-{{ block.id }}">
 
-  <div class="Ds-right-section">
+    <div class="d2c-marquee-wrapper-{{ block.id }}">
+      <div class="d2c-marquee-track-{{ block.id }}" id="marqueeTrack-{{ block.id }}">
+
+        {% for i in (1..5) %}
+          {% assign text_key = 'announcement_text_' | append: i %}
+          
+          {% if block.settings[text_key] != blank %}
+            <div class="d2c-marquee-item-{{ block.id }}">
+              {{ block.settings[text_key] }}
+            </div>
+          {% endif %}
+        {% endfor %}
+
+      </div>
+    </div>
+
     {% if block.settings.enable_timer %}
-      <div>
-        <div class="Ds-timer" id="timer">
-          <span class="Ds-timer-value" id="hours">00</span>
-          <span style="font-size: 20px; font-weight: 600; color: {{ block.settings.text_color }};">:</span>
-          <span class="Ds-timer-value" id="minutes">00</span>
-          <span style="font-size: 20px; font-weight: 600; color: {{ block.settings.text_color }};">:</span>
-          <span class="Ds-timer-value" id="seconds">00</span>
+      <div class="d2c-right-{{ block.id }}" id="timerWrapper-{{ block.id }}">
+
+        <div class="d2c-timer-{{ block.id }}">
+
+          {% if block.settings.show_days %}
+            <div class="d2c-timer-item-{{ block.id }}">
+              <span class="d2c-timer-value-{{ block.id }}" id="days-{{ block.id }}">00</span>
+              <span class="d2c-timer-label-{{ block.id }}">D</span>
+            </div>
+
+            <span class="d2c-separator-{{ block.id }}">:</span>
+          {% endif %}
+
+          <div class="d2c-timer-item-{{ block.id }}">
+            <span class="d2c-timer-value-{{ block.id }}" id="hours-{{ block.id }}">00</span>
+            <span class="d2c-timer-label-{{ block.id }}">H</span>
+          </div>
+
+          <span class="d2c-separator-{{ block.id }}">:</span>
+
+          <div class="d2c-timer-item-{{ block.id }}">
+            <span class="d2c-timer-value-{{ block.id }}" id="minutes-{{ block.id }}">00</span>
+            <span class="d2c-timer-label-{{ block.id }}">M</span>
+          </div>
+
+          <span class="d2c-separator-{{ block.id }}">:</span>
+
+          <div class="d2c-timer-item-{{ block.id }}">
+            <span class="d2c-timer-value-{{ block.id }}" id="seconds-{{ block.id }}">00</span>
+            <span class="d2c-timer-label-{{ block.id }}">S</span>
+          </div>
+
         </div>
-        <div class="Ds-timer-labels">
-          <span>Hrs</span><span>Mins</span><span>Secs</span>
-        </div>
+
+        {% if block.settings.button_text != blank %}
+          <a 
+            href="{{ block.settings.button_link }}"
+            class="d2c-btn-{{ block.id }}"
+          >
+            {{ block.settings.button_text }}
+          </a>
+        {% endif %}
+
       </div>
     {% endif %}
 
-    {% if block.settings.enable_cta_button %}
-      <a href="{{ block.settings.button_link }}" class="Ds-cta-btn">{{ block.settings.button_text }}</a>
-    {% endif %}
   </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Marquee duplication
-    const scrollingText = document.getElementById('scrollingText');
-    if (scrollingText) {
-      const text = scrollingText.innerHTML;
-      scrollingText.innerHTML = text + text;
+(function() {
+
+  const blockId = "{{ block.id }}";
+
+  const marqueeTrack = document.getElementById(`marqueeTrack-${blockId}`);
+
+  if (marqueeTrack) {
+    marqueeTrack.innerHTML += marqueeTrack.innerHTML;
+  }
+
+  {% if block.settings.enable_timer %}
+
+    const timerType = "{{ block.settings.timer_type }}";
+    const showDays = {{ block.settings.show_days }};
+    const timerWrapper = document.getElementById(`timerWrapper-${blockId}`);
+
+    function pad(num) {
+      return String(num).padStart(2, '0');
     }
 
-    // 24-hour countdown reset daily
-    function pad(n) { return n.toString().padStart(2, '0'); }
+    function getDailyReset() {
+      const now = new Date();
+
+      const tomorrow = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1
+      );
+
+      return tomorrow.getTime();
+    }
 
     function updateTimer() {
-      const now = new Date();
-      const endOfDay = new Date();
-      endOfDay.setHours(23, 59, 59, 999); // End of current day
-      let distance = endOfDay - now;
 
-      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((distance / (1000 * 60)) % 60);
-      const seconds = Math.floor((distance / 1000) % 60);
+      const now = new Date().getTime();
 
-      const h = document.getElementById('hours');
-      const m = document.getElementById('minutes');
-      const s = document.getElementById('seconds');
+      let distance;
 
-      if (h && m && s) {
-        h.textContent = pad(hours);
-        m.textContent = pad(minutes);
-        s.textContent = pad(seconds);
+      if (timerType === "target_date") {
+
+        const targetDate = new Date(
+          "{{ block.settings.countdown_end_date }}"
+        ).getTime();
+
+        distance = targetDate - now;
+
+        if (distance <= 0) {
+          timerWrapper.style.display = "none";
+          return;
+        }
+
+      } else {
+
+        const resetTime = getDailyReset();
+
+        distance = resetTime - now;
       }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+      );
+
+      const minutes = Math.floor(
+        (distance % (1000 * 60 * 60)) /
+        (1000 * 60)
+      );
+
+      const seconds = Math.floor(
+        (distance % (1000 * 60)) / 1000
+      );
+
+      if (showDays) {
+        const daysEl = document.getElementById(`days-${blockId}`);
+
+        if (daysEl) {
+          daysEl.textContent = pad(days);
+        }
+      }
+
+      document.getElementById(`hours-${blockId}`).textContent = pad(hours);
+      document.getElementById(`minutes-${blockId}`).textContent = pad(minutes);
+      document.getElementById(`seconds-${blockId}`).textContent = pad(seconds);
     }
 
     updateTimer();
+
     setInterval(updateTimer, 1000);
-  });
+
+  {% endif %}
+
+})();
 </script>
 
-{% schema %}
-{
-  "name": "Smart Announcement Bar",
-  "target": "section",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "enable_marquee",
-      "label": "Show Marquee",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_timer",
-      "label": "Show 24-Hour Timer",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_cta_button",
-      "label": "Show CTA Button",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Announcement Text Settings"
-    },
-    {
-      "type": "text",
-      "id": "announcement_text_1",
-      "label": "Announcement Text 1",
-      "default": "🚚 Free shipping on orders over ₹999"
-    },
-    {
-      "type": "text",
-      "id": "announcement_text_2",
-      "label": "Announcement Text 2",
-      "default": "🎁 Flat 60% Off on Rakhi Sale"
-    },
-    {
-      "type": "text",
-      "id": "announcement_text_3",
-      "label": "Announcement Text 3",
-      "default": "💥 Limited Time Offers"
-    },
-    {
-      "type": "text",
-      "id": "announcement_text_4",
-      "label": "Announcement Text 4",
-      "default": "🔥 Shop Now Before It Ends"
-    },
-    {
-      "type": "text",
-      "id": "announcement_text_5",
-      "label": "Announcement Text 5",
-      "default": "🎉 New Collection Launched"
-    },
-    {
-      "type": "header",
-      "content": "Color Settings"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Background Color",
-      "default": "#fff6e5"
-    },
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "Text Color",
-      "default": "#000000"
-    },
-    {
-      "type": "header",
-      "content": "CTA Button Settings"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button Text",
-      "default": "Shop Now"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button Link",
-      "default": "/collections/all"
-    },
-    {
-      "type": "color",
-      "id": "button_background",
-      "label": "Button Background Color",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Button Text Color",
-      "default": "#ffffff"
-    }
-  ]
-}
-{% endschema %}
+{% schema %} { "name": "Announcement Bar", "target":"section", "settings": [ { "type": "header", "content": "Announcement Text" }, { "type": "text", "id": "announcement_text_1", "label": "Text 1", "default": "🚚 Free Shipping Available" }, { "type": "text", "id": "announcement_text_2", "label": "Text 2", "default": "🎁 Special Offers Live" }, { "type": "text", "id": "announcement_text_3", "label": "Text 3", "default": "⭐ Trusted by 10,000+ Customers" }, { "type": "text", "id": "announcement_text_4", "label": "Text 4", "default": "🔥 Limited Time Sale" }, { "type": "text", "id": "announcement_text_5", "label": "Text 5", "default": "💫 New Collection Live" }, { "type": "range", "id": "scroll_speed", "label": "Scroll Speed", "min": 5, "max": 40, "step": 1, "default": 15 }, { "type": "header", "content": "Timer Settings" }, { "type": "checkbox", "id": "enable_timer", "label": "Enable Timer", "default": true }, { "type": "select", "id": "timer_type", "label": "Timer Type", "default": "target_date", "options": [ { "value": "target_date", "label": "Target Date Timer" }, { "value": "daily_reset", "label": "24 Hours Reset Timer" } ] }, { "type": "checkbox", "id": "show_days", "label": "Show Days", "default": true }, { "type": "text", "id": "countdown_end_date", "label": "Target Date", "info": "Format: YYYY-MM-DD HH:mm:ss", "default": "2026-12-31 23:59:59" }, { "type": "header", "content": "Button Settings" }, { "type": "text", "id": "button_text", "label": "Button Text", "default": "Shop Now" }, { "type": "url", "id": "button_link", "label": "Button Link" }, { "type": "header", "content": "Colors" }, { "type": "color", "id": "background_color", "label": "Background Color", "default": "#111111" }, { "type": "color", "id": "text_color", "label": "Text Color", "default": "#ffffff" }, { "type": "color", "id": "button_background", "label": "Button Background", "default": "#ce1178" }, { "type": "color", "id": "button_text_color", "label": "Button Text Color", "default": "#ffffff" } ] } {% endschema %}

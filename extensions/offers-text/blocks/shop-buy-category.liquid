@@ -1,0 +1,364 @@
+<style>
+#shop-buy-category-{{ block.id }} {
+--category-media-radius: {{ block.settings.media_border_radius }}%;
+}
+.category-icons-wrapper {
+max-width: 1400px;
+margin: 0 auto;
+}
+.category-icons {
+display: flex;
+gap: 20px;
+justify-content: start;
+padding: 40px 20px 20px;
+margin: 0 auto;
+overflow: scroll;
+scroll-snap-type: x mandatory;
+scrollbar-width: none;
+}
+.category-icons__card {
+text-align: center;
+width: 100px;
+text-decoration: none;
+color: #000;
+flex: 0 0 100px;
+}
+.category-icons__image,
+.category-icons__video {
+aspect-ratio: 1 / 1;
+overflow: hidden;
+border-radius: var(--category-media-radius, 50%);
+transition: all .7s ease-in-out;
+position: relative;
+box-shadow: 0 0 0 2px #fff, 0 0 0 3px #222;
+}
+.category-icons__image img,
+.category-icons__video video {
+width: 100%;
+height: 100%;
+transition: all 0.3s ease;
+object-fit: cover;
+object-position: center;
+display: block;
+}
+.category-icons__card:hover .category-icons__image img,
+.category-icons__card:hover .category-icons__video video {
+scale: 1.05;
+}
+.category-icons__title {
+margin-top: 10px;
+margin-bottom: 0;
+font-weight: 400;
+font-size: 14px;
+color: #000;
+text-transform: uppercase;
+line-height: 1;
+}
+@media(min-width: 1000px){
+.category-icons{
+justify-content: center;
+}
+}
+@media(max-width: 768px){
+.category-icons {
+justify-content: start;
+}
+.category-icons__card{
+flex: 0 0 80px;
+}
+.category-icons__title {
+font-size: 11px;
+}
+}
+</style>
+<div class="category-icons-wrapper" id="shop-buy-category-{{ block.id }}">
+<div class="category-icons">
+{% assign category_image = block.settings.category_1_image %}
+{% assign category_video = block.settings.category_1_video %}
+{% assign category_title = block.settings.category_1_title %}
+{% assign category_link = block.settings.category_1_link %}
+{% if category_title != blank %}
+<a href="{{ category_link }}" class="category-icons__card animate__animated animate__fadeInRight" style="animation-delay: 0ms">
+{% if category_video != blank %}
+<div class="category-icons__video">
+<video autoplay loop muted playsinline>
+<source src="{{ category_video }}" type="video/mp4">
+</video>
+</div>
+{% elsif category_image != blank %}
+<div class="category-icons__image">
+<img src="{{ category_image | img_url: '200x200' }}" alt="{{ category_title }}">
+</div>
+{% endif %}
+<p class="category-icons__title">{{ category_title }}</p>
+</a>
+{% endif %}
+{% assign category_image = block.settings.category_2_image %}
+{% assign category_video = block.settings.category_2_video %}
+{% assign category_title = block.settings.category_2_title %}
+{% assign category_link = block.settings.category_2_link %}
+{% if category_title != blank %}
+<a href="{{ category_link }}" class="category-icons__card animate__animated animate__fadeInRight" style="animation-delay: 100ms">
+{% if category_video != blank %}
+<div class="category-icons__video">
+<video autoplay loop muted playsinline>
+<source src="{{ category_video }}" type="video/mp4">
+</video>
+</div>
+{% elsif category_image != blank %}
+<div class="category-icons__image">
+<img src="{{ category_image | img_url: '200x200' }}" alt="{{ category_title }}">
+</div>
+{% endif %}
+<p class="category-icons__title">{{ category_title }}</p>
+</a>
+{% endif %}
+{% assign category_image = block.settings.category_3_image %}
+{% assign category_video = block.settings.category_3_video %}
+{% assign category_title = block.settings.category_3_title %}
+{% assign category_link = block.settings.category_3_link %}
+{% if category_title != blank %}
+<a href="{{ category_link }}" class="category-icons__card animate__animated animate__fadeInRight" style="animation-delay: 200ms">
+{% if category_video != blank %}
+<div class="category-icons__video">
+<video autoplay loop muted playsinline>
+<source src="{{ category_video }}" type="video/mp4">
+</video>
+</div>
+{% elsif category_image != blank %}
+<div class="category-icons__image">
+<img src="{{ category_image | img_url: '200x200' }}" alt="{{ category_title }}">
+</div>
+{% endif %}
+<p class="category-icons__title">{{ category_title }}</p>
+</a>
+{% endif %}
+{% assign category_image = block.settings.category_4_image %}
+{% assign category_video = block.settings.category_4_video %}
+{% assign category_title = block.settings.category_4_title %}
+{% assign category_link = block.settings.category_4_link %}
+{% if category_title != blank %}
+<a href="{{ category_link }}" class="category-icons__card animate__animated animate__fadeInRight" style="animation-delay: 300ms">
+{% if category_video != blank %}
+<div class="category-icons__video">
+<video autoplay loop muted playsinline>
+<source src="{{ category_video }}" type="video/mp4">
+</video>
+</div>
+{% elsif category_image != blank %}
+<div class="category-icons__image">
+<img src="{{ category_image | img_url: '200x200' }}" alt="{{ category_title }}">
+</div>
+{% endif %}
+<p class="category-icons__title">{{ category_title }}</p>
+</a>
+{% endif %}
+{% assign category_image = block.settings.category_5_image %}
+{% assign category_video = block.settings.category_5_video %}
+{% assign category_title = block.settings.category_5_title %}
+{% assign category_link = block.settings.category_5_link %}
+{% if category_title != blank %}
+<a href="{{ category_link }}" class="category-icons__card animate__animated animate__fadeInRight" style="animation-delay: 400ms">
+{% if category_video != blank %}
+<div class="category-icons__video">
+<video autoplay loop muted playsinline>
+<source src="{{ category_video }}" type="video/mp4">
+</video>
+</div>
+{% elsif category_image != blank %}
+<div class="category-icons__image">
+<img src="{{ category_image | img_url: '200x200' }}" alt="{{ category_title }}">
+</div>
+{% endif %}
+<p class="category-icons__title">{{ category_title }}</p>
+</a>
+{% endif %}
+{% assign category_image = block.settings.category_6_image %}
+{% assign category_video = block.settings.category_6_video %}
+{% assign category_title = block.settings.category_6_title %}
+{% assign category_link = block.settings.category_6_link %}
+{% if category_title != blank %}
+<a href="{{ category_link }}" class="category-icons__card animate__animated animate__fadeInRight" style="animation-delay: 500ms">
+{% if category_video != blank %}
+<div class="category-icons__video">
+<video autoplay loop muted playsinline>
+<source src="{{ category_video }}" type="video/mp4">
+</video>
+</div>
+{% elsif category_image != blank %}
+<div class="category-icons__image">
+<img src="{{ category_image | img_url: '200x200' }}" alt="{{ category_title }}">
+</div>
+{% endif %}
+<p class="category-icons__title">{{ category_title }}</p>
+</a>
+{% endif %}
+</div>
+</div>
+{% schema %}
+{
+"name": "Shop Buy Category",
+"target": "section",
+"settings": [
+{
+"type": "range",
+"id": "media_border_radius",
+"min": 0,
+"max": 50,
+"step": 5,
+"label": "Image border radius (%)",
+"default": 50
+},
+{
+"type": "header",
+"content": "Category 1"
+},
+{
+"type": "image_picker",
+"id": "category_1_image",
+"label": "Category Image"
+},
+{
+"type": "url",
+"id": "category_1_video",
+"label": "Category Video (MP4 URL)"
+},
+{
+"type": "text",
+"id": "category_1_title",
+"label": "Category Title",
+"default": "Category 1"
+},
+{
+"type": "url",
+"id": "category_1_link",
+"label": "Category Link"
+},
+{
+"type": "header",
+"content": "Category 2"
+},
+{
+"type": "image_picker",
+"id": "category_2_image",
+"label": "Category Image"
+},
+{
+"type": "url",
+"id": "category_2_video",
+"label": "Category Video (MP4 URL)"
+},
+{
+"type": "text",
+"id": "category_2_title",
+"label": "Category Title",
+"default": "Category 2"
+},
+{
+"type": "url",
+"id": "category_2_link",
+"label": "Category Link"
+},
+{
+"type": "header",
+"content": "Category 3"
+},
+{
+"type": "image_picker",
+"id": "category_3_image",
+"label": "Category Image"
+},
+{
+"type": "url",
+"id": "category_3_video",
+"label": "Category Video (MP4 URL)"
+},
+{
+"type": "text",
+"id": "category_3_title",
+"label": "Category Title",
+"default": "Category 3"
+},
+{
+"type": "url",
+"id": "category_3_link",
+"label": "Category Link"
+},
+{
+"type": "header",
+"content": "Category 4"
+},
+{
+"type": "image_picker",
+"id": "category_4_image",
+"label": "Category Image"
+},
+{
+"type": "url",
+"id": "category_4_video",
+"label": "Category Video (MP4 URL)"
+},
+{
+"type": "text",
+"id": "category_4_title",
+"label": "Category Title",
+"default": "Category 4"
+},
+{
+"type": "url",
+"id": "category_4_link",
+"label": "Category Link"
+},
+{
+"type": "header",
+"content": "Category 5"
+},
+{
+"type": "image_picker",
+"id": "category_5_image",
+"label": "Category Image"
+},
+{
+"type": "url",
+"id": "category_5_video",
+"label": "Category Video (MP4 URL)"
+},
+{
+"type": "text",
+"id": "category_5_title",
+"label": "Category Title",
+"default": "Category 5"
+},
+{
+"type": "url",
+"id": "category_5_link",
+"label": "Category Link"
+},
+{
+"type": "header",
+"content": "Category 6"
+},
+{
+"type": "image_picker",
+"id": "category_6_image",
+"label": "Category Image"
+},
+{
+"type": "url",
+"id": "category_6_video",
+"label": "Category Video (MP4 URL)"
+},
+{
+"type": "text",
+"id": "category_6_title",
+"label": "Category Title",
+"default": "Category 6"
+},
+{
+"type": "url",
+"id": "category_6_link",
+"label": "Category Link"
+}
+]
+}
+{% endschema %}

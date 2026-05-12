@@ -1,0 +1,1096 @@
+<div id="vs-search-section-{{ block.id }}" class="page-width vs-search-section" style="border-bottom:1px solid #eee">
+  <!-- Trigger for the modal (can be placed wherever the icon is needed) -->
+  <div class="vs-search-trigger-container">
+    <!-- New Trigger that looks like the Search Bar -->
+    <div class="vs-search-wrapper" id="vsSearchTriggerWrapper">
+      <!-- Left: Category Dropdown (Trigger) -->
+      <div class="vs-search-category">
+        <select class="vs-category-select" id="vsTriggerSelect">
+          <option value="">All categories</option>
+          {% for collection in collections %}
+            <option value="{{ collection.handle }}">{{ collection.title }}</option>
+          {% endfor %}
+        </select>
+        <div class="vs-category-display">
+          <span class="vs-category-text" id="vsTriggerCategoryText">All categories</span>
+          <svg
+            class="vs-icon-chevron"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Middle: Search Input (Trigger) -->
+      <div class="vs-search-input-wrapper">
+        <input
+          type="text"
+          placeholder="What are you searching for?"
+          class="vs-search-input"
+          id="vsTriggerInput"
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Right: Search Icon -->
+      <div class="vs-search-button" style="pointer-events: none;">
+        <svg
+          class="vs-icon-search"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full Screen Search Modal -->
+<div class="vs-search-modal" id="vsSearchModal">
+  <div class="vs-search-modal-overlay"></div>
+  <div class="vs-search-modal-content">
+    <div class="vs-search-modal-header page-width">
+      <!-- Close Button at top right -->
+      <button class="vs-search-close" id="vsSearchClose" aria-label="Close Search">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- The Search Bar -->
+      <form action="/search" method="get" class="vs-search-wrapper">
+        <!-- Left: Category Dropdown -->
+        <div class="vs-search-category">
+          <select name="category" class="vs-category-select">
+            <option value="">All categories</option>
+            {% for collection in collections %}
+              <option value="{{ collection.handle }}">{{ collection.title }}</option>
+            {% endfor %}
+          </select>
+          <div class="vs-category-display">
+            <span class="vs-category-text">All categories</span>
+            <svg
+              class="vs-icon-chevron"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Middle: Search Input -->
+        <div class="vs-search-input-wrapper">
+          <input
+            type="text"
+            name="q"
+            placeholder="What are you searching for?"
+            class="vs-search-input"
+            id="vsSearchInput"
+            autocomplete="off"
+          >
+        </div>
+
+        <!-- Right: Search Button -->
+        <button type="submit" class="vs-search-button">
+          <svg
+            class="vs-icon-search"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Search Results Area -->
+    <div class="vs-search-results-area page-width">
+      <!-- Default Empty State (3 Columns) -->
+      <div class="vs-search-default-state" id="vsSearchDefaultState">
+        <!-- Column 1: Need Help -->
+        <div class="vs-default-col">
+          <h3 class="vs-col-title">Need Help?</h3>
+          <div class="vs-help-links">
+            <a href="/" class="vs-help-link">Home</a>
+            <a href="/collections/all" class="vs-help-link">Catalog</a>
+            <a href="/pages/contact" class="vs-help-link">Contact</a>
+          </div>
+        </div>
+
+        <!-- Column 2: Recent Searches & Products -->
+        <div class="vs-default-col flex-2">
+          <div id="vsRecentSearchesBlock" style="display: none; margin-bottom: 30px;">
+            <h3 class="vs-col-title">Recent searches</h3>
+            <div class="vs-recent-searches-list" id="vsRecentSearchesList">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+
+          <h3 class="vs-col-title">Most searched products</h3>
+          <div class="vs-search-results-grid vs-default-products-grid">
+            {% assign has_products = false %}
+            {% for product in collections.all.products limit: 3 %}
+              {% assign has_products = true %}
+              {% assign product_collections = '' %}
+              {% for c in product.collections %}
+                {% assign product_collections = product_collections
+                  | append: c.title
+                  | append: ','
+                  | append: c.handle
+                  | append: ','
+                %}
+              {% endfor %}
+              <a
+                href="{{ product.url }}"
+                class="vs-search-result-item"
+                data-category="{{ product_collections }}"
+                style="text-decoration: none;"
+              >
+                <div class="vs-result-image">
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | img_url: '200x' }}"
+                      alt="{{ product.title | escape }}"
+                      style="width: 100%; height: auto; border-radius: 8px;"
+                    >
+                  {% else %}
+                    <div style="width: 100%; padding-bottom: 100%; background: #e5e7eb; border-radius: 8px;"></div>
+                  {% endif %}
+                </div>
+                <div class="vs-result-details">
+                  <span class="vs-result-vendor">{{ product.vendor }}</span>
+                  <h4 class="vs-result-title">{{ product.title }}</h4>
+                  <div class="vs-result-price">{{ product.price | money }}</div>
+                </div>
+              </a>
+            {% endfor %}
+
+            {% if has_products == false %}
+              <!-- Fallbacks -->
+              <a
+                href="#"
+                class="vs-search-result-item"
+                data-category="Home page,frontpage"
+                style="text-decoration: none;"
+              >
+                <div class="vs-result-image">
+                  <div style="width: 100%; padding-bottom: 100%; background: #e5e7eb; border-radius: 50%;"></div>
+                </div>
+                <div class="vs-result-details">
+                  <span class="vs-result-vendor">Decor</span>
+                  <h4 class="vs-result-title">Cream Modern Wooden Frame Sofa</h4>
+                  <div class="vs-result-price">$750.00</div>
+                </div>
+              </a>
+              <a href="#" class="vs-search-result-item" data-category="Decor,decor" style="text-decoration: none;">
+                <div class="vs-result-image">
+                  <div style="width: 100%; padding-bottom: 150%; background: #e5e7eb; border-radius: 8px;"></div>
+                </div>
+                <div class="vs-result-details">
+                  <span class="vs-result-vendor">Lighting</span>
+                  <h4 class="vs-result-title">Industrial Adjustable Desk Lamp</h4>
+                  <div class="vs-result-price">$29.00</div>
+                </div>
+              </a>
+              <a
+                href="#"
+                class="vs-search-result-item"
+                data-category="Home page,frontpage,Decor,decor"
+                style="text-decoration: none;"
+              >
+                <div class="vs-result-image">
+                  <div style="width: 100%; padding-bottom: 100%; background: #e5e7eb; border-radius: 50%;"></div>
+                </div>
+                <div class="vs-result-details">
+                  <span class="vs-result-vendor">Decor</span>
+                  <h4 class="vs-result-title">Modern Bean Bag</h4>
+                  <div class="vs-result-price">$79.00</div>
+                </div>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Column 3: Collections -->
+        <div class="vs-default-col">
+          <h3 class="vs-col-title">Explore our collections</h3>
+          <div class="vs-explore-collections">
+            <!-- Try to loop real collections, else fallback -->
+            {% assign collection_count = 0 %}
+            {% for col in collections limit: 4 %}
+              {% if col.handle != 'all' and col.handle != 'frontpage' %}
+                {% assign collection_count = collection_count | plus: 1 %}
+                <a href="{{ col.url }}" class="vs-collection-card">
+                  <div class="vs-collection-img">
+                    {% if col.image %}
+                      <img src="{{ col.image | img_url: '100x' }}" alt="{{ col.title | escape }}">
+                    {% else %}
+                      <div style="width:100%; height:100%; background:#e5e7eb;"></div>
+                    {% endif %}
+                  </div>
+                  <span class="vs-collection-title">{{ col.title }}</span>
+                </a>
+              {% endif %}
+            {% endfor %}
+
+            {% if collection_count == 0 %}
+              <a href="#" class="vs-collection-card">
+                <div class="vs-collection-img">
+                  <div style="width:100%; height:100%; background:#e5e7eb; border-radius:8px;"></div>
+                </div>
+                <span class="vs-collection-title">Chairs Furniture</span>
+              </a>
+              <a href="#" class="vs-collection-card">
+                <div class="vs-collection-img">
+                  <div style="width:100%; height:100%; background:#e5e7eb; border-radius:8px;"></div>
+                </div>
+                <span class="vs-collection-title">Sofas</span>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Search Results Grid (Hidden by default) -->
+      <div class="vs-search-results-grid" id="vsPredictiveSearchResults" style="display: none;"></div>
+
+      <!-- Predictive Search Loading State (hidden by default) -->
+      <div class="vs-search-loading" id="vsSearchLoading" style="display: none; text-align: center; padding: 40px 0;">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          class="vs-spinner"
+          style="animation: spin 1s linear infinite;"
+        >
+          <circle cx="12" cy="12" r="10" stroke="#e5e7eb" stroke-width="4"></circle>
+          <path d="M12 2a10 10 0 0 1 10 10" stroke="#111827" stroke-width="4" stroke-linecap="round"></path>
+        </svg>
+      </div>
+
+      <!-- Predictive Search Empty State (hidden by default) -->
+      <div
+        class="vs-search-empty"
+        id="vsSearchEmpty"
+        style="display: none; text-align: center; padding: 40px 0; color: #6b7280;"
+      >
+        No results found. Try a different search term.
+      </div>
+
+      <div class="vs-search-view-all" id="vsSearchViewAll">
+        <a href="/search?q=">View all &raquo;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} {
+      z-index: 999999999999 !important;
+            position: relative;
+  }
+ #shopify-section-sections--sections--26876555821090__1778564433fd6491e0
+
+  #vs-search-section-{{ block.id }} {
+      position: relative;
+      z-index: 9999;
+  }
+
+  *:focus-visible {
+
+      box-shadow: none !important;
+  }
+
+
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+
+  span.vs-category-text {
+      max-width: 150px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      min-width: 150px;
+  }
+
+
+
+  /* Reset basic spacing */
+  .vs-search-container, .vs-search-trigger-container {
+      padding: 20px 0;
+      max-width: 800px;
+      font-family: inherit;
+      margin: 0 auto;
+  }
+
+  /* Trigger Button */
+  .vs-search-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px 16px;
+  }
+  /* Modal Core */
+  .vs-search-modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2147483647;
+      background:#fff;
+      font-family: inherit;
+      isolation: isolate;
+  }
+
+  .vs-search-modal.is-open {
+      display: block;
+  }
+
+  .vs-search-modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(5px);
+      z-index: 0;
+  }
+
+  .vs-search-modal-content {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      overflow-y: auto;
+      padding-top: 20px;
+      padding-bottom: 40px;
+      z-index: 1;
+  }
+
+  /* Modal Header and Close */
+  .vs-search-modal-header {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      padding: 50px 20px 20px;
+  }
+
+  .vs-search-close {
+      position: absolute;
+      top: 0px;
+      right: 20px;
+      background: #f3f4f6;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #4b5563;
+      transition: background 0.2s;
+  }
+
+  .vs-search-close:hover {
+      background: #e5e7eb;
+      color: #111827;
+  }
+
+  /* Search Bar inside Modal */
+  .vs-search-wrapper {
+  display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      border: none;
+      border: 1px solid #eee;
+      padding: 10px 6px;
+      transition: all 0.2s ease;
+      border-radius: {{block.settings.input_border_radius}}px;
+  }
+
+  /* Category Dropdown */
+  .vs-search-category {
+      position: relative;
+      height: 48px;
+      margin-right: 16px;
+  }
+  .vs-category-select {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 10;
+  }
+  .vs-category-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      background-color: #f3f4f6;
+      padding: 0 16px;
+      border-radius: 8px;
+      color: #111827;
+      font-weight: 600;
+      font-size: 15px;
+      gap: 12px;
+      pointer-events: none;
+      white-space: nowrap;
+  }
+  .vs-icon-chevron { color: #6b7280; }
+
+  /* Search Input */
+  .vs-search-input-wrapper {
+      flex-grow: 1;
+  }
+  .vs-search-input {
+      width: 100%;
+      height: 48px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: #111827;
+      background: transparent;
+  }
+  .vs-search-input::placeholder { color: #9ca3af; font-weight: 400; }
+
+  /* Search Button */
+  .vs-search-button {
+      background: none;
+      border: none;
+      padding: 0 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111827;
+      transition: color 0.2s ease;
+  }
+  .vs-search-button:hover { opacity: 0.7; }
+
+  /* Search Results Area */
+  .vs-search-results-area {
+      max-width: 1000px;
+      margin: 40px auto 0;
+      padding: 0 20px;
+  }
+
+  .vs-search-results-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-bottom: 40px;
+  }
+
+  .vs-search-result-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+  }
+
+  .vs-result-image {
+      width: 80px;
+      flex-shrink: 0;
+  }
+
+  .vs-result-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 4px;
+  }
+
+  .vs-result-vendor {
+      font-size: 12px;
+      color: #6b7280;
+      font-weight: 500;
+  }
+
+  .vs-result-title {
+      margin: 0;
+      font-size: 15px;
+      color: #111827;
+      font-weight: 600;
+      line-height: 1.4;
+  }
+
+  .vs-result-price {
+      font-size: 15px;
+      color: #111827;
+      font-weight: 600;
+      margin-top: 4px;
+  }
+
+  .vs-search-view-all {
+      text-align: center;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      border-top: 1px solid #f3f4f6;
+  }
+
+  .vs-search-view-all a {
+      color: #111827;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+  }
+
+  .vs-search-view-all a:hover {
+      text-decoration: underline;
+  }
+
+  /* Responsive */
+  @media screen and (max-width: 768px) {
+      .vs-search-category { display: none; }
+      .vs-search-default-state { flex-direction: column; }
+      .vs-search-wrapper{
+        margin-top:0;
+        padding:6px 8px;
+      }
+      .vs-search-container, .vs-search-trigger-container {
+        padding: 15px 0;
+        max-width: 100%;
+        font-family: inherit;
+        margin: 0 10px;
+    }
+  }
+
+  /* 3-Column Layout */
+  .vs-search-default-state {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 40px;
+  }
+  .vs-default-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+  }
+  .vs-default-col.flex-2 {
+      flex: 2;
+  }
+  .vs-col-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+      margin: 0 0 20px 0;
+  }
+
+  /* 1st Column: Need Help */
+  .vs-help-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+  }
+  .vs-help-link {
+      display: inline-block;
+      padding: 10px 16px;
+      background-color: #f3f4f6;
+      color: #111827;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      width: fit-content;
+      transition: background 0.2s;
+  }
+  .vs-help-link:hover {
+      background-color: #e5e7eb;
+  }
+
+  /* 2nd Column: Recent Searches & Products */
+  .vs-recent-searches-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+  }
+  .vs-recent-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      background-color: #f3f4f6;
+      border-radius: 16px;
+      font-size: 13px;
+      color: #4b5563;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s;
+  }
+  .vs-recent-pill:hover {
+      background-color: #e5e7eb;
+  }
+
+  /* 3rd Column: Collections */
+  .vs-explore-collections {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+  }
+  .vs-collection-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: #111827;
+      font-weight: 600;
+      font-size: 14px;
+  }
+  .vs-collection-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+  }
+  .vs-collection-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+  .vs-collection-title:hover {
+      text-decoration: underline;
+  }
+
+#shopify-section-sections--{{ section.id }} {
+  z-index: 999999;
+}
+
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Modal Elements
+    const modalSelect = document.querySelector('.vs-search-modal .vs-category-select');
+    const modalDisplaySpan = document.querySelector('.vs-search-modal .vs-category-text');
+    const modalInput = document.getElementById('vsSearchInput');
+    const modal = document.getElementById('vsSearchModal');
+    const closeBtn = document.getElementById('vsSearchClose');
+    const resultsGrid = document.getElementById('vsPredictiveSearchResults');
+    const loadingState = document.getElementById('vsSearchLoading');
+    const emptyState = document.getElementById('vsSearchEmpty');
+    const viewAllLink = document.querySelector('#vsSearchViewAll a');
+    const viewAllDiv = document.getElementById('vsSearchViewAll');
+    const defaultState = document.getElementById('vsSearchDefaultState');
+    const recentSearchesBlock = document.getElementById('vsRecentSearchesBlock');
+    const recentSearchesList = document.getElementById('vsRecentSearchesList');
+    const searchForm = document.querySelector('.vs-search-modal .vs-search-wrapper');
+    const collectionCache = {};
+
+    // Trigger Elements
+    const triggerWrapper = document.getElementById('vsSearchTriggerWrapper');
+    const triggerSelect = document.getElementById('vsTriggerSelect');
+    const triggerDisplaySpan = document.getElementById('vsTriggerCategoryText');
+    const triggerInput = document.getElementById('vsTriggerInput');
+
+    let originalItemsHtml = resultsGrid ? resultsGrid.innerHTML : '';
+    let debounceTimer;
+
+    // Local Storage logic
+    function loadRecentSearches() {
+      let searches = JSON.parse(localStorage.getItem('vsRecentSearches') || '[]');
+      if (searches.length > 0) {
+        recentSearchesBlock.style.display = 'block';
+        recentSearchesList.innerHTML = '';
+        searches.forEach((term) => {
+          let pill = document.createElement('a');
+          pill.className = 'vs-recent-pill';
+          pill.textContent = term;
+          pill.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (modalInput) {
+              modalInput.value = term;
+              if (triggerInput) triggerInput.value = term;
+              doPredictiveSearch();
+            }
+          });
+          recentSearchesList.appendChild(pill);
+        });
+      } else {
+        recentSearchesBlock.style.display = 'none';
+      }
+    }
+
+    function saveRecentSearch(term) {
+      if (!term || term.trim() === '') return;
+      let searches = JSON.parse(localStorage.getItem('vsRecentSearches') || '[]');
+      // Remove if exists
+      searches = searches.filter((s) => s.toLowerCase() !== term.toLowerCase());
+      // Add to front
+      searches.unshift(term);
+      // Keep only top 5
+      if (searches.length > 5) searches.pop();
+      localStorage.setItem('vsRecentSearches', JSON.stringify(searches));
+      loadRecentSearches();
+    }
+
+    function renderSearchResults(items) {
+      resultsGrid.innerHTML = '';
+      if (!items || items.length === 0) {
+        emptyState.style.display = 'block';
+        viewAllDiv.style.display = 'none';
+        return;
+      }
+
+      items.forEach((item) => {
+        const productUrl = item.url || (item.handle ? `/products/${item.handle}` : '#');
+        const isProduct = productUrl.indexOf('/products/') === 0 || item.price !== undefined || item.compare_at_price !== undefined;
+        const imageSrc = item.image && item.image.src ? item.image.src : item.image;
+        const rawPrice = item.price;
+        const formattedPrice =
+          typeof rawPrice === 'number'
+            ? (rawPrice > 999 ? (rawPrice / 100).toFixed(2) : rawPrice.toFixed(2))
+            : rawPrice;
+        const priceHtml = isProduct && formattedPrice ? `<div class="vs-result-price">${formattedPrice}</div>` : '';
+
+        resultsGrid.insertAdjacentHTML(
+          'beforeend',
+          `<a href="${productUrl}" class="vs-search-result-item" style="text-decoration: none;">
+            <div class="vs-result-image">
+              ${
+                imageSrc
+                  ? `<img src="${imageSrc}" alt="${item.title}" style="width: 100%; height: auto; border-radius: 8px;">`
+                  : `<div style="width: 100%; height: 100%; background: #e5e7eb; border-radius: 8px; display:flex; align-items:center; justify-content:center; color:#9ca3af; font-size:12px;">${isProduct ? 'Image' : 'Doc'}</div>`
+              }
+            </div>
+            <div class="vs-result-details">
+              <span class="vs-result-vendor">${isProduct ? item.vendor || 'Product' : item.author ? 'Blog' : 'Page'}</span>
+              <h4 class="vs-result-title">${item.title}</h4>
+              ${priceHtml}
+            </div>
+          </a>`
+        );
+      });
+
+      resultsGrid.style.display = 'flex';
+      viewAllDiv.style.display = 'block';
+    }
+
+    function getCollectionProducts(collectionHandle) {
+      if (collectionCache[collectionHandle]) {
+        return Promise.resolve(collectionCache[collectionHandle]);
+      }
+
+      return fetch(`/collections/${collectionHandle}/products.json?limit=250`)
+        .then((response) => response.json())
+        .then((data) => {
+          const products = data.products || [];
+          collectionCache[collectionHandle] = products;
+          return products;
+        });
+    }
+
+    if (searchForm) {
+      searchForm.addEventListener('submit', function (e) {
+        if (modalInput && modalInput.value) {
+          saveRecentSearch(modalInput.value.trim());
+        }
+      });
+    }
+
+    function doPredictiveSearch() {
+      if (!modalInput || !resultsGrid) return;
+
+      const q = modalInput.value.trim();
+      const collection = modalSelect ? modalSelect.value : '';
+
+      // Update View All link
+      if (viewAllLink) {
+        let url = collection ? `/collections/${collection}` : '/search?q=' + encodeURIComponent(q);
+        viewAllLink.href = url;
+      }
+
+      if (q === '') {
+        // Restore default 3-column view
+        resultsGrid.style.display = 'none';
+        defaultState.style.display = 'flex';
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'none';
+        viewAllDiv.style.display = 'none';
+        filterProductsFrontEnd(); // Filter the default most searched products
+        return;
+      }
+
+      // Show loading state, hide default UI
+      defaultState.style.display = 'none';
+      resultsGrid.style.display = 'none';
+      emptyState.style.display = 'none';
+      loadingState.style.display = 'block';
+
+      if (collection) {
+        getCollectionProducts(collection)
+          .then((products) => {
+            loadingState.style.display = 'none';
+            const normalizedQuery = q.toLowerCase();
+            const matchedProducts = products
+              .filter((product) => {
+                const haystack = [product.title, product.vendor, product.product_type, ...(product.tags || [])]
+                  .join(' ')
+                  .toLowerCase();
+                return haystack.includes(normalizedQuery);
+              })
+              .slice(0, 6)
+              .map((product) => ({
+                ...product,
+                image: product.image ? product.image.src : '',
+                url: `/products/${product.handle}`,
+                price: product.price
+              }));
+
+            renderSearchResults(matchedProducts);
+          })
+          .catch((error) => {
+            console.error('Collection Search Error:', error);
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'block';
+            viewAllDiv.style.display = 'none';
+          });
+        return;
+      }
+
+      let url = `/search/suggest.json?q=${encodeURIComponent(
+        q
+      )}&resources[type]=product,page,article&resources[limit]=6`;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          loadingState.style.display = 'none';
+          let products = data.resources.results.products || [];
+          let pages = data.resources.results.pages || [];
+          let articles = data.resources.results.articles || [];
+
+          // Merge results (favoring products)
+          let combined = [...products, ...pages, ...articles].slice(0, 6);
+
+          renderSearchResults(combined);
+        })
+        .catch((error) => {
+          console.error('Predictive Search Error:', error);
+          loadingState.style.display = 'none';
+          resultsGrid.style.display = 'flex';
+        });
+    }
+
+    function handleInput() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(doPredictiveSearch, 300); // 300ms debounce
+    }
+
+    function filterProductsFrontEnd() {
+      if (modalInput && modalInput.value.trim() !== '') return;
+
+      if (!modalSelect) return;
+      const selectedText = modalSelect.options[modalSelect.selectedIndex]
+        ? modalSelect.options[modalSelect.selectedIndex].text
+        : 'All categories';
+      const selectedValue = modalSelect.value;
+      const defaultItems = document.querySelectorAll('.vs-default-products-grid .vs-search-result-item');
+
+      defaultItems.forEach((item) => {
+        const itemCat = item.getAttribute('data-category');
+        if (itemCat === null) return;
+
+        if (!selectedValue || selectedValue === '' || selectedText === 'All categories') {
+          item.style.display = 'flex';
+        } else if (itemCat.includes(selectedText) || itemCat.includes(selectedValue)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    function openModal() {
+      if (modal) {
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+
+        // Load local storage searches
+        loadRecentSearches();
+
+        // Sync value from trigger to modal
+        if (triggerInput && modalInput) {
+          modalInput.value = triggerInput.value;
+          modalInput.focus();
+        }
+        if (triggerSelect && modalSelect && triggerDisplaySpan && modalDisplaySpan) {
+          modalSelect.value = triggerSelect.value;
+          modalDisplaySpan.textContent = triggerDisplaySpan.textContent;
+        }
+
+        if (modalInput && modalInput.value.trim() !== '') {
+          doPredictiveSearch();
+        } else {
+          resultsGrid.style.display = 'none';
+          defaultState.style.display = 'flex';
+          viewAllDiv.style.display = 'none';
+          filterProductsFrontEnd();
+        }
+      }
+    }
+
+    // Trigger Select Change
+    if (triggerSelect && triggerDisplaySpan) {
+      triggerSelect.addEventListener('change', function () {
+        if (triggerSelect.options[triggerSelect.selectedIndex]) {
+          const text = triggerSelect.options[triggerSelect.selectedIndex].text;
+          triggerDisplaySpan.textContent = text;
+
+          if (modalSelect && modalDisplaySpan) {
+            modalSelect.value = triggerSelect.value;
+            modalDisplaySpan.textContent = text;
+          }
+
+          if (modalInput && modalInput.value.trim() !== '') {
+            doPredictiveSearch();
+          } else {
+            filterProductsFrontEnd();
+          }
+        }
+      });
+    }
+
+    // Modal Select Change
+    if (modalSelect && modalDisplaySpan) {
+      modalSelect.addEventListener('change', function () {
+        if (modalSelect.options[modalSelect.selectedIndex]) {
+          const text = modalSelect.options[modalSelect.selectedIndex].text;
+          modalDisplaySpan.textContent = text;
+
+          if (triggerSelect && triggerDisplaySpan) {
+            triggerSelect.value = modalSelect.value;
+            triggerDisplaySpan.textContent = text;
+          }
+
+          if (modalInput && modalInput.value.trim() !== '') {
+            doPredictiveSearch();
+          } else {
+            filterProductsFrontEnd();
+          }
+        }
+      });
+    }
+
+    // Open Modal when focusing/clicking on trigger input
+    if (triggerInput) {
+      triggerInput.addEventListener('focus', openModal);
+      triggerInput.addEventListener('click', openModal);
+      // Sync typing immediately
+      triggerInput.addEventListener('input', function () {
+        if (modalInput) {
+          modalInput.value = triggerInput.value;
+          doPredictiveSearch();
+        }
+      });
+    }
+
+    // Modal input syncing and searching
+    if (modalInput) {
+      modalInput.addEventListener('input', function () {
+        if (triggerInput) triggerInput.value = modalInput.value;
+        handleInput();
+      });
+
+      // Save search on enter
+      modalInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          saveRecentSearch(modalInput.value.trim());
+        }
+      });
+    }
+
+    // Modal close
+    if (closeBtn && modal) {
+      closeBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+      });
+    }
+
+    // Close on overlay click
+    const overlay = document.querySelector('.vs-search-modal-overlay');
+    if (overlay && modal) {
+      overlay.addEventListener('click', function () {
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+      });
+    }
+
+    // Handle Escape key
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && modal && modal.classList.contains('is-open')) {
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Initial filter state
+    filterProductsFrontEnd();
+  });
+</script>
+
+
+{% schema %}
+
+{
+  "name": "Categoried Search",
+  "target": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "label": "Search box radius",
+      "default": 16
+    }
+  ]
+}
+{% endschema %}
