@@ -1,0 +1,17 @@
+api_version = "2026-04"
+
+[[extensions]]
+name = "Ambition Kids Discount"
+handle = "ambitionkids-dicountapp"
+type = "function"
+uid = "cc890eef-bd0c-58f4-bc52-fb8341108b823ae7b97b"
+description = "Unlocks a fixed-price Steal Deal product discount when a main collection product is in the cart."
+
+  [[extensions.targeting]]
+  target = "purchase.product-discount.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"

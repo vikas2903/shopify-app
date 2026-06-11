@@ -26,6 +26,7 @@ export default function App() {
       <ExploreContextProvider>
         <NavMenu>
           <Link to="/app" rel="home">Home</Link>
+          {/* <Link to="/app/discounts">Discounts</Link> */}
           <Link to="/app/guide">How To Use</Link>
           <Link to="/app/contact">Support</Link>
         </NavMenu>

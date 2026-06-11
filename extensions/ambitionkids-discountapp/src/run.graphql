@@ -1,0 +1,31 @@
+query RunInput {
+  cart {
+    lines {
+      id
+      quantity
+      attribute(key: "bundle_type") {
+        value
+      }
+      cost {
+        amountPerQuantity {
+          amount
+        }
+      }
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          id
+          product {
+            id
+            inMainCollection: inAnyCollection(
+              ids: ["gid://shopify/Collection/488663908580"]
+            )
+            inStealDealCollection: inAnyCollection(
+              ids: ["gid://shopify/Collection/488663974116"]
+            )
+          }
+        }
+      }
+    }
+  }
+}

@@ -77,8 +77,14 @@ mongoose.connection.on("error", (err) => {
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET,
-  apiVersion: ApiVersion.January25,
-  scopes: ["read_themes", "write_themes", "read_products"],
+  apiVersion: ApiVersion.April25,
+  scopes: [
+    "read_themes",
+    "write_themes",
+    "read_products",
+    "read_discounts",
+    "write_discounts",
+  ],
   appUrl: process.env.SHOPIFY_APP_URL,
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
@@ -157,7 +163,7 @@ const shopify = shopifyApp({
 
 // Export Shopify app utilities
 export default shopify;
-export const apiVersion = ApiVersion.January25;
+export const apiVersion = ApiVersion.April25;
 export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
 export const authenticate = shopify.authenticate;
 export const unauthenticated = shopify.unauthenticated;
