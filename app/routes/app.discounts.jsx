@@ -217,7 +217,7 @@ export default function Index() {
                 </Text>
                 <Text as="p">
                   <strong>Behavior:</strong> Collection A unlocks fixed price
-                  Rs.599 for Collection B products already in the cart.
+                  Rs.399 for Collection B products already in the cart.
                 </Text>
               </BlockStack>
             </Box>

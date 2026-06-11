@@ -6,9 +6,9 @@
  * @typedef {RunInput["cart"]["lines"][number]} RunInputCartLine
  */
 
-const STEAL_DEAL_FIXED_PRICE = 599;
+const STEAL_DEAL_FIXED_PRICE = 399;
 const DISCOUNT_MESSAGE = "Steal Deal unlocked";
-const REQUIRED_ATTRIBUTE_VALUE = "STEAL DEAL @ RS. 599";
+const REQUIRED_ATTRIBUTE_VALUE = "STEAL DEAL @ RS. 399";
 
 /**
  * @type {FunctionRunResult}
